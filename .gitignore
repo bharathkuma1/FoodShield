@@ -1,0 +1,50 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Local datasets and generated outputs
+data/raw/
+data/interim/
+data/processed/
+data/external/
+outputs/
+artifacts/
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+checkpoints/
+checkpoint/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local proposal and presentation materials
+/proposal/
