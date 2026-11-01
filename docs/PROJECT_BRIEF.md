@@ -94,7 +94,7 @@ artifacts/         # generated metrics, charts, demo outputs
 
 Keep notebooks optional and exploratory; promote repeatable pipeline logic into `src/`. Avoid duplicating submitted proposal materials under `docs/`.
 
-The current architecture baseline and implemented Week 2 paths are documented in [`docs/ARCHITECTURE.md`](ARCHITECTURE.md); the local Spark runner, schema/grain contracts, outputs, and setup steps are in [`docs/WEEK2_ETL.md`](WEEK2_ETL.md). Treat the tree above as the target organization and those implementation notes as the current state; model, feature, evaluation, and streaming packages remain planned work.
+The current architecture baseline and implemented Week 2 paths are documented in [`docs/ARCHITECTURE.md`](ARCHITECTURE.md); the local Spark runner, schema/grain contracts, outputs, and setup steps are in [`docs/WEEK2_ETL.md`](WEEK2_ETL.md). Week 3 feature code and local run evidence are documented in [`docs/WEEK3_FEATURES.md`](WEEK3_FEATURES.md). Model evaluation and streaming packages remain planned work.
 
 Synthetic development fixtures are generated only to unblock pipeline and model-interface development. Their generation recipe, seed, split, target rule, and limitations are in [`docs/SYNTHETIC_DATA.md`](SYNTHETIC_DATA.md). They must remain identifiable and must not be used to claim observed coverage or final evaluation performance.
 

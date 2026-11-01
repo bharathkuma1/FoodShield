@@ -23,14 +23,14 @@ The end-to-end per-teammate allocation and detailed progress basis for all eight
 |---|---:|---:|---:|---:|---|
 | 1 — source feasibility | 100% | 100% | 100% | 100% | Complete as a documented feasibility handoff. |
 | 2 — Spark ETL | 100% | 100% | 100% | 100% | Complete as a reproducible local implementation/run; ownership carried forward from Week 1 was agreed. |
-| 3 — analytics/features | 0% | 0% | 0% | 0% | Not started; agreed default ownership is documented in `docs/WEEK3_TASK_ASSIGNMENTS.md`. |
+| 3 — analytics/features | 100% | 100% | 100% | 100% | Local Spark feature run, Week 2 real-input alignment, coverage profile, and selected date/as-of review are complete; shared teammate review/sign-off remains. |
 | 4 — M0 baseline/evaluation protocol | 0% | 0% | 0% | 0% | Not started; depends on Week 3 features and target/split decisions. |
 | 5 — M1–M4 and ablation | 0% | 0% | 0% | 0% | Not started. |
 | 6 — Kafka/Spark streaming replay | 0% | 0% | 0% | 0% | Not started. |
 | 7 — evaluation/scalability | 0% | 0% | 0% | 0% | Not started. |
 | 8 — dashboard/submission/demo | 0% | 0% | 0% | 0% | Not started. |
 
-By equal weekly milestone count, 2 of 8 roadmap weeks are complete (25%); this is a schedule snapshot, not an effort-weighted project-completion estimate. Week 1 and Week 2 tracker details and their acceptance boundaries are in `docs/WEEK1_TASK_ASSIGNMENTS.md` and `docs/WEEK2_TASK_ASSIGNMENTS.md`. Week 1 is feasibility only; Week 2 completion does not clear data rights, representative weather, target definition, or evaluation gates.
+By equal weekly milestone count, 3 of 8 roadmap weeks are complete (37.5%); this is a schedule snapshot, not an effort-weighted project-completion estimate. Week 1 and Week 2 tracker details and their acceptance boundaries are in `docs/WEEK1_TASK_ASSIGNMENTS.md` and `docs/WEEK2_TASK_ASSIGNMENTS.md`. Week 1 is feasibility only; completed Week 2/3 implementation does not clear data rights, representative weather, target definition, or evaluation gates.
 
 ## Proposed local streaming benchmark targets
 

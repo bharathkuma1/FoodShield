@@ -1,0 +1,6 @@
+{
+  "input_csv": "data/synthetic/week3_ukraine/ukraine_wheat_monthly_synthetic.csv",
+  "input_is_synthetic": true,
+  "annual_availability_lag_years": 2,
+  "output_root": "data/processed/week3_ukraine_synthetic"
+}
