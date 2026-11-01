@@ -1,4 +1,4 @@
-"""Price-only anomaly detector for the provisional Week 4 target."""
+"""Price-only supervised M0 baseline using Spark MLlib logistic regression."""
 
 from __future__ import annotations
 
@@ -7,6 +7,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from pyspark.ml import Pipeline
+from pyspark.ml.classification import LogisticRegression
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.functions import vector_to_array
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import functions as F
 
@@ -38,16 +42,17 @@ def fit_m0_price_only(
     root: Path,
     config: dict[str, Any],
 ) -> dict[str, Any]:
-    """Calibrate a transparent M0 score on train and its alert cutoff on validation.
+    """Fit an MLlib M0 on train labels and select its alert cutoff on validation.
 
-    The function never loads or scores final-test labels. M4 eligibility is
-    applied first so later M0–M4 comparisons can use identical origins.
+    The function loads only labeled train/validation origins. M4 eligibility is
+    applied first so later M0–M4 comparisons use identical forecast origins.
     """
     labels_path = root / config["label_csv"]
     eligibility_path = root / config["eligibility_csv"]
     output_root = root / config["m0_output_root"]
     target = config["target"]
     split = config["candidate_split"]
+    model_config = config["m0_model"]
 
     labels = (
         spark.read.option("header", "true").option("inferSchema", "true").csv(str(labels_path))
@@ -55,7 +60,7 @@ def fit_m0_price_only(
         .select(
             F.to_date(F.concat_ws("-", F.col("origin_month"), F.lit("01"))).alias("month"),
             F.col("split").alias("split"),
-            F.col("future_stress_label").cast("int").alias("label"),
+            F.col("future_stress_label").cast("double").alias("label"),
         )
     )
     eligible = (
@@ -64,10 +69,10 @@ def fit_m0_price_only(
         .select(F.to_date(F.concat_ws("-", F.col("month"), F.lit("01"))).alias("month"))
         .dropDuplicates(["month"])
     )
-    required = ["month", *M0_FEATURES]
-    absent = sorted(set(required) - set(features.columns))
+    absent = sorted(set(["month", *M0_FEATURES]) - set(features.columns))
     if absent:
         raise ValueError(f"Week 4 feature panel is missing M0 columns: {absent}")
+
     samples = (
         features.join(eligible, "month", "inner")
         .join(labels, "month", "inner")
@@ -76,7 +81,6 @@ def fit_m0_price_only(
         .filter(F.expr(" AND ".join(f"`{name}` IS NOT NULL" for name in M0_FEATURES)))
         .select("month", "split", "label", *M0_FEATURES)
     )
-
     training = samples.filter(F.col("split") == "train")
     validation = samples.filter(F.col("split") == "validation")
     training_count, validation_count = training.count(), validation.count()
@@ -86,50 +90,61 @@ def fit_m0_price_only(
     if set(train_classes) != {0, 1}:
         raise ValueError(f"M0 training sample needs both target classes; found {train_classes}")
 
-    # Use only the training period to scale the current-month change. The
-    # anomaly already compares the current real price with its prior 12 months.
-    scale = training.agg(
-        F.avg("price_real_mom_change").alias("mean"),
-        F.stddev_samp("price_real_mom_change").alias("sd"),
-    ).first()
-    mom_mean, mom_sd = float(scale["mean"]), float(scale["sd"] or 0.0)
-    if mom_sd <= 0:
-        raise ValueError("M0 training month-over-month change has zero or undefined standard deviation")
-
-    scored = samples.withColumn(
-        "m0_score",
-        F.col("price_real_anomaly_z_12m")
-        + (F.col("price_real_mom_change") - F.lit(mom_mean)) / F.lit(mom_sd),
+    assembler = VectorAssembler(inputCols=M0_FEATURES, outputCol="m0_features", handleInvalid="error")
+    logistic = LogisticRegression(
+        featuresCol="m0_features",
+        labelCol="label",
+        predictionCol="m0_prediction",
+        probabilityCol="m0_probability_vector",
+        rawPredictionCol="m0_raw_prediction",
+        family="binomial",
+        regParam=float(model_config["regularization_l2"]),
+        elasticNetParam=0.0,
+        maxIter=int(model_config["max_iterations"]),
+        standardization=True,
     )
-    validation_scores = scored.filter(F.col("split") == "validation").select("m0_score", "label").collect()
-    pairs = [(float(row["m0_score"]), int(row["label"])) for row in validation_scores]
-    threshold_candidates = sorted({0.0, 1.0, *(score for score, _ in pairs)})
-    threshold_results = [_f1_counts(pairs, threshold) for threshold in threshold_candidates]
+    fitted = Pipeline(stages=[assembler, logistic]).fit(training)
+    train_scores = fitted.transform(training)
+    validation_scores = fitted.transform(validation)
+
+    validation_rows = validation_scores.select(
+        vector_to_array("m0_probability_vector")[1].alias("score"), F.col("label").cast("int").alias("label")
+    ).collect()
+    score_label_pairs = [(float(row["score"]), int(row["label"])) for row in validation_rows]
+    threshold_candidates = sorted({0.0, 1.0, *(score for score, _ in score_label_pairs)})
+    threshold_results = [_f1_counts(score_label_pairs, threshold) for threshold in threshold_candidates]
     best_f1 = max(result["f1"] for result in threshold_results)
     chosen = max((result for result in threshold_results if result["f1"] == best_f1), key=lambda row: row["threshold"])
 
     predictions = (
-        scored.withColumn("selected_alert_threshold", F.lit(float(chosen["threshold"])))
+        train_scores.unionByName(validation_scores)
+        .withColumn("m0_score", vector_to_array("m0_probability_vector")[1])
+        .withColumn("selected_alert_threshold", F.lit(float(chosen["threshold"])))
         .withColumn("m0_alert", (F.col("m0_score") >= F.lit(float(chosen["threshold"]))).cast("integer"))
         .select("month", "split", "label", *M0_FEATURES, "m0_score", "selected_alert_threshold", "m0_alert")
     )
 
     output_root.mkdir(parents=True, exist_ok=True)
+    fitted.write().overwrite().save(str(output_root / "model"))
     predictions.write.mode("overwrite").parquet(str(output_root / "train_validation_predictions"))
     class_counts = {
         label_split: {str(int(row["label"])): row["count"] for row in frame.groupBy("label").count().collect()}
         for label_split, frame in (("train", training), ("validation", validation))
     }
+    trained_lr = fitted.stages[-1]
     report = {
-        "pipeline": "week4_m0_price_only_anomaly_detector",
+        "pipeline": "week4_m0_spark_mllib_logistic_regression",
         "generated_utc": datetime.now(timezone.utc).isoformat(),
-        "status": "working candidate; target and candidate split marked review needed",
+        "status": "working MLlib candidate; target and candidate split marked review needed",
         "target": target,
         "candidate_split": split,
         "features": M0_FEATURES,
-        "score_definition": "price_real_anomaly_z_12m + train-standardized price_real_mom_change",
-        "training_mom_change_mean": mom_mean,
-        "training_mom_change_sample_sd": mom_sd,
+        "algorithm": "Spark MLlib DataFrame-based binomial LogisticRegression",
+        "regularization": {"type": "L2", "regParam": float(model_config["regularization_l2"]), "elasticNetParam": 0.0},
+        "max_iterations": int(model_config["max_iterations"]),
+        "standardization": "MLlib standardization enabled; fitted with training data only",
+        "coefficients": {name: float(value) for name, value in zip(M0_FEATURES, trained_lr.coefficients)},
+        "intercept": float(trained_lr.intercept),
         "training_origins": training_count,
         "validation_origins": validation_count,
         "class_counts": class_counts,
@@ -138,7 +153,7 @@ def fit_m0_price_only(
             "threshold": chosen["threshold"],
             "calibration_counts": chosen,
             "candidate_threshold_count": len(threshold_candidates),
-            "caveat": "These validation figures are used to select the alert threshold and are not an unbiased final performance estimate.",
+            "caveat": "These validation figures select the alert cutoff and are not an unbiased final performance estimate.",
         },
         "holdout": {
             "test_labels_loaded": False,
@@ -147,10 +162,11 @@ def fit_m0_price_only(
         },
         "limits": [
             "Small training and validation samples; treat estimates as exploratory.",
-            "Outcome is measured from the same FAOSTAT producer-price source as the M0 price history, though strictly after each origin.",
-            "The input weather signal is a single-point screening series; M0 itself uses no weather, production, or trade features.",
-            "This is a transparent anomaly-detector baseline, not evidence of superiority over a multi-signal model.",
+            "Outcome is measured from the same FAOSTAT producer-price source as M0 inputs, though strictly after each origin.",
+            "M0 uses only price features; later M1–M4 stages should use this same model family for a fair signal ablation.",
+            "The candidate target, split, regularization, and validation cutoff remain subject to review.",
         ],
+        "model_path": str((output_root / "model").relative_to(root)).replace("\\", "/"),
         "predictions_path": str((output_root / "train_validation_predictions").relative_to(root)).replace("\\", "/"),
     }
     (output_root / "m0_profile.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

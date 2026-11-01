@@ -8,6 +8,7 @@ training and validation periods; 2021 onward is deliberately not labeled.
 from __future__ import annotations
 
 import csv
+import argparse
 import hashlib
 import json
 from datetime import datetime, timezone
@@ -15,19 +16,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PRICE_FILE = ROOT / "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv"
-ELIGIBILITY_FILE = ROOT / "data/processed/week4_ukraine_m0_m4_eligibility.csv"
-OUTPUT = ROOT / "data/processed/week4_stress_label_sensitivity.csv"
-SUMMARY = ROOT / "data/processed/week4_stress_label_sensitivity.json"
-HISTORY_MONTHS = 36
-QUANTILES = (80, 90, 95)
-REAL_PRICE_RISE_PCT = (5, 10, 15)
-HORIZONS = (1, 3, 6)
-TRAIN_START = "2013-01"
-TRAIN_END = "2017-12"
-VALIDATION_START = "2018-01"
-VALIDATION_END = "2020-12"
-TEST_START = "2021-01"  # Holdout labels are never calculated or written.
+DEFAULT_LABEL_PROFILE = {
+    "history_months": 36,
+    "historical_level_quantiles": [80, 90, 95],
+    "real_price_rise_percent": [5, 10, 15],
+    "horizons_months": [1, 3, 6],
+}
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -77,25 +71,41 @@ def contiguous_episodes(positive_months: list[str]) -> int:
     return episodes
 
 
-def split_for(origin: str, horizon: int) -> str | None:
+def split_for(origin: str, horizon: int, split_config: dict[str, str]) -> str | None:
     end = month_number(origin) + horizon
-    if origin >= TRAIN_START and end <= month_number(TRAIN_END):
+    if origin >= split_config["training_start"] and end <= month_number(split_config["training_end"]):
         return "train"
-    if origin >= VALIDATION_START and end <= month_number(VALIDATION_END):
+    if origin >= split_config["validation_start"] and end <= month_number(split_config["validation_end"]):
         return "validation"
     # Test-period outcomes are intentionally not inspected for this profile.
-    if origin >= TEST_START:
+    if origin >= split_config["test_start"]:
         return None
     return "purged_or_insufficient_history"
 
 
 def main() -> None:
-    price_rows = read_csv(PRICE_FILE)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", type=Path, default=ROOT / "configs" / "week4.local.json")
+    args = parser.parse_args()
+    config_path = args.config.resolve()
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    profile_config = {**DEFAULT_LABEL_PROFILE, **config.get("label_profile", {})}
+    split_config = config["candidate_split"]
+    price_file = ROOT / config["price_csv"]
+    eligibility_file = ROOT / config["eligibility_csv"]
+    output_file = ROOT / config["label_csv"]
+    summary_file = ROOT / config["label_summary_json"]
+    history_months = int(profile_config["history_months"])
+    quantiles = tuple(int(value) for value in profile_config["historical_level_quantiles"])
+    rise_percentages = tuple(int(value) for value in profile_config["real_price_rise_percent"])
+    horizons = tuple(int(value) for value in profile_config["horizons_months"])
+
+    price_rows = read_csv(price_file)
     prices = {f"{row['year']}-{int(row['month']):02d}": float(row["real_price_dec_2000_lcu_per_tonne"]) for row in price_rows}
     if len(prices) != len(price_rows):
         raise ValueError("Real-price input must have unique calendar months")
 
-    eligibility = {row["month"]: row for row in read_csv(ELIGIBILITY_FILE)}
+    eligibility = {row["month"]: row for row in read_csv(eligibility_file)}
     common_origins = sorted(
         key for key, row in eligibility.items()
         if row["M4_features_complete"] == "1"
@@ -105,27 +115,27 @@ def main() -> None:
 
     output_rows: list[dict[str, str | int]] = []
     summaries: dict[str, dict] = {}
-    for horizon in HORIZONS:
+    for horizon in horizons:
         candidate_rules = [
-            ("historical_level", q, f"trailing36m_q{q}_futuremax_{horizon}m")
-            for q in QUANTILES
+            ("historical_level", q, f"trailing{history_months}m_q{q}_futuremax_{horizon}m")
+            for q in quantiles
         ] + [
             ("rise_from_origin", rise, f"realrise_{rise}pct_futuremax_{horizon}m")
-            for rise in REAL_PRICE_RISE_PCT
+            for rise in rise_percentages
         ]
         for family, parameter, rule_id in candidate_rules:
             labels_by_split = {"train": [], "validation": []}
             candidates = 0
             positives = 0
             for origin in common_origins:
-                split = split_for(origin, horizon)
+                split = split_for(origin, horizon, split_config)
                 if split not in labels_by_split:
                     continue
                 idx = price_index[origin]
-                if idx + 1 < HISTORY_MONTHS:
+                if idx + 1 < history_months:
                     continue
-                history_keys = ordered_price_months[idx - HISTORY_MONTHS + 1:idx + 1]
-                if len(history_keys) != HISTORY_MONTHS or any(
+                history_keys = ordered_price_months[idx - history_months + 1:idx + 1]
+                if len(history_keys) != history_months or any(
                     month_number(b) != month_number(a) + 1
                     for a, b in zip(history_keys, history_keys[1:])
                 ):
@@ -137,7 +147,7 @@ def main() -> None:
                 if family == "historical_level":
                     threshold = percentile([prices[key] for key in history_keys], parameter)
                     label = int(future_max > threshold)
-                    rule = f"positive if any real farm-gate price in months t+1..t+{horizon} exceeds the {parameter}th percentile of the 36 consecutive monthly real prices ending at origin t"
+                    rule = f"positive if any real price in months t+1..t+{horizon} exceeds the {parameter}th percentile of the {history_months} consecutive monthly real prices ending at origin t"
                 else:
                     rise_pct = (future_max / prices[origin] - 1.0) * 100
                     label = int(rise_pct >= parameter)
@@ -150,7 +160,7 @@ def main() -> None:
                     "split": split,
                     "common_stage_set": "M0-M4",
                     "label_rule_id": rule_id,
-                    "history_months": HISTORY_MONTHS,
+                    "history_months": history_months,
                     "history_percentile": parameter if family == "historical_level" else "",
                     "minimum_real_price_rise_pct": parameter if family == "rise_from_origin" else "",
                     "forecast_horizon_months": horizon,
@@ -180,9 +190,9 @@ def main() -> None:
                 "splits": split_summary,
             }
 
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     fields = ["origin_month", "split", "common_stage_set", "label_rule_id", "history_months", "history_percentile", "minimum_real_price_rise_pct", "forecast_horizon_months", "future_stress_label"]
-    with OUTPUT.open("w", encoding="utf-8", newline="") as stream:
+    with output_file.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(output_rows)
@@ -190,29 +200,30 @@ def main() -> None:
     metadata = {
         "purpose": "Candidate target-label sensitivity profile for Week 4; this is label feasibility, not model performance.",
         "generated_utc": datetime.now(timezone.utc).isoformat(),
-        "output_file": OUTPUT.relative_to(ROOT).as_posix(),
-        "output_sha256": sha256(OUTPUT),
+        "output_file": output_file.relative_to(ROOT).as_posix(),
+        "output_sha256": sha256(output_file),
         "inputs": {
-            PRICE_FILE.relative_to(ROOT).as_posix(): sha256(PRICE_FILE),
-            ELIGIBILITY_FILE.relative_to(ROOT).as_posix(): sha256(ELIGIBILITY_FILE),
+            price_file.relative_to(ROOT).as_posix(): sha256(price_file),
+            eligibility_file.relative_to(ROOT).as_posix(): sha256(eligibility_file),
         },
         "common_origin_rule": "M4 feature-complete origins; M4 requires all M0-M3 core feature groups, so every reported origin is shared across M0-M4.",
-        "candidate_grid": {"history_months": HISTORY_MONTHS, "historical_level_quantiles": QUANTILES, "real_price_rise_percent": REAL_PRICE_RISE_PCT, "horizons_months": HORIZONS},
+        "candidate_grid": {"history_months": history_months, "historical_level_quantiles": quantiles, "real_price_rise_percent": rise_percentages, "horizons_months": horizons},
         "working_periods_review_needed": {
-            "training": [TRAIN_START, TRAIN_END],
-            "validation": [VALIDATION_START, VALIDATION_END],
-            "held_out_test_starts": TEST_START,
+            "training": [split_config["training_start"], split_config["training_end"]],
+            "validation": [split_config["validation_start"], split_config["validation_end"]],
+            "held_out_test_starts": split_config["test_start"],
         },
         "purge_rule": "Exclude an origin if its full future outcome horizon crosses the end of its candidate train or validation period.",
         "threshold_note": "Rolling real-price quantiles use only the 36 observations available through forecast origin t; percentile uses linear interpolation at (n-1)*p. Outcome checks only months after t. A separate model alert threshold is not selected here.",
         "working_target_review_needed": "The project lead selected realrise_10pct_futuremax_3m as the current working target; it may be revised after team review.",
-        "holdout_note": "No labels, price outcomes, or counts are calculated for origins on/after 2021-01. The candidate calendar remains review needed.",
+        "holdout_note": f"No labels, price outcomes, or counts are calculated for origins on/after {split_config['test_start']}. The candidate calendar remains review needed.",
         "episode_count_note": "Positive-label episodes are contiguous runs of positive eligible calendar-month origins; missing or purged months break runs.",
-        "source_limit": "The future outcome uses the same FAOSTAT farm-gate price series as M0, with the SSSU CPI chain; temporal separation does not make it source-independent.",
+        "source_limit": f"The future outcome uses the same selected real-price series as M0, deflated using {config['price_metadata']['deflator_source']}; temporal separation does not make it source-independent.",
         "results": summaries,
     }
-    SUMMARY.write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(json.dumps({"summary_file": str(SUMMARY), "output_file": str(OUTPUT), "results": summaries}, indent=2))
+    summary_file.parent.mkdir(parents=True, exist_ok=True)
+    summary_file.write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(json.dumps({"summary_file": str(summary_file), "output_file": str(output_file), "results": summaries}, indent=2))
 
 
 if __name__ == "__main__":

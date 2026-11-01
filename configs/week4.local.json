@@ -1,11 +1,31 @@
 {
   "price_csv": "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv",
+  "price_metadata": {
+    "currency": "UAH",
+    "price_unit": "LCU/tonne",
+    "source": "FAOSTAT_PP_monthly_element_5530",
+    "element_code": 5530,
+    "deflator_source": "SSSU_all_items_CPI_chain"
+  },
   "eligibility_csv": "data/processed/week4_ukraine_m0_m4_eligibility.csv",
   "label_csv": "data/processed/week4_stress_label_sensitivity.csv",
+  "label_summary_json": "data/processed/week4_stress_label_sensitivity.json",
+  "label_profile": {
+    "history_months": 36,
+    "historical_level_quantiles": [80, 90, 95],
+    "real_price_rise_percent": [5, 10, 15],
+    "horizons_months": [1, 3, 6]
+  },
   "week2_config": "configs/week2.local.json",
   "annual_availability_lag_years": 2,
   "output_root": "data/processed/week4_ukraine_faostat_features",
   "m0_output_root": "data/processed/week4_ukraine_m0_candidate",
+  "m0_model": {
+    "algorithm": "logistic_regression",
+    "regularization_l2": 0.1,
+    "max_iterations": 100,
+    "review_needed": true
+  },
   "target": {
     "label_rule_id": "realrise_10pct_futuremax_3m",
     "forecast_horizon_months": 3,
