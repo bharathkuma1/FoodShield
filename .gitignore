@@ -48,6 +48,7 @@ logs/
 data/interim/
 data/processed/
 !/data/processed/
+/data/processed/*
 !/data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv
 !/data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv.metadata.json
 data/external/
