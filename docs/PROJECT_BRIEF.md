@@ -64,6 +64,8 @@ The team agreed to carry the Week 1 signal owners into Week 2 Spark ETL: Bharath
 
 For the analytics and feature-engineering milestone, the proposed workstream mapping follows the four Week 1/2 signal owners: Bharath—price/M0 features; Abhijith—production features and as-of availability; Jyoti—weather aggregation and features; Naman—trade features plus cross-signal join/completeness integration. This is a proposed assignment, not recorded teammate sign-off. Shared acceptance criteria and boundaries are in [`docs/WEEK3_TASK_ASSIGNMENTS.md`](WEEK3_TASK_ASSIGNMENTS.md).
 
+The current working responsibility allocation for all eight weeks, including provisional owners and per-week status, is maintained in [`docs/TEAM_RESPONSIBILITIES.md`](TEAM_RESPONSIBILITIES.md). Weeks 4–8 remain adjustable planning assignments, not frozen commitments.
+
 ## Recommended project structure
 
 Recommended layout for source code, configuration, data, and generated outputs. Keep submitted proposal and presentation artifacts in their existing locations.

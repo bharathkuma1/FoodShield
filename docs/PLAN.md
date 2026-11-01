@@ -17,6 +17,8 @@ The roadmap follows the project's eight-week schedule and incorporates the TA's 
 
 **Status snapshot:** 1 November 2026. Percentages are completion of the documented workstream deliverable in this workspace, not personal effort, attendance, or teammate approval.
 
+The end-to-end per-teammate allocation and detailed progress basis for all eight weeks are in [`docs/TEAM_RESPONSIBILITIES.md`](TEAM_RESPONSIBILITIES.md). Week 1 and Week 2 assignments are agreed; Weeks 3–8 are proposed/provisional allocations to revise as project visibility improves.
+
 | Week | Bharath Kumar | Abhijith C R | Jyoti Prakash Das | Naman Singh Shekhawat | Roadmap status |
 |---|---:|---:|---:|---:|---|
 | 1 — source feasibility | 100% | 100% | 100% | 100% | Complete as a documented feasibility handoff. |
@@ -45,7 +47,9 @@ Run in local mode with bounded batches and a fixed small payload; report Windows
 
 ## Cross-week dependencies and scope gates
 
+- Workstreams proceed in parallel when their input contracts are clear; do not require every teammate to finish a weekly task before others continue. A milestone is complete only when its shared dependency artifacts and acceptance evidence are reviewed. See `docs/TEAM_RESPONSIBILITIES.md` for the collaboration rule.
 - Data feasibility gates the signal set and geographic scope; retain a clear M0 and evaluation protocol even if a candidate source fails.
-- Streaming consumes a stable processed-record contract. It is a separate replay demonstration and does not replace historical M0–M4 evaluation.
+- Week 4 M0 can proceed from the price feature contract while weather, production, or trade subtasks continue; M1–M4 comparisons require the applicable features and common-period coverage evidence. Target and holdout rules still require a shared decision before evaluation claims.
+- Streaming consumes a reviewed stable processed-record contract and at least one processed slice. Its producer, consumer, alert, and replay-configuration tasks can be developed in parallel against that contract; the end-to-end replay acceptance waits for their integration.
 - Keep the laptop workload bounded. If full data or all signal stages exceed local resources, document the subset and preserve reproducibility rather than silently claiming full coverage.
 - Reserve W8 for communication and repeatability, not first-time data discovery or unmeasured performance claims.
