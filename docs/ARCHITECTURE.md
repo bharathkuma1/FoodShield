@@ -6,7 +6,7 @@
 ## Design principles
 
 - Use Python and Apache Spark DataFrames/Spark SQL for repeatable batch transformations; store normalized layers as Parquet.
-- Keep source files immutable in `data/raw/`; explicitly reviewed, attributed small snapshots may be versioned. Ignore other raw acquisitions and all generated outputs under `data/processed/` and `artifacts/`.
+- Keep source files immutable in `data/raw/`; explicitly reviewed, attributed small snapshots may be versioned. Ignore other raw acquisitions and generated outputs under `data/processed/`, except outputs explicitly allowlisted with provenance for team reuse.
 - Keep development-only mock inputs under ignored `data/synthetic/`, mark every row as synthetic, and exclude them from reported model/evaluation results.
 - Keep schemas, units, identifiers, grain, and temporal availability explicit. Retain source flags/notes. Do not turn missing values into zero.
 - Keep the pipeline configurable by country, item code, source IDs, and paths, while requiring a separate feasibility profile before changing from the Ukraine wheat pilot.
@@ -20,7 +20,8 @@
 ```mermaid
 flowchart LR
   subgraph Sources[Local source inputs]
-    P[FPMA price JSON]
+    P[FAOSTAT monthly producer-price CSV]
+    C[SSSU monthly CPI CSV]
     Q[FAOSTAT QCL CSV]
     T[FAOSTAT TCL CSV]
     W[NASA POWER JSON]
@@ -32,6 +33,7 @@ flowchart LR
     E[M0-M4 experiments and event-study evaluation]
   end
   P --> B
+  C --> B
   Q --> B
   T --> B
   W --> B
@@ -44,6 +46,8 @@ flowchart LR
   end
   R --> K --> SS --> A
 ```
+
+The local FPMA/APK-Inform series is an optional controlled comparator, not a shared input to the selected pilot target.
 
 The batch path is the analytical foundation. Kafka replay is a separate demonstration that reads historical or processed records; it is not a live-feed service and does not replace batch validation.
 
@@ -117,28 +121,31 @@ The professor's report expectation includes the data model, methods, platforms, 
 - Purge each partition boundary by the forecast horizon so a future label cannot reach across a split. Every predictor must be available by its forecast origin, including annual data with explicit availability dates.
 - Keep benchmark-only synthetic workload data separate from real-data model training, validation, test, event labels, and food-market conclusions. Use it only for controlled Spark/Kafka scale measurements when source data are too small to expose runtime scaling.
 
-This comparison contract is project-wide. `WEEK4_EVALUATION_PROTOCOL.md` tracks the remaining target, horizon, event, and calendar decisions that instantiate it.
+This comparison contract is project-wide. The Ukraine pilot's selected price outcome is farm-gate producer-price stress, using FAOSTAT PP and the attributed SSSU CPI chain. `WEEK4_EVALUATION_PROTOCOL.md` tracks the remaining stress-rule, horizon, threshold, event, and split decisions that instantiate it.
 
 ### Current pilot source readiness (Ukraine)
 
 | Signal | Profiled period | Project status and limitation |
 |---|---|---|
-| FPMA monthly wheat price | January 2001–October 2026 | Present locally; raw values and real-source derived outputs are Git-ignored pending APK-Inform reuse-right confirmation. Series metadata also has a Retail/Wholesale mismatch. |
+| FAOSTAT monthly wheat producer price | January 2010–January 2023 | Selected Ukraine pilot price input/outcome; monthly farm-gate Producer Price (LCU/tonne), 157 observations, all flagged official and complete through December 2022. Shared under catalogued CC BY 4.0 with attribution. |
+| SSSU all-items CPI | August 1991–September 2026 | Shared official monthly CPI-change series with attribution; chained from December 2000=100 for the shared farm-gate real-price candidate. CPI is broad inflation, not wheat-specific. |
+| FPMA monthly wheat price | January 2001–October 2026 | Retained locally as an exploratory/comparison source only; APK-Inform reuse terms are unconfirmed and metadata has a Retail/Wholesale mismatch. It is not the selected M0 or outcome input. |
 | NASA POWER weather | Daily January 2001–December 2022; monthly coverage 264/310 price months | Ukraine point snapshot and request metadata are tracked on the team branch. One central point only; not nationally representative or crop-weighted. |
 | FAOSTAT wheat production | Annual 1992–2024 | Ukraine filtered extract and provenance sidecar are tracked. Contains production, yield, and harvested area with flags. |
 | FAOSTAT wheat trade | Annual 1992–2024 | Ukraine filtered extract and provenance sidecar are tracked. Contains import/export quantity and value with units/flags. |
 
-The local Week 3 profile reports 220 M4 feature-complete rows out of 310 price-month rows after current source coverage and lookback rules. Exact first/last eligible dates must be recalculated after the target is finalized. Production/trade monthly joins currently rely on a provisional two-year availability lag; historical publication vintages have not been verified.
+The original local Week 3 feature build uses the FPMA series and is not the shared selected-source panel. A separate source-only profile from the selected shared inputs mirrors the Week 3 past-only feature completeness rules: M0 has 145 eligible feature origins (January 2011–January 2023); M1 has 144 (January 2011–December 2022); M2 has 132 (February 2011–December 2022); M3/M4 have 121 (February 2011–December 2022). For a provisional three-month future-observation window, 119 M4 origins remain (February 2011–October 2022). These are feature/outcome-observation availability counts, not labeled stress cases or model results. Spark integration of the selected source is still required before treating this profile as the production feature pipeline. Production/trade joins use the provisional two-year lag; historical publication vintages have not been verified.
 
 India is a possible comparator, not yet a full multi-year fallback: its profiled FPMA price series spans January 2014–September 2026, but the local India weather extract covers 2022 only. India-filtered FAOSTAT extracts exist locally but are not tracked on the team branch. No alternate country currently has a better verified M0–M4 common period. A country change requires a new coverage, rights, and feature-completeness profile.
 
 ### Source and time grain
 
-- **FPMA price:** preserve source observation frequency; use the provider's calculated monthly values as the M0 month-level input rather than averaging weekly rows without a separately approved rule. Store nominal, real, and USD fields as separate measures with currency/unit metadata.
+- **Selected price/outcome:** use FAOSTAT Ukraine Wheat Producer Price (LCU/tonne), monthly element 5530, at farm-gate. Keep nominal and SSSU-CPI-deflated series distinct, retain source flags, and measure the future outcome only after each prediction cutoff. The deflator uses the SSSU all-items CPI chain with an explicit December 2000=100 anchor.
+- **FPMA comparison:** preserve source frequency, metadata and source fields locally. Do not redistribute raw values or value-revealing outputs without reuse permission; do not conflate its wholesale series with farm-gate producer prices.
 - **FAOSTAT QCL production:** long form at country × commodity × element × data year; values carry unit, flag, and note. Current provisional availability date is January 1 of `data_year + 2`.
 - **FAOSTAT TCL trade:** long form at reporter country × commodity × import/export element × data year; quantity and value remain distinct and keep units/flags/notes. The selected bulk extract has no partner dimension.
 - **NASA POWER weather:** preserve daily parameters, units, time standard, coordinates, and spatial method. Current Ukraine data is a single-point screening sample. Planned national/crop-exposure features require verified region selection and wheat-area weights.
-- **Event evidence:** broad FAO-backed periods are retrospective global event-study contexts. The selected target type is future domestic wheat-price stress, measured after the predictor cutoff; the exact label contract must be defined before classification metrics are meaningful.
+- **Event evidence:** broad FAO-backed periods are retrospective global event-study contexts. The selected target type is future Ukraine wheat farm-gate producer-price stress, measured after the predictor cutoff; the exact label contract must be defined before classification metrics are meaningful.
 
 ## Model progression and event validation
 
@@ -150,7 +157,7 @@ India is a possible comparator, not yet a full multi-year fallback: its profiled
 | M3 | Price + weather + production + trade |
 | M4 | All feasible signals plus temporal lags and cross-signal interactions |
 
-Compare models by ablation under the project-level evaluation contract above. Report unavailable signals and coverage changes. The 2007–08, 2010/11, and 2022 windows are context for event-study timing; they are not country-level binary labels. The primary outcome is future domestic wheat-price stress measured after the predictor cutoff; it is temporally separated but uses FPMA at later dates, not an independent source. Do not claim precision, recall, or predictive skill until the target and negative periods are operationally defined. Prevent threshold tuning on holdout cases.
+Compare models by ablation under the project-level evaluation contract above. Report unavailable signals and coverage changes. The 2007–08, 2010/11, and 2022 windows are global contexts, not country-level binary labels. Under the selected pilot source, 2007–08 is out of coverage; 2010/11 is in coverage only from the start of the 2010 event, without the proposed multi-year pre-event history; 2022 is the current eligible test-event candidate. The primary outcome is future farm-gate producer-price stress measured after the predictor cutoff, from the same source as M0; it is temporally separated, not source-independent. Do not claim precision, recall, or predictive skill until the target and negative periods are operationally defined. Prevent threshold tuning on holdout cases.
 
 ## Repository layout
 

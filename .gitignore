@@ -51,6 +51,8 @@ data/processed/
 /data/processed/*
 !/data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv
 !/data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv.metadata.json
+!/data/processed/week4_ukraine_m0_m4_eligibility.csv
+!/data/processed/week4_ukraine_m0_m4_eligibility.csv.metadata.json
 data/external/
 outputs/
 artifacts/

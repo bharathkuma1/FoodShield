@@ -1,0 +1,53 @@
+{
+  "purpose": "Source-coverage and feature-completeness profile for the agreed FAOSTAT farm-gate price candidate; no outcome labels or model performance.",
+  "generated_utc": "2026-11-01T15:37:53.654828+00:00",
+  "output_file": "data/processed/week4_ukraine_m0_m4_eligibility.csv",
+  "output_sha256": "daa05014206f83669921480d6a0c5f28f0a635d74162917dd4aabd2275ede196",
+  "records": 157,
+  "candidate_price_month_range": [
+    "2010-01",
+    "2023-01"
+  ],
+  "feature_rules": "Mirrors src/foodshield/features/week3.py required M0–M4 predictors, trailing 12-observation past-only anomalies, and M4 price × precipitation anomaly; annual QCL/TCL values use the documented provisional 2-year availability lag.",
+  "sources": {
+    "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv": "d08225d0f163c6213c62b8071b01b3688f482e14dd79d47eacc5e1494016403d",
+    "data/raw/faostat_ukraine_wheat_production_2026-11.csv": "4bd60ec1f79fb8859e56eaa09c23c268fa311b0a56a3618b3a4b7a293df0bb2a",
+    "data/raw/faostat_ukraine_wheat_trade_all_measures_2026-11.csv": "45623e6e469f6de29980db199426eccff12461e9c9492f394f313d5a3f604639",
+    "data/raw/nasa_power_ukraine_central_daily_2001_2022.json": "b6931177322f18061fe82dca367f9505805e6f469f47fe9c660f030334aecc5f"
+  },
+  "spatial_limit": "Weather is one NASA POWER point at 49 N, 32 E; its M1–M4 completeness does not establish nationally representative wheat weather.",
+  "annual_availability_limit": "The configured two-year QCL/TCL lag is a proxy, not verified release-vintage evidence.",
+  "stage_feature_summary": {
+    "M0": {
+      "eligible_origins": 145,
+      "first": "2011-01",
+      "last": "2023-01"
+    },
+    "M1": {
+      "eligible_origins": 144,
+      "first": "2011-01",
+      "last": "2022-12"
+    },
+    "M2": {
+      "eligible_origins": 132,
+      "first": "2011-02",
+      "last": "2022-12"
+    },
+    "M3": {
+      "eligible_origins": 121,
+      "first": "2011-02",
+      "last": "2022-12"
+    },
+    "M4": {
+      "eligible_origins": 121,
+      "first": "2011-02",
+      "last": "2022-12"
+    }
+  },
+  "M4_origins_with_future_price_observation_by_horizon_months": {
+    "1": 121,
+    "3": 119,
+    "6": 116
+  },
+  "proposal_contexts": "The event tag is contextual only; not a stress label. Target formula, horizon and test split remain subject to approval."
+}
