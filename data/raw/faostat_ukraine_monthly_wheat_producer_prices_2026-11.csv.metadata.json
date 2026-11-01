@@ -1,0 +1,53 @@
+{
+  "provider": "FAOSTAT",
+  "domain": "PP",
+  "source_archive_url": "https://bulks-faostat.fao.org/production/Prices_E_All_Data_(Normalized).zip",
+  "source_archive_sha256": "327f70a2230032d3966d6e9583ec5caf0e9416aa9fd91b444e02f6b8665c984d",
+  "retrieved_utc": "2026-11-01T15:04:58.529239+00:00",
+  "filter": {
+    "Area Code (M49)": "804",
+    "Item Code": "15",
+    "Element Code": "5530",
+    "Element": "Producer Price (LCU/tonne)",
+    "frequency": "monthly; excludes Annual value rows"
+  },
+  "output_file": "data/raw/faostat_ukraine_monthly_wheat_producer_prices_2026-11.csv",
+  "records": 157,
+  "year_range": [
+    2010,
+    2023
+  ],
+  "month_range": [
+    "2010-01",
+    "2023-01"
+  ],
+  "missing_months_between_first_and_last": [],
+  "last_complete_calendar_year": 2022,
+  "flags": {
+    "A": 157
+  },
+  "units": {
+    "LCU": 157
+  },
+  "output_sha256": "df6f92d1d8521b2643e78e61f66e77879a7df9637e87f5233de00460879db675",
+  "fields_preserved": [
+    "Area Code",
+    "Area Code (M49)",
+    "Area",
+    "Item Code",
+    "Item Code (CPC)",
+    "Item",
+    "Element Code",
+    "Element",
+    "Year Code",
+    "Year",
+    "Months Code",
+    "Months",
+    "Unit",
+    "Value",
+    "Flag"
+  ],
+  "license": "CC-BY-4.0 per FAOSTAT PP dataset catalog; attribution required. All observations in this Ukraine wheat extract are flagged A (official value).",
+  "citation": "FAO. 2026. FAOSTAT Producer Prices. Accessed 1 November 2026. https://www.fao.org/faostat/en/#data/PP Licence: CC-BY-4.0.",
+  "scope_note": "Farm-gate producer price candidate; it is not the FPMA wholesale price target and requires a project scope decision before substitution."
+}

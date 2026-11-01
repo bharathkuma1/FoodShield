@@ -1,0 +1,40 @@
+{
+  "provider": "State Statistics Service of Ukraine (SSSU)",
+  "dataset": "Changes in prices (tariffs) for consumer goods (services)",
+  "dataflow": "DF_PRICE_CHANGE_CONSUMER_GOODS_SERVICE, version 27.2.0",
+  "request_url": "https://stat.gov.ua/sdmx/workspaces/default:integration/registry/sdmx/3.0/data/dataflow/SSSU/DF_PRICE_CHANGE_CONSUMER_GOODS_SERVICE/27.2.0/INDEX_CONSUMPRICE.PREV_MONTH.UA00000000000000000.0.M?dimensionAtObservation=TIME_PERIOD",
+  "retrieved_utc": "2026-11-01T15:15:40.386827+00:00",
+  "series": {
+    "indicator": "INDEX_CONSUMPRICE",
+    "base_period": "PREV_MONTH",
+    "region": "UA00000000000000000 (Ukraine)",
+    "goods_services_type": "0 (all-items CPI)",
+    "frequency": "M (monthly)"
+  },
+  "records": 422,
+  "period_range": [
+    "1991-M08",
+    "2026-M09"
+  ],
+  "source_response_sha256": "134c3c5b4ebc6afc5787b282688a3cdce0d10121ec589a8124d65a53ce69ce47",
+  "output_file": "data/raw/ukrstat_ukraine_monthly_all_items_cpi_2026-11.csv",
+  "output_sha256": "648b85db57bf918d51f57f0653d9342a809db617d136d0b3d32fb01b53ccc96c",
+  "fields_preserved": [
+    "FREQ",
+    "INDICATOR",
+    "BASE_PERIOD",
+    "REGION",
+    "GOODS_SERVICES_TYPE",
+    "TIME_PERIOD",
+    "OBS_VALUE",
+    "OBS_FLAG",
+    "UPDATED",
+    "NOTES_OBS"
+  ],
+  "reuse_basis": "Official state statistical information; Article 27(1) of Ukraine Law 2524-IX provides access and use/distribution/storage rights, and Article 27(3) requires attribution to the producer when publishing or distributing. Cite SSSU; retain series dimensions and caveats.",
+  "citation": "State Statistics Service of Ukraine (SSSU), Changes in prices (tariffs) for consumer goods (services), accessed 1 November 2026 via SSSU SDMX API v3. https://stat.gov.ua/en/development-api/sdmx-api-v3",
+  "geographic_caveat": "SSSU metadata notes that coverage excludes temporarily occupied and some conflict-affected territories; see dataset notes before interpreting national representativeness.",
+  "measurement_caveat": "OBS_VALUE is the monthly CPI change relative to the previous month, not an already chained CPI index level. Construct any price deflator explicitly and document the anchor month.",
+  "missing_months_between_first_and_last": [],
+  "last_complete_calendar_year": 2025
+}
