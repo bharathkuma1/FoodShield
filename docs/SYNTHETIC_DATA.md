@@ -4,7 +4,7 @@
 
 FoodShield can develop and integrate Week 3 monthly features without waiting for outstanding source, rights, or coverage decisions. The generator creates a small Ukraine wheat panel calibrated from distribution summaries of the local FPMA, NASA POWER, FAOSTAT QCL, and FAOSTAT TCL files. It generates new values; it does not copy rows from those sources.
 
-Every generated row has `is_synthetic=true`; output metadata also names the local calibration inputs, seed, ranges, lags, splits, and synthetic scenario. The output lives under ignored `data/synthetic/`, separate from `data/raw/` and the real Week 2 outputs. Synthetic rows, event IDs, split labels, and price-stress labels are for pipeline/model-interface development only. They are not observed data, real event reconstructions, model results, or final evaluation evidence. Do not combine them with real observations in results or describe their synthetic scenarios as historical events.
+Every generated row has `is_synthetic=true`; output metadata also names the local calibration inputs, seed, ranges, lags, splits, and synthetic scenario. The two named Week 3 fixture files under `data/synthetic/week3_ukraine/` are versioned for team development. Other synthetic outputs remain ignored. All synthetic data stays separate from `data/raw/` and real Week 2 outputs. Synthetic rows, event IDs, split labels, and price-stress labels are for pipeline/model-interface development only. They are not observed data, real event reconstructions, model results, or final evaluation evidence. Do not combine them with real observations in results or describe their synthetic scenarios as historical events.
 
 ## Generate the Week 3 fixture
 

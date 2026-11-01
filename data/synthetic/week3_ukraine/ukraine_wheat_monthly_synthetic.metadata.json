@@ -1,0 +1,68 @@
+{
+  "purpose": "synthetic development fixture only; never evidence, observed data, or final evaluation",
+  "generated_seed": 20261101,
+  "row_count": 96,
+  "month_range": [
+    "2015-01-01",
+    "2022-12-01"
+  ],
+  "calibration_inputs": {
+    "fpma_monthly": "data/raw/fpma_ukraine_national_wheat_grain_wholesale.json",
+    "nasa_daily": "data/raw/nasa_power_ukraine_central_daily_2001_2022.json",
+    "qcl_annual": "data/raw/faostat_ukraine_wheat_production_2026-11.csv",
+    "tcl_annual": "data/raw/faostat_ukraine_wheat_trade_all_measures_2026-11.csv"
+  },
+  "generation_method": "Synthetic values generated from source distribution summaries (calendar-month medians/variation and annual log trends); no source rows are copied.",
+  "temporal_rule": "Annual synthetic features use data_year = forecast_year - 2 and become available January 1 of forecast_year. This mirrors a provisional project assumption, not verified release vintages.",
+  "demo_split": {
+    "2015": "WARMUP",
+    "2016": "TRAIN",
+    "2017": "TRAIN",
+    "2018": "TRAIN",
+    "2019": "TRAIN",
+    "2020": "TRAIN",
+    "2021": "VALIDATION",
+    "2022": "TEST"
+  },
+  "synthetic_events": [
+    {
+      "event_id": "SIM-TRAIN-01",
+      "start_month": "2018-04",
+      "duration_months": 4,
+      "price_shock_fraction": 0.24,
+      "weather_lead_months": 2,
+      "price_decay_months": 4
+    },
+    {
+      "event_id": "SIM-VALIDATION-01",
+      "start_month": "2021-03",
+      "duration_months": 4,
+      "price_shock_fraction": 0.18,
+      "weather_lead_months": 2,
+      "price_decay_months": 4
+    },
+    {
+      "event_id": "SIM-TEST-01",
+      "start_month": "2022-05",
+      "duration_months": 4,
+      "price_shock_fraction": 0.24,
+      "weather_lead_months": 2,
+      "price_decay_months": 4
+    }
+  ],
+  "synthetic_label_rule": {
+    "name": "synthetic_demo_future_price_stress",
+    "horizon_months": 3,
+    "threshold_fraction": 0.15,
+    "definition": "1 when the maximum synthetic real price in the next horizon months is at least (1 + threshold_fraction) times the current synthetic real price; otherwise 0; final rows without full horizon are blank.",
+    "status": "illustrative only; replace with a team-approved outcome/horizon/threshold for real evaluation"
+  },
+  "limitations": [
+    "All rows and labels are synthetic; demo_split is not a validated train/test split.",
+    "Weather is calibrated from a single NASA POWER point, not a wheat-area or national signal.",
+    "Annual lags are a provisional proxy; no publication vintages are simulated.",
+    "The synthetic event injections are invented scenarios, not historical event reconstructions or causal claims.",
+    "Generated data are local development fixtures and should not be published as observations."
+  ],
+  "output_file": "data/synthetic/week3_ukraine/ukraine_wheat_monthly_synthetic.csv"
+}
