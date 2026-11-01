@@ -15,6 +15,8 @@
     "qcl_csv": "data/raw/faostat_ukraine_wheat_production_2026-11.csv",
     "tcl_csv": "data/raw/faostat_ukraine_wheat_trade_all_measures_2026-11.csv",
     "cpi_csv": "data/raw/faostat_ukraine_monthly_cpi_2026-11.csv",
+    "ukrstat_cpi_csv": "data/raw/ukrstat_ukraine_monthly_all_items_cpi_2026-11.csv",
+    "producer_prices_csv": "data/raw/faostat_ukraine_monthly_wheat_producer_prices_2026-11.csv",
     "nasa_power_json": "data/raw/nasa_power_ukraine_central_daily_2001_2022.json"
   },
   "nasa_power": {

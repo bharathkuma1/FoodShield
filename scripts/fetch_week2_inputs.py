@@ -35,6 +35,16 @@ FAOSTAT_CPI_URL = (
     "https://bulks-faostat.fao.org/production/"
     "ConsumerPriceIndices_E_All_Data_(Normalized).zip"
 )
+FAOSTAT_PP_URL = (
+    "https://bulks-faostat.fao.org/production/"
+    "Prices_E_All_Data_(Normalized).zip"
+)
+UKRSTAT_CPI_URL = (
+    "https://stat.gov.ua/sdmx/workspaces/default:integration/registry/sdmx/3.0/"
+    "data/dataflow/SSSU/DF_PRICE_CHANGE_CONSUMER_GOODS_SERVICE/27.2.0/"
+    "INDEX_CONSUMPRICE.PREV_MONTH.UA00000000000000000.0.M"
+    "?dimensionAtObservation=TIME_PERIOD"
+)
 FAOSTAT_FIELDS = [
     "Area Code",
     "Area Code (M49)",
@@ -71,6 +81,30 @@ CPI_FIELDS = [
 CPI_ITEMS = {
     "23012": "Consumer Prices, General Indices (2015 = 100)",
     "23013": "Consumer Prices, Food Indices (2015 = 100)",
+}
+PP_FIELDS = [
+    "Area Code",
+    "Area Code (M49)",
+    "Area",
+    "Item Code",
+    "Item Code (CPC)",
+    "Item",
+    "Element Code",
+    "Element",
+    "Year Code",
+    "Year",
+    "Months Code",
+    "Months",
+    "Unit",
+    "Value",
+    "Flag",
+]
+MONTH_NUMBER = {
+    month: index
+    for index, month in enumerate(
+        ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"),
+        start=1,
+    )
 }
 
 
@@ -293,6 +327,7 @@ def extract_faostat_cpi(*, area_m49: str, output: Path, root: Path) -> dict[str,
     temp_output = output.with_name(output.name + ".tmp")
     count = 0
     years: list[int] = []
+    month_keys: list[tuple[int, int]] = []
     records_by_item: dict[str, int] = {}
     flags_by_item: dict[str, dict[str, int]] = {}
     seen_keys: set[tuple[str, str, str]] = set()
@@ -323,7 +358,9 @@ def extract_faostat_cpi(*, area_m49: str, output: Path, root: Path) -> dict[str,
                         seen_keys.add(key)
                         writer.writerow({field: row.get(field, "") for field in CPI_FIELDS})
                         count += 1
-                        years.append(int(row["Year"]))
+                        year = int(row["Year"])
+                        years.append(year)
+                        month_keys.append((year, MONTH_NUMBER[month]))
                         records_by_item[item_code] = records_by_item.get(item_code, 0) + 1
                         flag = row.get("Flag", "").strip()
                         item_flags = flags_by_item.setdefault(item_code, {})
@@ -340,6 +377,22 @@ def extract_faostat_cpi(*, area_m49: str, output: Path, root: Path) -> dict[str,
             pass
 
     output_sha = sha256_file(output)
+    ordered_months = sorted(month_keys)
+    first_year, first_month = ordered_months[0]
+    last_year, last_month = ordered_months[-1]
+    all_months = {
+        (year, month)
+        for year in range(first_year, last_year + 1)
+        for month in range(1, 13)
+        if (year, month) >= (first_year, first_month)
+        and (year, month) <= (last_year, last_month)
+    }
+    month_set = set(ordered_months)
+    gaps = sorted(all_months - month_set)
+    complete_years = [
+        year for year in years
+        if all((year, month) in month_set for month in range(1, 13))
+    ]
     sidecar = {
         "provider": "FAOSTAT",
         "domain": "CP",
@@ -354,6 +407,9 @@ def extract_faostat_cpi(*, area_m49: str, output: Path, root: Path) -> dict[str,
         "output_file": output.relative_to(root).as_posix(),
         "records": count,
         "year_range": [min(years), max(years)],
+        "month_range": [f"{first_year:04d}-{first_month:02d}", f"{last_year:04d}-{last_month:02d}"],
+        "missing_months_between_first_and_last": [f"{year:04d}-{month:02d}" for year, month in gaps],
+        "last_complete_calendar_year": max(complete_years) if complete_years else None,
         "records_by_item": records_by_item,
         "flags_by_item": flags_by_item,
         "output_sha256": output_sha,
@@ -368,6 +424,219 @@ def extract_faostat_cpi(*, area_m49: str, output: Path, root: Path) -> dict[str,
         "records": count,
         "downloaded_now": True,
     }
+
+
+def extract_faostat_monthly_wheat_producer_prices(
+    *, area_m49: str, item_code: str, output: Path, root: Path
+) -> dict[str, Any]:
+    """Fetch the official monthly wheat producer-price candidate for one country."""
+    if output.exists():
+        if not output.is_file() or output.stat().st_size == 0:
+            raise ValueError(f"Existing producer-price extract is empty or invalid: {output}")
+        return {
+            "path": output.relative_to(root).as_posix(),
+            "sha256": sha256_file(output),
+            "downloaded_now": False,
+        }
+
+    expected_member = "Prices_E_All_Data_(Normalized).csv"
+    temporary_dir = output.parent / ".source_download_cache"
+    archive_path, archive_sha = download_bulk_to_temp(FAOSTAT_PP_URL, temporary_dir)
+    temp_output = output.with_name(output.name + ".tmp")
+    count = 0
+    years: list[int] = []
+    flags: dict[str, int] = {}
+    units: dict[str, int] = {}
+    seen_keys: set[tuple[str, str]] = set()
+    try:
+        with zipfile.ZipFile(archive_path) as archive:
+            if expected_member not in archive.namelist():
+                raise ValueError(f"Expected {expected_member} not found in {FAOSTAT_PP_URL}")
+            with archive.open(expected_member) as raw, temp_output.open("w", encoding="utf-8", newline="") as out:
+                import io
+
+                text = io.TextIOWrapper(raw, encoding="utf-8-sig", newline="")
+                reader = csv.DictReader(text)
+                if reader.fieldnames is None or not set(PP_FIELDS).issubset(reader.fieldnames):
+                    raise ValueError(f"Unexpected FAOSTAT PP schema in {expected_member}")
+                writer = csv.DictWriter(out, fieldnames=PP_FIELDS, lineterminator="\n")
+                writer.writeheader()
+                for row in reader:
+                    month = row.get("Months", "").strip()
+                    source_m49 = row.get("Area Code (M49)", "").strip().lstrip("'")
+                    if (
+                        source_m49 == str(area_m49)
+                        and row.get("Item Code", "").strip() == str(item_code)
+                        and row.get("Element Code", "").strip() == "5530"
+                        and month in {
+                            "January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December",
+                        }
+                    ):
+                        key = (row.get("Year", "").strip(), row.get("Months Code", "").strip())
+                        if key in seen_keys:
+                            raise ValueError(f"Duplicate FAOSTAT monthly producer-price key {key}")
+                        seen_keys.add(key)
+                        writer.writerow({field: row.get(field, "") for field in PP_FIELDS})
+                        count += 1
+                        years.append(int(row["Year"]))
+                        flag = row.get("Flag", "").strip()
+                        flags[flag] = flags.get(flag, 0) + 1
+                        unit = row.get("Unit", "").strip()
+                        units[unit] = units.get(unit, 0) + 1
+        if count == 0:
+            raise ValueError(f"No FAOSTAT monthly PP rows matched M49 {area_m49}, item {item_code}")
+        temp_output.replace(output)
+    finally:
+        archive_path.unlink(missing_ok=True)
+        temp_output.unlink(missing_ok=True)
+        try:
+            temporary_dir.rmdir()
+        except OSError:
+            pass
+
+    output_sha = sha256_file(output)
+    sidecar = {
+        "provider": "FAOSTAT",
+        "domain": "PP",
+        "source_archive_url": FAOSTAT_PP_URL,
+        "source_archive_sha256": archive_sha,
+        "retrieved_utc": datetime.now(timezone.utc).isoformat(),
+        "filter": {
+            "Area Code (M49)": str(area_m49),
+            "Item Code": str(item_code),
+            "Element Code": "5530",
+            "Element": "Producer Price (LCU/tonne)",
+            "frequency": "monthly; excludes Annual value rows",
+        },
+        "output_file": output.relative_to(root).as_posix(),
+        "records": count,
+        "year_range": [min(years), max(years)],
+        "flags": flags,
+        "units": units,
+        "output_sha256": output_sha,
+        "fields_preserved": PP_FIELDS,
+        "license": "CC-BY-4.0 per FAOSTAT PP dataset catalog; attribution required. All observations in this Ukraine wheat extract are flagged A (official value).",
+        "citation": "FAO. 2026. FAOSTAT Producer Prices. Accessed 1 November 2026. https://www.fao.org/faostat/en/#data/PP Licence: CC-BY-4.0.",
+        "scope_note": "Farm-gate producer price candidate; it is not the FPMA wholesale price target and requires a project scope decision before substitution.",
+    }
+    write_json_atomically(output.with_name(output.name + ".metadata.json"), sidecar)
+    return {
+        "path": output.relative_to(root).as_posix(),
+        "sha256": output_sha,
+        "records": count,
+        "downloaded_now": True,
+    }
+
+
+def extract_ukrstat_monthly_cpi(*, output: Path, root: Path) -> dict[str, Any]:
+    """Fetch the official Ukraine all-items monthly CPI change series via SDMX."""
+    if output.exists():
+        if not output.is_file() or output.stat().st_size == 0:
+            raise ValueError(f"Existing SSSU CPI extract is empty or invalid: {output}")
+        return {
+            "path": output.relative_to(root).as_posix(),
+            "sha256": sha256_file(output),
+            "downloaded_now": False,
+        }
+
+    request = urllib.request.Request(
+        UKRSTAT_CPI_URL,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "application/vnd.sdmx.data+csv;version=2.0.0;labels=id;timeFormat=normalized;keys=both",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=120) as response:
+        source_bytes = response.read()
+    source_sha = hashlib.sha256(source_bytes).hexdigest()
+    text = source_bytes.decode("utf-8-sig")
+    reader = csv.DictReader(text.splitlines())
+    if reader.fieldnames is None or not {"TIME_PERIOD", "OBS_VALUE"}.issubset(reader.fieldnames):
+        raise ValueError("Unexpected SSSU SDMX CSV schema; expected TIME_PERIOD and OBS_VALUE")
+    fields = [
+        name for name in (
+            "FREQ", "INDICATOR", "BASE_PERIOD", "REGION", "GOODS_SERVICES_TYPE",
+            "TIME_PERIOD", "OBS_VALUE", "OBS_FLAG", "OBS_STATUS", "UPDATED", "NOTES_OBS",
+        ) if name in reader.fieldnames
+    ]
+    if not {"TIME_PERIOD", "OBS_VALUE"}.issubset(fields):
+        raise ValueError("SSSU CSV did not include required observation fields")
+
+    destination_tmp = output.with_name(output.name + ".tmp")
+    count = 0
+    periods: list[str] = []
+    try:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        with destination_tmp.open("w", encoding="utf-8", newline="") as stream:
+            writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
+            writer.writeheader()
+            seen: set[str] = set()
+            for row in reader:
+                period = (row.get("TIME_PERIOD") or "").strip()
+                value = (row.get("OBS_VALUE") or "").strip()
+                if not period or not value:
+                    continue
+                if period in seen:
+                    raise ValueError(f"Duplicate SSSU CPI observation for {period}")
+                seen.add(period)
+                writer.writerow({name: (row.get(name) or "").strip() for name in fields})
+                periods.append(period)
+                count += 1
+        if not count:
+            raise ValueError("SSSU returned no non-empty monthly CPI observations")
+        destination_tmp.replace(output)
+    finally:
+        destination_tmp.unlink(missing_ok=True)
+
+    digest = sha256_file(output)
+    ordered = sorted(periods)
+    year_months = [tuple(map(int, period.split("-M"))) for period in ordered]
+    first_year, first_month = year_months[0]
+    last_year, last_month = year_months[-1]
+    observed = set(year_months)
+    expected = {
+        (year, month)
+        for year in range(first_year, last_year + 1)
+        for month in range(1, 13)
+        if (year, month) >= (first_year, first_month)
+        and (year, month) <= (last_year, last_month)
+    }
+    missing_months = sorted(expected - observed)
+    complete_years = [
+        year for year in range(first_year, last_year + 1)
+        if all((year, month) in observed for month in range(1, 13))
+    ]
+    metadata = {
+        "provider": "State Statistics Service of Ukraine (SSSU)",
+        "dataset": "Changes in prices (tariffs) for consumer goods (services)",
+        "dataflow": "DF_PRICE_CHANGE_CONSUMER_GOODS_SERVICE, version 27.2.0",
+        "request_url": UKRSTAT_CPI_URL,
+        "retrieved_utc": datetime.now(timezone.utc).isoformat(),
+        "series": {
+            "indicator": "INDEX_CONSUMPRICE",
+            "base_period": "PREV_MONTH",
+            "region": "UA00000000000000000 (Ukraine)",
+            "goods_services_type": "0 (all-items CPI)",
+            "frequency": "M (monthly)",
+        },
+        "records": count,
+        "period_range": [ordered[0], ordered[-1]],
+        "missing_months_between_first_and_last": [
+            f"{year:04d}-M{month:02d}" for year, month in missing_months
+        ],
+        "last_complete_calendar_year": max(complete_years) if complete_years else None,
+        "source_response_sha256": source_sha,
+        "output_file": output.relative_to(root).as_posix(),
+        "output_sha256": digest,
+        "fields_preserved": fields,
+        "reuse_basis": "Official state statistical information; Article 27(1) of Ukraine Law 2524-IX provides access and use/distribution/storage rights, and Article 27(3) requires attribution to the producer when publishing or distributing. Cite SSSU; retain series dimensions and caveats.",
+        "citation": "State Statistics Service of Ukraine (SSSU), Changes in prices (tariffs) for consumer goods (services), accessed 1 November 2026 via SSSU SDMX API v3. https://stat.gov.ua/en/development-api/sdmx-api-v3",
+        "geographic_caveat": "SSSU metadata notes that coverage excludes temporarily occupied and some conflict-affected territories; see dataset notes before interpreting national representativeness.",
+        "measurement_caveat": "OBS_VALUE is the monthly CPI change relative to the previous month, not an already chained CPI index level. Construct any price deflator explicitly and document the anchor month.",
+    }
+    write_json_atomically(output.with_name(output.name + ".metadata.json"), metadata)
+    return {"path": output.relative_to(root).as_posix(), "sha256": digest, "records": count, "downloaded_now": True}
 
 
 def main() -> None:
@@ -399,6 +668,20 @@ def main() -> None:
         extract_faostat_cpi(
             area_m49=area,
             output=resolve_input(ROOT, inputs["cpi_csv"]),
+            root=ROOT,
+        )
+    )
+    results["sources"].append(
+        extract_ukrstat_monthly_cpi(
+            output=resolve_input(ROOT, inputs["ukrstat_cpi_csv"]),
+            root=ROOT,
+        )
+    )
+    results["sources"].append(
+        extract_faostat_monthly_wheat_producer_prices(
+            area_m49=area,
+            item_code=item,
+            output=resolve_input(ROOT, inputs["producer_prices_csv"]),
             root=ROOT,
         )
     )
