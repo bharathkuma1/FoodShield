@@ -1,4 +1,5 @@
 origin_month,split,common_stage_set,label_rule_id,history_months,history_percentile,minimum_real_price_rise_pct,forecast_horizon_months,future_stress_label
+2012-12,train,M0-M4,trailing36m_q80_futuremax_1m,36,80,,1,1
 2013-02,train,M0-M4,trailing36m_q80_futuremax_1m,36,80,,1,1
 2013-03,train,M0-M4,trailing36m_q80_futuremax_1m,36,80,,1,1
 2013-04,train,M0-M4,trailing36m_q80_futuremax_1m,36,80,,1,1
@@ -74,6 +75,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-09,validation,M0-M4,trailing36m_q80_futuremax_1m,36,80,,1,1
 2020-10,validation,M0-M4,trailing36m_q80_futuremax_1m,36,80,,1,1
 2020-11,validation,M0-M4,trailing36m_q80_futuremax_1m,36,80,,1,1
+2012-12,train,M0-M4,trailing36m_q90_futuremax_1m,36,90,,1,1
 2013-02,train,M0-M4,trailing36m_q90_futuremax_1m,36,90,,1,1
 2013-03,train,M0-M4,trailing36m_q90_futuremax_1m,36,90,,1,1
 2013-04,train,M0-M4,trailing36m_q90_futuremax_1m,36,90,,1,1
@@ -149,6 +151,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-09,validation,M0-M4,trailing36m_q90_futuremax_1m,36,90,,1,1
 2020-10,validation,M0-M4,trailing36m_q90_futuremax_1m,36,90,,1,1
 2020-11,validation,M0-M4,trailing36m_q90_futuremax_1m,36,90,,1,1
+2012-12,train,M0-M4,trailing36m_q95_futuremax_1m,36,95,,1,1
 2013-02,train,M0-M4,trailing36m_q95_futuremax_1m,36,95,,1,1
 2013-03,train,M0-M4,trailing36m_q95_futuremax_1m,36,95,,1,1
 2013-04,train,M0-M4,trailing36m_q95_futuremax_1m,36,95,,1,0
@@ -224,6 +227,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-09,validation,M0-M4,trailing36m_q95_futuremax_1m,36,95,,1,1
 2020-10,validation,M0-M4,trailing36m_q95_futuremax_1m,36,95,,1,1
 2020-11,validation,M0-M4,trailing36m_q95_futuremax_1m,36,95,,1,1
+2012-12,train,M0-M4,realrise_5pct_futuremax_1m,36,,5,1,0
 2013-02,train,M0-M4,realrise_5pct_futuremax_1m,36,,5,1,0
 2013-03,train,M0-M4,realrise_5pct_futuremax_1m,36,,5,1,0
 2013-04,train,M0-M4,realrise_5pct_futuremax_1m,36,,5,1,0
@@ -299,6 +303,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-09,validation,M0-M4,realrise_5pct_futuremax_1m,36,,5,1,1
 2020-10,validation,M0-M4,realrise_5pct_futuremax_1m,36,,5,1,0
 2020-11,validation,M0-M4,realrise_5pct_futuremax_1m,36,,5,1,0
+2012-12,train,M0-M4,realrise_10pct_futuremax_1m,36,,10,1,0
 2013-02,train,M0-M4,realrise_10pct_futuremax_1m,36,,10,1,0
 2013-03,train,M0-M4,realrise_10pct_futuremax_1m,36,,10,1,0
 2013-04,train,M0-M4,realrise_10pct_futuremax_1m,36,,10,1,0
@@ -374,6 +379,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-09,validation,M0-M4,realrise_10pct_futuremax_1m,36,,10,1,0
 2020-10,validation,M0-M4,realrise_10pct_futuremax_1m,36,,10,1,0
 2020-11,validation,M0-M4,realrise_10pct_futuremax_1m,36,,10,1,0
+2012-12,train,M0-M4,realrise_15pct_futuremax_1m,36,,15,1,0
 2013-02,train,M0-M4,realrise_15pct_futuremax_1m,36,,15,1,0
 2013-03,train,M0-M4,realrise_15pct_futuremax_1m,36,,15,1,0
 2013-04,train,M0-M4,realrise_15pct_futuremax_1m,36,,15,1,0
@@ -449,6 +455,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-09,validation,M0-M4,realrise_15pct_futuremax_1m,36,,15,1,0
 2020-10,validation,M0-M4,realrise_15pct_futuremax_1m,36,,15,1,0
 2020-11,validation,M0-M4,realrise_15pct_futuremax_1m,36,,15,1,0
+2012-12,train,M0-M4,trailing36m_q80_futuremax_3m,36,80,,3,1
 2013-02,train,M0-M4,trailing36m_q80_futuremax_3m,36,80,,3,1
 2013-03,train,M0-M4,trailing36m_q80_futuremax_3m,36,80,,3,1
 2013-04,train,M0-M4,trailing36m_q80_futuremax_3m,36,80,,3,1
@@ -520,6 +527,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-07,validation,M0-M4,trailing36m_q80_futuremax_3m,36,80,,3,1
 2020-08,validation,M0-M4,trailing36m_q80_futuremax_3m,36,80,,3,1
 2020-09,validation,M0-M4,trailing36m_q80_futuremax_3m,36,80,,3,1
+2012-12,train,M0-M4,trailing36m_q90_futuremax_3m,36,90,,3,1
 2013-02,train,M0-M4,trailing36m_q90_futuremax_3m,36,90,,3,1
 2013-03,train,M0-M4,trailing36m_q90_futuremax_3m,36,90,,3,1
 2013-04,train,M0-M4,trailing36m_q90_futuremax_3m,36,90,,3,1
@@ -591,6 +599,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-07,validation,M0-M4,trailing36m_q90_futuremax_3m,36,90,,3,1
 2020-08,validation,M0-M4,trailing36m_q90_futuremax_3m,36,90,,3,1
 2020-09,validation,M0-M4,trailing36m_q90_futuremax_3m,36,90,,3,1
+2012-12,train,M0-M4,trailing36m_q95_futuremax_3m,36,95,,3,1
 2013-02,train,M0-M4,trailing36m_q95_futuremax_3m,36,95,,3,1
 2013-03,train,M0-M4,trailing36m_q95_futuremax_3m,36,95,,3,1
 2013-04,train,M0-M4,trailing36m_q95_futuremax_3m,36,95,,3,0
@@ -662,6 +671,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-07,validation,M0-M4,trailing36m_q95_futuremax_3m,36,95,,3,1
 2020-08,validation,M0-M4,trailing36m_q95_futuremax_3m,36,95,,3,1
 2020-09,validation,M0-M4,trailing36m_q95_futuremax_3m,36,95,,3,1
+2012-12,train,M0-M4,realrise_5pct_futuremax_3m,36,,5,3,1
 2013-02,train,M0-M4,realrise_5pct_futuremax_3m,36,,5,3,0
 2013-03,train,M0-M4,realrise_5pct_futuremax_3m,36,,5,3,0
 2013-04,train,M0-M4,realrise_5pct_futuremax_3m,36,,5,3,0
@@ -733,6 +743,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-07,validation,M0-M4,realrise_5pct_futuremax_3m,36,,5,3,1
 2020-08,validation,M0-M4,realrise_5pct_futuremax_3m,36,,5,3,1
 2020-09,validation,M0-M4,realrise_5pct_futuremax_3m,36,,5,3,1
+2012-12,train,M0-M4,realrise_10pct_futuremax_3m,36,,10,3,0
 2013-02,train,M0-M4,realrise_10pct_futuremax_3m,36,,10,3,0
 2013-03,train,M0-M4,realrise_10pct_futuremax_3m,36,,10,3,0
 2013-04,train,M0-M4,realrise_10pct_futuremax_3m,36,,10,3,0
@@ -804,6 +815,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-07,validation,M0-M4,realrise_10pct_futuremax_3m,36,,10,3,1
 2020-08,validation,M0-M4,realrise_10pct_futuremax_3m,36,,10,3,1
 2020-09,validation,M0-M4,realrise_10pct_futuremax_3m,36,,10,3,1
+2012-12,train,M0-M4,realrise_15pct_futuremax_3m,36,,15,3,0
 2013-02,train,M0-M4,realrise_15pct_futuremax_3m,36,,15,3,0
 2013-03,train,M0-M4,realrise_15pct_futuremax_3m,36,,15,3,0
 2013-04,train,M0-M4,realrise_15pct_futuremax_3m,36,,15,3,0
@@ -875,6 +887,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-07,validation,M0-M4,realrise_15pct_futuremax_3m,36,,15,3,1
 2020-08,validation,M0-M4,realrise_15pct_futuremax_3m,36,,15,3,1
 2020-09,validation,M0-M4,realrise_15pct_futuremax_3m,36,,15,3,0
+2012-12,train,M0-M4,trailing36m_q80_futuremax_6m,36,80,,6,1
 2013-02,train,M0-M4,trailing36m_q80_futuremax_6m,36,80,,6,1
 2013-03,train,M0-M4,trailing36m_q80_futuremax_6m,36,80,,6,1
 2013-04,train,M0-M4,trailing36m_q80_futuremax_6m,36,80,,6,1
@@ -940,6 +953,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-04,validation,M0-M4,trailing36m_q80_futuremax_6m,36,80,,6,1
 2020-05,validation,M0-M4,trailing36m_q80_futuremax_6m,36,80,,6,1
 2020-06,validation,M0-M4,trailing36m_q80_futuremax_6m,36,80,,6,1
+2012-12,train,M0-M4,trailing36m_q90_futuremax_6m,36,90,,6,1
 2013-02,train,M0-M4,trailing36m_q90_futuremax_6m,36,90,,6,1
 2013-03,train,M0-M4,trailing36m_q90_futuremax_6m,36,90,,6,1
 2013-04,train,M0-M4,trailing36m_q90_futuremax_6m,36,90,,6,1
@@ -1005,6 +1019,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-04,validation,M0-M4,trailing36m_q90_futuremax_6m,36,90,,6,1
 2020-05,validation,M0-M4,trailing36m_q90_futuremax_6m,36,90,,6,1
 2020-06,validation,M0-M4,trailing36m_q90_futuremax_6m,36,90,,6,1
+2012-12,train,M0-M4,trailing36m_q95_futuremax_6m,36,95,,6,1
 2013-02,train,M0-M4,trailing36m_q95_futuremax_6m,36,95,,6,1
 2013-03,train,M0-M4,trailing36m_q95_futuremax_6m,36,95,,6,1
 2013-04,train,M0-M4,trailing36m_q95_futuremax_6m,36,95,,6,0
@@ -1070,6 +1085,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-04,validation,M0-M4,trailing36m_q95_futuremax_6m,36,95,,6,1
 2020-05,validation,M0-M4,trailing36m_q95_futuremax_6m,36,95,,6,1
 2020-06,validation,M0-M4,trailing36m_q95_futuremax_6m,36,95,,6,1
+2012-12,train,M0-M4,realrise_5pct_futuremax_6m,36,,5,6,1
 2013-02,train,M0-M4,realrise_5pct_futuremax_6m,36,,5,6,0
 2013-03,train,M0-M4,realrise_5pct_futuremax_6m,36,,5,6,0
 2013-04,train,M0-M4,realrise_5pct_futuremax_6m,36,,5,6,0
@@ -1135,6 +1151,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-04,validation,M0-M4,realrise_5pct_futuremax_6m,36,,5,6,1
 2020-05,validation,M0-M4,realrise_5pct_futuremax_6m,36,,5,6,1
 2020-06,validation,M0-M4,realrise_5pct_futuremax_6m,36,,5,6,1
+2012-12,train,M0-M4,realrise_10pct_futuremax_6m,36,,10,6,0
 2013-02,train,M0-M4,realrise_10pct_futuremax_6m,36,,10,6,0
 2013-03,train,M0-M4,realrise_10pct_futuremax_6m,36,,10,6,0
 2013-04,train,M0-M4,realrise_10pct_futuremax_6m,36,,10,6,0
@@ -1200,6 +1217,7 @@ origin_month,split,common_stage_set,label_rule_id,history_months,history_percent
 2020-04,validation,M0-M4,realrise_10pct_futuremax_6m,36,,10,6,1
 2020-05,validation,M0-M4,realrise_10pct_futuremax_6m,36,,10,6,1
 2020-06,validation,M0-M4,realrise_10pct_futuremax_6m,36,,10,6,1
+2012-12,train,M0-M4,realrise_15pct_futuremax_6m,36,,15,6,0
 2013-02,train,M0-M4,realrise_15pct_futuremax_6m,36,,15,6,0
 2013-03,train,M0-M4,realrise_15pct_futuremax_6m,36,,15,6,0
 2013-04,train,M0-M4,realrise_15pct_futuremax_6m,36,,15,6,0

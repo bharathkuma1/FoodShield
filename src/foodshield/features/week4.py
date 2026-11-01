@@ -45,6 +45,7 @@ def assemble_selected_price_panel(
     price_csv: str,
     week2_config_path: str,
     annual_lag_years: int,
+    price_metadata: dict[str, Any],
 ) -> DataFrame:
     """Build a selected-source panel without reading the local FPMA price data."""
     config_path = root / week2_config_path
@@ -62,13 +63,13 @@ def assemble_selected_price_panel(
             F.make_date(F.col("year"), F.col("month").cast(IntegerType()), F.lit(1)).alias("month"),
             F.col("nominal_price_lcu_per_tonne").alias("price_nominal"),
             F.col("real_price_dec_2000_lcu_per_tonne").alias("price_real"),
-            F.lit("UAH").alias("currency"),
-            F.lit("LCU/tonne").alias("price_unit"),
-            F.lit("FAOSTAT_PP_monthly_element_5530").alias("price_source"),
-            F.lit(5530).alias("price_element_code"),
+            F.lit(price_metadata["currency"]).alias("currency"),
+            F.lit(price_metadata["price_unit"]).alias("price_unit"),
+            F.lit(price_metadata["source"]).alias("price_source"),
+            F.lit(int(price_metadata["element_code"])).alias("price_element_code"),
             F.col("producer_price_flag").alias("price_source_flag"),
             F.col("cpi_index_dec_2000_100").alias("cpi_index_dec_2000_100"),
-            F.lit("SSSU_all_items_CPI_chain").alias("deflator_source"),
+            F.lit(price_metadata["deflator_source"]).alias("deflator_source"),
             F.col("cpi_updated").alias("cpi_source_updated"),
         )
     )
@@ -108,6 +109,7 @@ def build_week4_selected_features(
         config["price_csv"],
         config["week2_config"],
         int(config["annual_availability_lag_years"]),
+        config["price_metadata"],
     )
     features, profile = build_week3_features(
         panel,
@@ -115,7 +117,9 @@ def build_week4_selected_features(
         input_is_synthetic=False,
     )
     profile["pipeline"] = "week4_selected_faostat_sssu_m0_m4_features"
-    profile["selected_price_source"] = "FAOSTAT monthly Wheat Producer Price (element 5530), CPI-adjusted with attributed SSSU all-items CPI chain"
+    profile["selected_price_source"] = config["price_metadata"]["source"]
+    profile["selected_country"] = config.get("country_name", json.loads((root / config["week2_config"]).read_text(encoding="utf-8"))["country_name"])
+    profile["selected_commodity"] = config.get("commodity_name", json.loads((root / config["week2_config"]).read_text(encoding="utf-8"))["commodity_name"])
     profile["price_csv"] = config["price_csv"]
     profile["week2_source_config"] = config["week2_config"]
     profile["source_boundary"] = "The FPMA price source is not read. Shared Week 2 QCL/TCL/NASA readers provide non-price signals."

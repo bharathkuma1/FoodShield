@@ -10,7 +10,7 @@ FoodShield will integrate heterogeneous public data and study historical wheat-m
 
 ## Authoritative scope
 
-The submitted proposal defines the core scope: wheat as the initial commodity; historical analysis and documented stress-event validation; a country–commodity–month analytical grain; a price-only baseline compared with progressively richer signals; temporal feature engineering; and Spark processing/scalability experiments. Candidate countries and exact datasets are to be selected after profiling. Additional commodities, logistics signals, and global real-time feeds remain extensions unless separately agreed.
+The submitted proposal defines the current research scope: wheat as the commodity, with Ukraine as the selected pilot for the present experiment; historical analysis and documented stress-event validation; a country–commodity–month analytical grain; a price-only baseline compared with progressively richer signals; temporal feature engineering; and Spark processing/scalability experiments. The pipeline is being structured so country and commodity identifiers, source paths/metadata, and target/split choices can be replaced through configuration for a separately profiled run. Reuse of that framework does not expand the current wheat study or imply that every country/commodity has equivalent public data or coverage. Additional commodities, logistics signals, and global real-time feeds remain extensions unless separately agreed.
 
 The TA feedback is a required addition that extends the execution architecture without replacing the proposal's batch research: replay historical/processed records locally through Kafka, consume them with Spark Structured Streaming, calculate stress, and emit alerts. No live production feed is required.
 
