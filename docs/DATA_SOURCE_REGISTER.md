@@ -60,7 +60,7 @@ FAOSTAT statistical data are provided under CC BY 4.0 with attribution; FAO term
 
 The separate [data.gov.ua trade dataset](https://data.gov.ua/dataset/491d1176-5300-45c1-a9bb-0b207528e04e) states CC BY attribution terms. That does not establish that this exact State Statistics ZIP is covered by the same license. Public download was free; confirm the archive's reuse terms before redistribution. A direct UN Comtrade preview API probe was rate-limited for some periods; the UI preview results and gaps are recorded below and in the archive sidecar.
 
-## UN Comtrade monthly wheat exports (candidate independent target)
+## UN Comtrade monthly wheat exports (secondary corroboration candidate)
 
 Public query template (Ukraine exports, wheat and meslin HS 1001, monthly, partner World):
 
