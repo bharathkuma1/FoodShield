@@ -6,7 +6,7 @@
 ## Design principles
 
 - Use Python and Apache Spark DataFrames/Spark SQL for repeatable batch transformations; store normalized layers as Parquet.
-- Keep source files immutable in `data/raw/`; derived and generated data live under ignored `data/processed/` and `artifacts/` locations.
+- Keep source files immutable in `data/raw/`; explicitly reviewed, attributed small snapshots may be versioned. Ignore other raw acquisitions and all generated outputs under `data/processed/` and `artifacts/`.
 - Keep development-only mock inputs under ignored `data/synthetic/`, mark every row as synthetic, and exclude them from reported model/evaluation results.
 - Keep schemas, units, identifiers, grain, and temporal availability explicit. Retain source flags/notes. Do not turn missing values into zero.
 - Keep the pipeline configurable by country, item code, source IDs, and paths, while requiring a separate feasibility profile before changing from the Ukraine wheat pilot.
@@ -51,7 +51,7 @@ The batch path is the analytical foundation. Kafka replay is a separate demonstr
 
 | Layer | Purpose | Contract |
 |---|---|---|
-| `data/raw/` | Original retrieved source responses/archives. | Preserve unchanged; keep local and Git-ignored. Record canonical source, request/filter, retrieval date, and limitations in `DATA_SOURCE_REGISTER.md`. |
+| `data/raw/` | Original retrieved source responses/archives and explicitly approved pinned snapshots. | Preserve unchanged. Keep unreviewed/restricted acquisitions local and ignored; allowlist only documented snapshots with reuse terms/attribution reviewed. Record canonical source, request/filter, retrieval date, checksum, and limitations in `DATA_SOURCE_REGISTER.md`. |
 | Bronze | Source-specific rows flattened to tabular form. | Preserve source identifiers, units, flags, notes, original frequency, and a source-file key. Do not apply model assumptions here. |
 | Silver | Typed, normalized signal rows ready for alignment. | Use canonical country, commodity, unit, date/year, and element fields; keep annual availability dates, weather location/method, and quality flags explicit. |
 | Gold | Analysis-grain datasets and features. | Keyed by country–commodity–month for this wheat project; M0–M4 signals must be joinable and their missingness/coverage visible. Do not create target labels from the same signal being evaluated. |
@@ -138,7 +138,7 @@ src/foodshield/
   streaming/                  # Historical replay, stream consumer, alert writer (planned)
   etl/week2.py                # Current FPMA/FAOSTAT/NASA ETL slice
 data/
-  raw/                        # Retrieved inputs, ignored by Git
+  raw/                        # Local inputs; only documented shareable snapshots are versioned
   processed/                  # Bronze/Silver/Gold Parquet, ignored by Git
 proposal/                     # Submitted proposal materials; preserve in place
 artifacts/                    # Generated reports/figures, ignored by Git

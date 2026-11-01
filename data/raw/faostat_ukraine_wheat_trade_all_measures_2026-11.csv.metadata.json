@@ -1,0 +1,83 @@
+{
+  "retrieved_utc": "2026-11-01",
+  "provider": "FAOSTAT",
+  "domain": "TCL",
+  "source_archive_url": "https://bulks-faostat.fao.org/production/Trade_CropsLivestock_E_All_Data_(Normalized).zip",
+  "catalog_url": "https://bulks-faostat.fao.org/production/datasets_E.json",
+  "source_archive_file": "data/raw/faostat_tcl_trade_bulk_2026-11.zip",
+  "filter": {
+    "Area Code (M49)": "804",
+    "Item Code": "15",
+    "Item": "Wheat",
+    "Element": [
+      "Import quantity",
+      "Export quantity",
+      "Import value",
+      "Export value"
+    ]
+  },
+  "output_file": "data/raw/faostat_ukraine_wheat_trade_all_measures_2026-11.csv",
+  "records": 132,
+  "units": {
+    "Import quantity": [
+      "t"
+    ],
+    "Import value": [
+      "1000 USD"
+    ],
+    "Export quantity": [
+      "t"
+    ],
+    "Export value": [
+      "1000 USD"
+    ]
+  },
+  "year_ranges": {
+    "Import quantity": [
+      1992,
+      2024
+    ],
+    "Import value": [
+      1992,
+      2024
+    ],
+    "Export quantity": [
+      1992,
+      2024
+    ],
+    "Export value": [
+      1992,
+      2024
+    ]
+  },
+  "records_by_element": {
+    "Import quantity": 33,
+    "Import value": 33,
+    "Export quantity": 33,
+    "Export value": 33
+  },
+  "flags": {
+    "X": 11,
+    "A": 112,
+    "I": 9
+  },
+  "fields_preserved": [
+    "Area Code",
+    "Area Code (M49)",
+    "Area",
+    "Item Code",
+    "Item Code (CPC)",
+    "Item",
+    "Element Code",
+    "Element",
+    "Year Code",
+    "Year",
+    "Unit",
+    "Value",
+    "Flag",
+    "Note"
+  ],
+  "output_sha256": "45623e6e469f6de29980db199426eccff12461e9c9492f394f313d5a3f604639",
+  "license_note": "FAO statistical database terms specify CC BY 4.0 with a third-party data exception; recheck dataset metadata before reuse changes.",
+  "attribution": "FAO. 2026. FAOSTAT TCL. Accessed 1 November 2026. https://www.fao.org/faostat/en/#data/TCL. Licence: CC-BY-4.0, subject to third-party exceptions."
+}
