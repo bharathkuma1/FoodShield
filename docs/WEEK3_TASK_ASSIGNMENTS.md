@@ -1,13 +1,13 @@
 # Week 3 team assignments
 
-**Status:** Proposed owner mapping based on the Week 1/2 signal workstreams; teammate review/sign-off is not recorded.
+**Status:** Agreed default owner mapping based on the Week 1/2 signal workstreams; revise it when a change is explicitly called out.
 **Scope:** Spark analytics and temporal feature engineering at the proposal's country–commodity–month grain. Week 3 produces reusable feature tables and quality evidence; it does not define or claim the final stress label, train a detector, or report model performance.
 
 ## Shared objective
 
 Build the common monthly analytical panel from Week 2 Silver datasets, preserving country, commodity, month, source provenance, units, and feature availability. Implement and document the proposed signal progression as far as source coverage permits: price-only M0 inputs; weather M1 additions; production M2 additions; trade M3 additions; and M4 temporal/lagged/cross-signal features. Report coverage and missingness at every join. Keep the point-weather and annual-lag limitations visible. Development fixtures may exercise the pipeline, but synthetic data must remain marked and excluded from historical evaluation.
 
-## Proposed owners and deliverables
+## Agreed default owners and deliverables
 
 | Teammate | Status | Proposed Week 3 workstream | Acceptance evidence |
 |---|---:|---|---|
