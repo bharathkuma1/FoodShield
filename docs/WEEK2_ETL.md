@@ -13,16 +13,18 @@ The pipeline leaves `data/raw/` unchanged and writes Parquet under the ignored `
 
 ## Local setup and run
 
-Prerequisite: Python 3.10+, Java 17+, and a Hadoop Windows build matching PySpark's bundled Hadoop 3.5.0 client. The local Hadoop `bin` must contain both `winutils.exe` and `hadoop.dll`: Spark uses `winutils` for Windows filesystem operations and the native DLL for Hadoop `NativeIO`. The project pins PySpark 4.3.0 in `requirements.txt`; Spark's official install documentation lists Python 3.10+ and Java 17+ requirements ([PySpark installation](https://spark.apache.org/docs/latest/api/python/getting_started/install.html)). Apache's Windows guidance explains that official Hadoop releases do not include Windows binaries and documents building from source ([Apache Hadoop Windows guidance](https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems)).
+The complete cross-platform team software list is in [`PREREQUISITES.md`](PREREQUISITES.md); the notes below describe the current Week 2 runner and its Windows-specific needs.
 
-For this workspace, both components were built from the official [Hadoop 3.5.0 source archive](https://downloads.apache.org/hadoop/common/hadoop-3.5.0/hadoop-3.5.0-src.tar.gz), SHA-512 `90c4f187af0606443523249a40c9af487bd0bbee7af3ff777492f5b5198e599583d07e4d55f569e39842e3304a605e929babf6bbea7d7683c7fac0523147ab0b`. The source archive predates a Windows SDK 10.0.26100 name collision; the build applies Apache's merged [HADOOP-19977 fix](https://github.com/apache/hadoop/pull/8713.patch). Microsoft Visual Studio 2022 Build Tools, MSVC, Windows SDK, and CMake are installed under `D:\Bharath\Installations\VisualStudio\2022\BuildTools`. The resulting local Hadoop home is `D:\Bharath\Installations\Hadoop-3.5.0-source-build\hadoop-home`.
+Prerequisite: Python 3.11+, Java 17+, and PySpark 4.3.0. On Windows, the current local run also uses Hadoop Windows native files matching PySpark's bundled Hadoop 3.5.0 client. The local Hadoop `bin` must contain both `winutils.exe` and `hadoop.dll`: Spark uses `winutils` for Windows filesystem operations and the native DLL for Hadoop `NativeIO`. Spark's current official installation documentation lists Python 3.11+ and Java 17+ requirements ([PySpark installation](https://spark.apache.org/docs/latest/api/python/getting_started/install.html)). Apache's Windows guidance explains that official Hadoop releases do not include Windows binaries and documents building from source ([Apache Hadoop Windows guidance](https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems)). The Windows native files are not required on other operating systems.
+
+For the current maintainer's Windows workspace, both native components were built from the official [Hadoop 3.5.0 source archive](https://downloads.apache.org/hadoop/common/hadoop-3.5.0/hadoop-3.5.0-src.tar.gz), SHA-512 `90c4f187af0606443523249a40c9af487bd0bbee7af3ff777492f5b5198e599583d07e4d55f569e39842e3304a605e929babf6bbea7d7683c7fac0523147ab0b`. The source archive predates a Windows SDK 10.0.26100 name collision; the build applies Apache's merged [HADOOP-19977 fix](https://github.com/apache/hadoop/pull/8713.patch). Visual Studio 2022 Build Tools, MSVC, Windows SDK, CMake, and the resulting Hadoop home are in `D:\Bharath\Installations`; these exact paths and build tools are specific to that host. Teammates can use an already compatible Windows native build or their own OS-specific setup rather than reproducing this path.
 
 From the repository root in PowerShell:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python -m pip install -r requirements.txt
-$env:HADOOP_HOME = 'D:\Bharath\Installations\Hadoop-3.5.0-source-build\hadoop-home'
+$env:HADOOP_HOME = '<your Hadoop 3.5.0 Windows native home>'
 .\.venv\Scripts\python scripts\run_week2_etl.py
 ```
 
@@ -42,4 +44,4 @@ The runner fails on empty datasets, null key values, or duplicate rows at each d
 
 ## Current execution status
 
-PySpark 4.3.0 and Java 17 are installed. Matching Hadoop 3.5.0 `winutils.exe` and `hadoop.dll` were built from Apache source and stored under `D:\Bharath\Installations`; the successful local run wrote Parquet layers and `profile.json` under the ignored `data/processed/week2_ukraine/` directory. Counts: Bronze prices 804, production 99, trade 132, weather point rows 24,105; Silver prices 804, production 99, trade 132, daily weather rows 24,105, monthly weather rows 264; Gold M0 monthly prices 310. The profile records source schemas and the limitations above. These counts describe the local pilot extracts, not nationwide coverage or model results.
+The current maintainer's local environment has Python 3.13.5, PySpark 4.3.0, Java 17, and matching Hadoop 3.5.0 Windows native files under `D:\Bharath\Installations`. That setup wrote Parquet layers and `profile.json` under the ignored `data/processed/week2_ukraine/` directory. Counts: Bronze prices 804, production 99, trade 132, weather point rows 24,105; Silver prices 804, production 99, trade 132, daily weather rows 24,105, monthly weather rows 264; Gold M0 monthly prices 310. These are local pilot counts, not requirements for teammates, nationwide coverage, or model results.

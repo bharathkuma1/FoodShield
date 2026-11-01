@@ -76,6 +76,7 @@ docs/
   PROJECT_BRIEF.md
   PLAN.md
   DECISIONS.md
+  PREREQUISITES.md
 src/foodshield/
   ingestion/       # source readers and profiling
   transforms/      # bronze/silver/gold and joins
@@ -86,7 +87,7 @@ src/foodshield/
 configs/           # small, explicit run configurations
 scripts/           # bounded local entry points
 tests/             # targeted unit and data-contract checks
-data/              # local raw/bronze/silver/gold; keep on D:, do not commit
+data/              # local raw/bronze/silver/gold; per-host path, do not commit
   synthetic/       # clearly marked development fixtures; never final evaluation evidence
 artifacts/         # generated metrics, charts, demo outputs
 ```
@@ -98,3 +99,5 @@ The current architecture baseline and implemented Week 2 paths are documented in
 Synthetic development fixtures are generated only to unblock pipeline and model-interface development. Their generation recipe, seed, split, target rule, and limitations are in [`docs/SYNTHETIC_DATA.md`](SYNTHETIC_DATA.md). They must remain identifiable and must not be used to claim observed coverage or final evaluation performance.
 
 The continuing professor-facing project manuscript, including the wheat-only scope, methods, evidence, software prerequisites, and current reproducibility instructions, is [`docs/PROJECT_SUBMISSION.md`](PROJECT_SUBMISSION.md).
+
+Teammate software setup, per-OS requirements, trusted download links, and host-specific notes are maintained in [`docs/PREREQUISITES.md`](PREREQUISITES.md).
