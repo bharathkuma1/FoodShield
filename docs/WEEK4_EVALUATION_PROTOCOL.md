@@ -1,6 +1,6 @@
 # Week 4 evaluation protocol: open draft
 
-**Status:** Project-level scope and evaluation principles are in [`ARCHITECTURE.md`](ARCHITECTURE.md). This Week 4 document tracks the remaining target, horizon, threshold, event, and calendar decisions needed to instantiate that design. No target formula, horizon, event holdout, or train/validation/test date is locked. Do not report model metrics until these are defined and implemented.
+**Status:** The project lead selected the 3-month/10% real-price-rise rule as the current working choice; mark it **review needed** and revise if team review warrants. The candidate chronological split and M0 alert-threshold method also remain review items. A bounded Spark selected-source feature build and training/validation M0 calibration now run successfully. Final-test labels and scores remain untouched.
 
 ## What timeframe is currently available?
 
@@ -18,12 +18,12 @@ The selected-price all-signal input overlap is January 2010–December 2022 befo
 
 | Candidate | What it would measure | Current boundary |
 |---|---|---|
-| Future Ukraine farm-gate wheat producer-price stress | Whether information available through month `t` warns of an explicitly defined producer-price stress condition in a later period. | **Selected target type and price source.** Use FAOSTAT producer price as M0 history and future outcome, and cite the source. This is time-separated but not independent by source. No horizon, stress rule, or threshold is selected. |
+| Future Ukraine farm-gate wheat producer-price stress | Whether information available through month `t` warns of a defined farm-gate producer-price increase in a later period. | **Current working target and price source; review needed.** Use FAOSTAT producer price as M0 history and future outcome, deflated by attributed SSSU CPI. The working label is a ≥10% rise within the next 3 months. This is time-separated but not independent by source. |
 | Monthly wheat export-flow disruption | Changes in reported wheat exports, useful as a separate supply/trade outcome. | Full monthly coverage has not been established; sparse query samples cannot define missing months or event labels. Do not use it until the complete candidate window is profiled. |
 | Annual production or trade | Slow-moving supply context. | Annual cadence makes these unsuitable as monthly outcomes in the current design; retain them as lagged features. |
 | Proposal event contexts | Historical context for wheat-market disruptions. | Global event descriptions do not automatically establish a country-month outcome. Define geography, onset, and evidence independently of predictor behavior before evaluation. |
 
-The outcome comparison and cited event evidence are summarized in [`WEEK1_EVENT_CASES.md`](WEEK1_EVENT_CASES.md). The project lead has selected the farm-gate target; the operational label rule remains open.
+The outcome comparison and cited event evidence are summarized in [`WEEK1_EVENT_CASES.md`](WEEK1_EVENT_CASES.md). The project lead has selected the farm-gate target type and a provisional operational label rule; both the label rule and evaluation calendar carry a review-needed status.
 
 ## Previous FPMA screen: superseded for selected target
 
@@ -31,7 +31,26 @@ The earlier local FPMA proxy sensitivity screen is not used for the selected pro
 
 It remains a separate exploratory source check; its label frequencies and real-price calculations are excluded from shared reporting because they are tied to an unresolved third-party source.
 
-**Deliverable outcome:** public target source and CPI source selected; the farm-gate CPI-adjusted candidate is reproducible and shared; event/source alignment and M0–M4 feature eligibility are profiled. Still open: finalize label formula and horizon, compute label sensitivity and independent episodes, approve split/threshold procedure, integrate the selected source into the Spark M0–M4 pipeline, and implement M0. Week 4 remains in progress.
+**Deliverable outcome:** public target source and CPI source selected; the farm-gate CPI-adjusted candidate is reproducible; event/source alignment, M0–M4 feature eligibility, and train/validation-only label sensitivity are profiled. Current working choice: 3-month horizon and a ≥10% real-price rise, marked review needed. The candidate split is also review needed. The selected-source Spark feature integration and M0 training/validation calibration have run successfully; do not use final-test labels until review is complete.
+
+## Candidate target and horizon sensitivity (provisional)
+
+`scripts/profile_week4_stress_labels.py` creates candidate binary labels only on common M0–M4 feature-eligible origins in the proposed training and validation periods. It deliberately does not calculate or emit labels for origins on or after 2021-01. To keep definitions comparable, all candidates use common origins with 36 consecutive real-price observations available through forecast month `t`. The future-level candidate compares months `t+1` through `t+h` against that trailing history; the real-price-rise candidate compares the maximum price over `t+1` through `t+h` directly with the price at `t`. Boundaries are purged by each horizon. The proposed calendar is still only a candidate; the saved label counts are feasibility evidence, not performance results.
+
+For a three-month horizon, two candidate definitions were compared:
+
+| Candidate label | Training positives / eligible origins (episodes) | Validation positives / eligible origins (episodes) | Interpretation |
+|---|---:|---:|---|
+| Maximum future real price at least 5% above origin-month real price | 14/41 (5) | 14/30 (6) | More frequent, less severe increase. |
+| **Maximum future real price at least 10% above origin-month real price** | **12/41 (4)** | **9/30 (5)** | **Recommended provisional primary target:** directly measures a material real-price rise while retaining multiple validation episodes. |
+| Maximum future real price at least 15% above origin-month real price | 9/41 (4) | 4/30 (2) | More severe, but validation support is sparse. |
+| Future price exceeds trailing 36-month real-price 90th percentile | 11/41 (4) | 15/30 (2) | Measures an unusually high level, not the size of a rise; labels cluster into few long episodes. |
+
+The scan also covers 1- and 6-month horizons and 5/10/15% rise thresholds, plus 80th/90th/95th-percentile historical-level cutoffs. Because a common 36-month history is required for the comparison, the proposed 2011–2017 training calendar contributes labeled origins only from February 2013 onward; the usable train slice is therefore shorter than the calendar suggests. With the 10% rise rule, the 1-month case has 3/43 training and 2/32 validation positives (2 validation episodes); the 3-month case has 12/41 and 9/30 (5 validation episodes); the 6-month case has 21/38 and 13/27 (4 validation episodes). The 3-month option gives a useful compromise between a short warning window with few labels and a longer window with more frequent positives. Across this short validation period, the 3-month 10% rise rule gives similar positive-month rates in training (29%) and validation (30%). The 15% rule gives only two validation episodes; the trailing-quantile rule produces long clustered episodes and a higher validation rate. These small counts do not establish predictive value. An episode is currently a contiguous run of positive eligible calendar origins; a gap or purged month separates episodes.
+
+**Current working choice — review needed:** use a 3-month forecast horizon and label a positive when the maximum CPI-adjusted FAOSTAT farm-gate price over the next three months is at least 10% above the real price observed at origin `t`. Use 5% and 15% as target-definition sensitivity checks, and 1/6 months as horizon sensitivity checks. The real-price rise threshold defines the outcome; it is separate from the model alert-score threshold, which is selected using validation only. The project lead requested that the team review this choice and revise it later if needed; see `DECISIONS.md`.
+
+The detailed rule-by-period counts and row-level train/validation labels are generated at `data/processed/week4_stress_label_sensitivity.json` and `.csv` (git-ignored derived outputs). The script records input hashes and the no-holdout-label rule so teammates can reproduce the profile from shared inputs. No test-period labels, alert scores, or model metrics are included.
 
 ### CPI source, reuse and real-price construction
 
@@ -45,14 +64,14 @@ The FAOSTAT CP archive extract remains local because its general CPI values carr
 
 The reproducible screen in `scripts/profile_week4_price_deflator.py` chains the SSSU month-over-month all-items CPI observations with December 2000 set to 100. It deflates FAOSTAT monthly wheat producer prices using `real LCU/tonne = nominal LCU/tonne × 100 / chained CPI`. The output is `data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv`; its sidecar records formula and input/output hashes. There are 157 consecutive monthly records from January 2010 through January 2023, with complete calendar years through 2022 and all source wheat-price rows flagged `A`.
 
-This resolves the mechanical CPI-chain and join-feasibility item for the selected farm-gate outcome. It does not define the stress label: all-items CPI is a broad inflation deflator, not a wheat-specific stress measure. The output is not an IFPA score. The operational target rule and horizon remain open; the FPMA wholesale series is not required for this pilot.
+This resolves the mechanical CPI-chain and join-feasibility item for the selected farm-gate outcome. It does not make CPI wheat-specific: it is a broad inflation deflator. The output is not an IFPA score. The working stress label is documented above and remains review needed; the FPMA wholesale series is not required for this pilot.
 
 ## Week 4 work order
 
-1. Define and profile candidate future producer-price-stress labels from the shared FAOSTAT/SSSU candidate; report positive months and independent event episodes against the common M0–M4 dates.
-2. Select the prediction cutoff, primary forecast horizon, stress rule, and positive/negative examples. Select any alert threshold on training/validation only; never tune on a held-out event.
-3. Instantiate project-level train/validation/test rules with dates from verified eligible coverage. The proposed date ranges below are a starting point only; consider rolling-origin evaluation if the final event sample is small.
-4. Build and profile M0 using only information available at or before each cutoff. Then compare M1–M4 under the shared evaluation contract in [`ARCHITECTURE.md`](ARCHITECTURE.md), reporting warning lead time, missed events/false alarms, and agreed metrics.
+1. **Done:** profile candidate labels/horizons on common M0–M4 dates, with counts/episodes from training and validation only. The 3-month/10% rise is the current working choice; review needed.
+2. Use the working label and horizon for the bounded M0 build; keep the target and prediction cutoff in config so a later review can change them without rewriting the pipeline.
+3. Use the candidate chronological split below for development, mark it review needed, and keep final-test labels/metrics out of current outputs. Add rolling-origin evaluation because the final event sample is small.
+4. Integrate the selected FAOSTAT/SSSU price source into the Spark M0–M4 feature pipeline and implement/profile M0. Compare M1–M4 only under the shared contract in [`ARCHITECTURE.md`](ARCHITECTURE.md), reporting warning lead time, missed events/false alarms, and agreed metrics only after evaluation choices are reviewed.
 
 ### Candidate chronological schedule (proposed, not locked)
 
@@ -63,13 +82,30 @@ This resolves the mechanical CPI-chain and join-feasibility item for the selecte
 | 2018–2020 | Validation candidate | Select feature/model settings and alert thresholds; keep a horizon-length purge before the test period. |
 | 2021–2022 | Final-test candidate | Evaluate once after choices are fixed; for a three-month outcome window, the latest fully observed M4 origin is October 2022. Apply a horizon-length purge at the boundary. |
 
-The three-month horizon is a working candidate, not a confirmed decision. For it, the source-only feature profile identifies 119 eligible M4 origins through October 2022 and nine origins (February–October 2022) within the global 2022 event context. Feature completeness excludes January observations because annual-signal anomaly variance can be zero; M3/M4 also exclude February–December 2016 because trade anomaly features are undefined. Exact monthly eligibility is in the generated CSV. The calendar above is a proposal, not a locked split. Apply purges only after confirming the horizon and label interval. Since the 2022 event sample is small, add rolling-origin backtests using only prior data and report uncertainty rather than relying on one event alone.
+The three-month horizon is the current working choice, marked review needed. For it, the source-only feature profile identifies 119 eligible M4 origins through October 2022 and nine origins (February–October 2022) within the global 2022 event context. Feature completeness excludes January observations because annual-signal anomaly variance can be zero; M3/M4 also exclude February–December 2016 because trade anomaly features are undefined. Exact monthly eligibility is in the generated CSV. The calendar above is a candidate split, marked review needed. Current development labels are purged at train/validation boundaries; final-test labels are not generated. Since the 2022 event sample is small, add rolling-origin backtests using only prior data and report uncertainty rather than relying on one event alone.
 
-Project-wide candidate feature groups and the data model are documented in [`ARCHITECTURE.md`](ARCHITECTURE.md). The selected price source and deflator are FAOSTAT producer prices and SSSU CPI. The stress formula, horizon, alert-threshold procedure, and date split remain open; do not report classification performance until label sensitivity and positive-event counts have been profiled without holdout tuning.
+## Spark feature and M0 run
 
-## Next item requiring team decision
+Run the selected-source panel and price-only baseline from the repository root:
 
-The price concept and public source are selected: FAOSTAT farm-gate producer price with SSSU CPI adjustment. The next decisions are the label formula, primary horizon, sensitivity checks, and chronological split. Then integrate this source into the Spark M0–M4 pipeline, implement M0, and profile labels on identical eligible origins. Do not select test events by inspecting model results or treat source overlap as a validated evaluation period.
+```powershell
+python scripts\profile_week4_stress_labels.py
+python scripts\run_week4_m0.py --config configs\week4.local.json
+```
+
+The Week 4 runner reads the shared FAOSTAT/SSSU farm-gate real-price candidate directly and attaches shared NASA point-weather and FAOSTAT QCL/TCL inputs using the existing Spark readers. It does not read the local FPMA price file. The generated feature panel is `data/processed/week4_ukraine_faostat_features/`; the M0 profile and train/validation scores are under `data/processed/week4_ukraine_m0_candidate/`. Both are derived, git-ignored outputs. The profile matched the source-only eligibility counts: 157 panel months; M0 145 feature-complete origins; M1 144; M2 132; and M3/M4 121.
+
+M0 uses only `price_real_anomaly_z_12m` and `price_real_mom_change`. Its score adds the past-only 12-month real-price anomaly to month-over-month real-price change standardized with training-period statistics. Validation selects the alert cutoff by F1. In the current calibration, train has 41 origins (12 positive), validation has 30 (9 positive), and the selected validation cutoff yields 9 true positives, 16 false positives, and 0 missed positive months (precision 0.36, recall 1.00, F1 0.529). These are threshold-selection figures from the same validation set, not an unbiased performance estimate. The high alert count/false-positive rate is a limitation to address in later comparisons.
+
+This M0 is a transparent Spark DataFrame/SQL anomaly detector; it does not use Spark MLlib. MLlib would be useful for fitting supervised estimators such as logistic regression and comparing learned feature effects across M0–M4. The current local PySpark environment lacks NumPy, required by the MLlib package; no dependency was installed. A deterministic rule-based baseline is adequate for this first M0 and avoids making a 41-origin training sample carry a complex learned model. Reconsider MLlib if the team wants a supervised model and accepts the additional dependency and small-sample limitations.
+
+The run produced no final-test labels or predictions. The working target, candidate split, score definition, and alert-threshold procedure are recorded with **review needed** status; the source and feature contracts are in `configs/week4.local.json`, `src/foodshield/features/week4.py`, and `src/foodshield/models/m0.py`.
+
+Project-wide candidate feature groups and the data model are documented in [`ARCHITECTURE.md`](ARCHITECTURE.md). The selected price source and deflator are FAOSTAT producer prices and SSSU CPI. The current target, horizon, alert-threshold procedure, and date split are working choices marked review needed. Do not claim final-test performance until the review is complete and the held-out period is evaluated once.
+
+## Current implementation status and next item
+
+The selected price concept and shared source are FAOSTAT farm-gate producer price with SSSU CPI adjustment. The project lead chose the 3-month/10% real-price-rise outcome as the current working default, with review needed. The candidate train/validation/test calendar is also review needed. Current implementation uses train/validation labels only; final-test labels remain unaccessed. Next: review the candidate target, split, M0 score and validation calibration; then carry the same target and date contract into M1–M4 ablation work. Any review revisions must be recorded before final-test evaluation.
 
 Warning lead time is the interval between the first valid model warning and the later onset of price stress. Processing/alert latency is elapsed system runtime from input to output; that is a separate streaming/scalability measure, not the historical warning-lead-time objective shown in the proposal slide.
 

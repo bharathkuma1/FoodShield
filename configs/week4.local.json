@@ -1,0 +1,23 @@
+{
+  "price_csv": "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv",
+  "eligibility_csv": "data/processed/week4_ukraine_m0_m4_eligibility.csv",
+  "label_csv": "data/processed/week4_stress_label_sensitivity.csv",
+  "week2_config": "configs/week2.local.json",
+  "annual_availability_lag_years": 2,
+  "output_root": "data/processed/week4_ukraine_faostat_features",
+  "m0_output_root": "data/processed/week4_ukraine_m0_candidate",
+  "target": {
+    "label_rule_id": "realrise_10pct_futuremax_3m",
+    "forecast_horizon_months": 3,
+    "minimum_real_price_rise_pct": 10,
+    "review_needed": true
+  },
+  "candidate_split": {
+    "training_start": "2011-01",
+    "training_end": "2017-12",
+    "validation_start": "2018-01",
+    "validation_end": "2020-12",
+    "test_start": "2021-01",
+    "review_needed": true
+  }
+}
