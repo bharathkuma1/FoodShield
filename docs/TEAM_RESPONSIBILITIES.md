@@ -28,7 +28,7 @@ Percentages indicate the workstream evidence currently present in this repositor
 | 1 | 100% | 100% | 100% | 100% | Feasibility handoffs documented. |
 | 2 | 100% | 100% | 100% | 100% | Local ETL outputs and owner deliverables documented. |
 | 3 | 100% | 100% | 100% | 100% | Spark feature build, real Week 2 monthly/as-of integration, coverage profile, and hand-reviewed synthetic lag/anomaly plus real annual-availability examples are documented. Local rights-bound data remains ignored; shared teammate review is pending. See `WEEK3_TASK_ASSIGNMENTS.md` and `WEEK3_FEATURES.md`. |
-| 4 | 0% | 90% | 55% | 60% | In progress; evidence-based estimates for Week 4 workstream artifacts, not individual effort. Overall Week 4 progress: **51%** (mean, rounded). |
+| 4 | 80% | 95% | 55% | 65% | In progress; selected-source Spark features and M0 training/validation calibration run successfully. The target and candidate split are working choices marked review needed; final-test labels remain untouched. Overall Week 4 progress: **74%** (mean, rounded). |
 | 5 | 0% | 0% | 0% | 0% | Planned; depends on Week 3 features and Week 4 protocol. |
 | 6 | 0% | 0% | 0% | 0% | Planned; depends on processed event contract. |
 | 7 | 0% | 0% | 0% | 0% | Planned; depends on model and replay outputs. |
@@ -38,12 +38,12 @@ Percentages indicate the workstream evidence currently present in this repositor
 
 | Owner | Progress | Evidence present | Remaining for this workstream |
 |---|---:|---|---|
-| Bharath | 0% | No Week 4 M0 detector/scoring baseline is implemented or documented as an accepted baseline yet. | Implement and document price-only M0 after the label and cutoff contract is reviewed. |
-| Abhijith | 90% | Selected the CC BY FAOSTAT farm-gate price source as the pilot target, documented the SSSU reuse basis, and produced a shared CPI-adjusted candidate with source hashes. | Finalize stress formula/horizon and label sensitivity; integrate the selected source into the Spark pipeline; confirm availability assumptions. |
-| Jyoti | 55% | Profiled exact shared-source M0–M4 feature-eligible dates, common horizon coverage, and a candidate chronological split. | Review the split/purge after the horizon is selected; improve representative weather construction and document weather/as-of constraints. |
-| Naman | 60% | Mapped proposal event contexts to selected-source coverage: 2007–08 unavailable, 2010/11 lacks multi-year pre-event history, and 2022 has nine M4 origins under the provisional three-month window. | Complete target-label/event alignment and metric definitions; document small-event uncertainty and review the final evaluation protocol. |
+| Bharath | 80% | Implemented and ran the Spark selected-source feature panel and price-only M0 score, with training-only scaling and validation-only alert-cutoff calibration. Final-test labels and predictions were not loaded or generated. | Review the score, target, split and validation calibration with the team; revise if needed; later compare M1–M4 on the same origins. |
+| Abhijith | 95% | Selected the CC BY FAOSTAT farm-gate price source, documented the SSSU reuse basis, produced the CPI-adjusted candidate with source hashes, generated target/horizon sensitivity, and integrated selected-source input into the Week 4 Spark path. | Review the current 3-month/10% target choice; confirm annual availability assumptions and keep retrieval/provenance current. |
+| Jyoti | 55% | Profiled exact shared-source M0–M4 feature-eligible dates, common horizon coverage, and a candidate chronological split. | Review and approve the split/purge against the selected horizon; improve representative weather construction and document weather/as-of constraints. |
+| Naman | 65% | Mapped proposal event contexts to selected-source coverage and added candidate positive-origin/episode counts for common M0–M4 validation periods. The 2007–08 context is unavailable; 2010/11 lacks multi-year pre-event history; 2022 has nine M4 origins under the provisional three-month window. | Align approved target labels to evidence-backed event definitions, finalize metric definitions, document small-event uncertainty, and review the final protocol. |
 
-The **51% Week 4 overall figure** is the arithmetic mean of these four repository-evidence estimates, rounded to the nearest whole percent. It indicates milestone artifact completion only; it is not an estimate of personal effort or a claim that the label rule, split, or protocol is approved. Remaining work can proceed in parallel where inputs permit; the team must review and approve the shared target and evaluation contract before model metrics are reported.
+The **74% Week 4 overall figure** is the arithmetic mean of these four repository-evidence estimates, rounded to the nearest whole percent. It indicates milestone artifact completion only; it is not an estimate of personal effort or a claim that the review-needed target, split, or protocol is final. Remaining work can proceed in parallel where inputs permit; the team must review the shared evaluation choices before final-test metrics are reported.
 
 ## Assignment boundaries
 

@@ -24,7 +24,7 @@ The end-to-end per-teammate allocation and detailed progress basis for all eight
 | 1 — source feasibility | 100% | 100% | 100% | 100% | Complete as a documented feasibility handoff. |
 | 2 — Spark ETL | 100% | 100% | 100% | 100% | Complete as a reproducible local implementation/run; ownership carried forward from Week 1 was agreed. |
 | 3 — analytics/features | 100% | 100% | 100% | 100% | Local Spark feature run, Week 2 real-input alignment, coverage profile, and selected date/as-of review are complete; shared teammate review/sign-off remains. |
-| 4 — M0 baseline/evaluation protocol | 0% | 90% | 55% | 60% | In progress; price source and CPI deflator selected, event/feature eligibility profiled, and candidate split drafted. Stress label, horizon, Spark source integration, and M0 remain open. Overall Week 4 evidence completion: 51%. |
+| 4 — M0 baseline/evaluation protocol | 80% | 95% | 55% | 65% | Selected-source Spark features and M0 train/validation calibration run; the 3-month/10% outcome and candidate split are working choices marked review needed. Final-test labels remain untouched. Overall Week 4 evidence completion: 74%. |
 | 5 — M1–M4 and ablation | 0% | 0% | 0% | 0% | Not started. |
 | 6 — Kafka/Spark streaming replay | 0% | 0% | 0% | 0% | Not started. |
 | 7 — evaluation/scalability | 0% | 0% | 0% | 0% | Not started. |
