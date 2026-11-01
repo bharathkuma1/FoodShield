@@ -1,7 +1,7 @@
 # FoodShield architecture baseline
 
 **Status:** Project architecture baseline; current implementation and planned work are distinguished below.
-**Scope:** Wheat-only research pilot, country–commodity–month analysis, M0–M4 progression, and the required local Kafka replay through Spark Structured Streaming. Other commodities remain future extensions and must not expand the current analysis scope.
+**Scope:** The current research experiment remains wheat-only, with Ukraine as the selected pilot; the analysis grain is country–commodity–month, with M0–M4 progression and the required local Kafka replay through Spark Structured Streaming. The implementation is being made configuration-driven so a separately profiled country or commodity can reuse the pipeline without changing transformation/model code where source schemas and meanings are compatible. This reusable design does not claim data availability or expand the current experiment beyond wheat.
 
 ## Design principles
 
@@ -134,7 +134,7 @@ This comparison contract is project-wide. The Ukraine pilot uses FAOSTAT PP and 
 | FAOSTAT wheat production | Annual 1992–2024 | Ukraine filtered extract and provenance sidecar are tracked. Contains production, yield, and harvested area with flags. |
 | FAOSTAT wheat trade | Annual 1992–2024 | Ukraine filtered extract and provenance sidecar are tracked. Contains import/export quantity and value with units/flags. |
 
-The original local Week 3 feature build uses the FPMA series and is not the shared selected-source panel. The Week 4 Spark path now builds features from the selected FAOSTAT/SSSU price candidate and shared QCL/TCL/NASA inputs. Its observed counts match the source-only profile: M0 145; M1 144; M2 132; M3/M4 121. For a three-month future-observation window, 119 M4 origins remain (through October 2022). These are feature/outcome-observation availability counts, not model results. The M0 anomaly detector is implemented and calibrated on training/validation origins only; the final test remains untouched. Production/trade joins use the provisional two-year lag; historical publication vintages have not been verified.
+The original local Week 3 feature build uses the FPMA series and is not the shared selected-source panel. The Week 4 Spark path builds features from the selected FAOSTAT/SSSU price candidate and shared QCL/TCL/NASA inputs. Its observed counts match the source-only profile: M0 145; M1 144; M2 132; M3/M4 121. For a three-month future-observation window, 119 M4 origins remain (through October 2022). These are feature/outcome-observation availability counts, not model results. M0 uses supervised Spark MLlib logistic regression, trained/calibrated on training/validation origins only; final-test labels and predictions remain untouched. Production/trade joins use the provisional two-year lag; historical publication vintages have not been verified. Country, commodity, input paths, source metadata, target, and split are selected in config, but each new series still requires compatible verified inputs and its own profiling.
 
 India is a possible comparator, not yet a full multi-year fallback: its profiled FPMA price series spans January 2014–September 2026, but the local India weather extract covers 2022 only. India-filtered FAOSTAT extracts exist locally but are not tracked on the team branch. No alternate country currently has a better verified M0–M4 common period. A country change requires a new coverage, rights, and feature-completeness profile.
 
@@ -151,7 +151,7 @@ India is a possible comparator, not yet a full multi-year fallback: its profiled
 
 | Model | Signals |
 |---|---|
-| M0 | Price; current baseline score combines past-only 12-month real-price anomaly with training-standardized month-over-month real-price change. The alert cutoff is selected on validation; rule is review needed. |
+| M0 | Price-only Spark MLlib binomial logistic regression over past-only 12-month real-price anomaly and month-over-month real-price change. Fit on labeled training data; select alert cutoff on labeled validation data. The future-stress rule defines the training target; it is not a rule-based detector. Target, candidate dates, and model settings remain review needed. |
 | M1 | Price + weather |
 | M2 | Price + weather + production |
 | M3 | Price + weather + production + trade |
