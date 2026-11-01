@@ -28,11 +28,22 @@ Percentages indicate the workstream evidence currently present in this repositor
 | 1 | 100% | 100% | 100% | 100% | Feasibility handoffs documented. |
 | 2 | 100% | 100% | 100% | 100% | Local ETL outputs and owner deliverables documented. |
 | 3 | 100% | 100% | 100% | 100% | Spark feature build, real Week 2 monthly/as-of integration, coverage profile, and hand-reviewed synthetic lag/anomaly plus real annual-availability examples are documented. Local rights-bound data remains ignored; shared teammate review is pending. See `WEEK3_TASK_ASSIGNMENTS.md` and `WEEK3_FEATURES.md`. |
-| 4 | 0% | 0% | 0% | 0% | Planned; target and evaluation protocol remain open. |
+| 4 | 0% | 65% | 25% | 45% | In progress; evidence-based estimates for Week 4 workstream artifacts, not individual effort. Overall Week 4 progress: **34%** (mean, rounded). |
 | 5 | 0% | 0% | 0% | 0% | Planned; depends on Week 3 features and Week 4 protocol. |
 | 6 | 0% | 0% | 0% | 0% | Planned; depends on processed event contract. |
 | 7 | 0% | 0% | 0% | 0% | Planned; depends on model and replay outputs. |
 | 8 | 0% | 0% | 0% | 0% | Planned; depends on reviewed results and reproducible demo. |
+
+### Week 4 percentage basis
+
+| Owner | Progress | Evidence present | Remaining for this workstream |
+|---|---:|---|---|
+| Bharath | 0% | No Week 4 M0 detector/scoring baseline is implemented or documented as an accepted baseline yet. | Implement and document price-only M0 after the label and cutoff contract is reviewed. |
+| Abhijith | 65% | Local FPMA field/coverage and proxy-label sensitivity are profiled; official IFPA method and source-rights caveats are recorded; Ukraine General/Food CPI snapshot and provenance sidecar are acquired. | Profile CPI completeness and flags, align to FPMA, calculate CPI-adjusted candidate labels and event counts, verify publication timing and source reuse terms. |
+| Jyoti | 25% | Candidate chronological partitions and nominal weather-coverage boundary are documented as proposed. | Derive exact M0–M4 eligible periods, purge/embargo boundaries, and valid event/test eligibility from profiled feature completeness. |
+| Naman | 45% | Proposal event contexts and evaluation metric concepts are documented; the protocol separates event context from labels and final-test use. | Map independently sourced events to dated country-month evidence, finalize metric definitions and label alignment, and review the full evaluation protocol. |
+
+The **34% Week 4 overall figure** is the arithmetic mean of these four repository-evidence estimates, rounded to the nearest whole percent. It indicates milestone artifact completion only; it is not an estimate of personal effort or a claim that the target, split, or protocol is approved. Remaining work can proceed in parallel where inputs permit; the team must review and approve the shared target and evaluation contract before model metrics are reported.
 
 ## Assignment boundaries
 
