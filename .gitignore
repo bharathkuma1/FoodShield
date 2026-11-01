@@ -28,7 +28,12 @@ logs/
 
 # Local datasets and generated outputs
 data/raw/
-data/synthetic/
+# Share the explicitly synthetic Week 3 development fixture; ignore other generated data.
+/data/synthetic/*
+!/data/synthetic/week3_ukraine/
+/data/synthetic/week3_ukraine/*
+!/data/synthetic/week3_ukraine/ukraine_wheat_monthly_synthetic.csv
+!/data/synthetic/week3_ukraine/ukraine_wheat_monthly_synthetic.metadata.json
 data/interim/
 data/processed/
 data/external/
