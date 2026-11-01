@@ -24,7 +24,7 @@ The TA feedback is a required addition that extends the execution architecture w
 | M3 | Price + weather + production + trade |
 | M4 | All signals, temporal features, lagged relationships, and cross-signal interactions |
 
-Compare stages through historical validation and ablation. Use holdout periods where feasible. Annual structural signals must only become available at valid dates, with explicit lags to prevent future-information leakage.
+Compare stages through chronological validation and ablation. Train/calibrate on years before the test event, use a separate validation slice to select thresholds, and reserve later event periods as untouched tests. A 3–5 year training span is a reasonable initial minimum, not a required cap; at monthly grain it is only 36–60 rows, so use simple detectors and extend the training history or use rolling-origin evaluation when source coverage permits. At each prediction month, features must be limited to information available by that date, and the outcome must be measured only afterward. Annual structural signals require explicit availability lags to prevent future-information leakage.
 
 ## Architecture and candidate data
 
@@ -38,7 +38,7 @@ Compare stages through historical validation and ablation. Use holdout periods w
 
 ## Evaluation
 
-Measure detection lead time, precision, recall, F1, and false-positive rate; ablation contribution; data quality (missingness, join completeness, temporal alignment, reproducibility); and batch processing runtime, throughput, speedup, scaling efficiency, and join/shuffle cost. Add streaming throughput and end-to-end alert latency under a documented local configuration. Record targets separately from observed results.
+Measure detection lead time, precision, recall, F1, and false-positive rate against an explicit observed outcome; ablation contribution; data quality (missingness, join completeness, temporal alignment, reproducibility); and batch processing runtime, throughput, speedup, scaling efficiency, and join/shuffle cost. Add streaming throughput and end-to-end alert latency under a documented local configuration. Record targets separately from observed results. A future price-stress outcome measures wheat-market price stress, not physical shortage; any export-flow outcome needs its own coverage and reporting-gap profile.
 
 ## Team
 
@@ -46,6 +46,23 @@ Measure detection lead time, precision, recall, F1, and false-positive rate; abl
 - Abhijith C R (proposal files shorten the name to “Abhijith”)
 - Jyoti Prakash Das
 - Naman Singh Shekhawat
+
+### Agreed Week 1 ownership
+
+- **Bharath Kumar — price and baseline:** profile FPMA wheat/grain and flour series for shortlisted countries; capture source, market, product, unit, frequency, coverage, and missing months.
+- **Abhijith C R — production:** profile FAOSTAT wheat production, yield, and harvested area; preserve flags/units and document publication/availability lags.
+- **Jyoti Prakash Das — weather:** profile NASA POWER parameters and historical coverage for wheat-producing areas; recommend a defensible spatial representation, time standard, and monthly aggregation.
+- **Naman Singh Shekhawat — trade and event evidence:** profile FAOSTAT wheat trade measures and flags; compile cited GIEWS/FAO event evidence and draft candidate event definitions.
+
+These are Week 1 workstream owners. Current feasibility evidence makes Ukraine the strongest starting geography for the downloaded input sources and keeps India as an alternative/comparator. The three historical cases in proposal development are examples, not fixed evaluation requirements: select final instances after establishing the target definition and quality-checked common coverage. The current weather extracts are point samples and do not yet establish representative national exposure. Operational prediction labels, publication rights, temporal availability, and feature coverage remain gates. These are not teammate vote records. See `docs/DECISIONS.md`, `docs/DATA_SOURCE_REGISTER.md`, `docs/WEEK1_EVENT_CASES.md`, and `docs/WEEK1_TASK_ASSIGNMENTS.md`.
+
+### Agreed Week 2 ownership
+
+The team agreed to carry the Week 1 signal owners into Week 2 Spark ETL: Bharath—price/M0; Abhijith—production; Jyoti—weather; Naman—trade. Week 2 implementation evidence and completion criteria are in [`docs/WEEK2_TASK_ASSIGNMENTS.md`](WEEK2_TASK_ASSIGNMENTS.md) and [`docs/WEEK2_ETL.md`](WEEK2_ETL.md).
+
+### Proposed Week 3 ownership
+
+For the analytics and feature-engineering milestone, the proposed workstream mapping follows the four Week 1/2 signal owners: Bharath—price/M0 features; Abhijith—production features and as-of availability; Jyoti—weather aggregation and features; Naman—trade features plus cross-signal join/completeness integration. This is a proposed assignment, not recorded teammate sign-off. Shared acceptance criteria and boundaries are in [`docs/WEEK3_TASK_ASSIGNMENTS.md`](WEEK3_TASK_ASSIGNMENTS.md).
 
 ## Recommended project structure
 
@@ -68,7 +85,14 @@ configs/           # small, explicit run configurations
 scripts/           # bounded local entry points
 tests/             # targeted unit and data-contract checks
 data/              # local raw/bronze/silver/gold; keep on D:, do not commit
+  synthetic/       # clearly marked development fixtures; never final evaluation evidence
 artifacts/         # generated metrics, charts, demo outputs
 ```
 
 Keep notebooks optional and exploratory; promote repeatable pipeline logic into `src/`. Avoid duplicating submitted proposal materials under `docs/`.
+
+The current architecture baseline and implemented Week 2 paths are documented in [`docs/ARCHITECTURE.md`](ARCHITECTURE.md); the local Spark runner, schema/grain contracts, outputs, and setup steps are in [`docs/WEEK2_ETL.md`](WEEK2_ETL.md). Treat the tree above as the target organization and those implementation notes as the current state; model, feature, evaluation, and streaming packages remain planned work.
+
+Synthetic development fixtures are generated only to unblock pipeline and model-interface development. Their generation recipe, seed, split, target rule, and limitations are in [`docs/SYNTHETIC_DATA.md`](SYNTHETIC_DATA.md). They must remain identifiable and must not be used to claim observed coverage or final evaluation performance.
+
+The continuing professor-facing project manuscript, including the wheat-only scope, methods, evidence, software prerequisites, and current reproducibility instructions, is [`docs/PROJECT_SUBMISSION.md`](PROJECT_SUBMISSION.md).

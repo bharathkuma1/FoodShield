@@ -1,0 +1,56 @@
+{
+  "output_dir": "data/synthetic/week3_ukraine",
+  "country_code": "UKR",
+  "commodity_code": "15",
+  "price_currency": "UAH",
+  "price_unit": "tonne",
+  "start_month": "2015-01",
+  "end_month": "2022-12",
+  "seed": 20261101,
+  "annual_availability_lag_years": 2,
+  "target_horizon_months": 3,
+  "price_stress_threshold_fraction": 0.15,
+  "calibration_sources": {
+    "fpma_monthly": "data/raw/fpma_ukraine_national_wheat_grain_wholesale.json",
+    "nasa_daily": "data/raw/nasa_power_ukraine_central_daily_2001_2022.json",
+    "qcl_annual": "data/raw/faostat_ukraine_wheat_production_2026-11.csv",
+    "tcl_annual": "data/raw/faostat_ukraine_wheat_trade_all_measures_2026-11.csv"
+  },
+  "split_by_year": {
+    "2015": "WARMUP",
+    "2016": "TRAIN",
+    "2017": "TRAIN",
+    "2018": "TRAIN",
+    "2019": "TRAIN",
+    "2020": "TRAIN",
+    "2021": "VALIDATION",
+    "2022": "TEST"
+  },
+  "default_split": "WARMUP",
+  "synthetic_events": [
+    {
+      "event_id": "SIM-TRAIN-01",
+      "start_month": "2018-04",
+      "duration_months": 4,
+      "price_shock_fraction": 0.24,
+      "weather_lead_months": 2,
+      "price_decay_months": 4
+    },
+    {
+      "event_id": "SIM-VALIDATION-01",
+      "start_month": "2021-03",
+      "duration_months": 4,
+      "price_shock_fraction": 0.18,
+      "weather_lead_months": 2,
+      "price_decay_months": 4
+    },
+    {
+      "event_id": "SIM-TEST-01",
+      "start_month": "2022-05",
+      "duration_months": 4,
+      "price_shock_fraction": 0.24,
+      "weather_lead_months": 2,
+      "price_decay_months": 4
+    }
+  ]
+}
