@@ -109,7 +109,7 @@ The replay demonstration is separate:
 processed historical observations -> local Kafka topic -> Spark Structured Streaming -> traceable alert output
 ```
 
-Apache Spark is the primary batch and streaming compute engine. Kafka provides the local replay transport. Parquet is used for derived analytical tables. The workflow is designed for bounded execution on a Windows 11 laptop with 8 GB RAM; this is a project environment constraint, not a general performance claim.
+Apache Spark is the primary batch and streaming compute engine. Kafka provides the local replay transport. Parquet is used for derived analytical tables. The current maintainer has developed the pilot on a Windows 11 machine with 8 GB RAM; this describes one local development environment, not a requirement for every teammate or the final project. Tune each run to its host and record hardware/software details for benchmark comparisons.
 
 ## 7. Current results and evidence
 
@@ -148,21 +148,20 @@ Report source coverage and join completeness, missingness, key uniqueness, tempo
 
 The current batch ETL requires:
 
-- Windows 11 (current bounded local environment) or a compatible environment with the required Hadoop native support;
-- Python 3.10 or later;
-- Java 17;
+- Python 3.11 or later;
+- Java 17 or later;
 - PySpark 4.3.0, pinned in `requirements.txt`;
-- Hadoop Windows native files compatible with the PySpark-bundled Hadoop 3.5.0 client (`winutils.exe` and `hadoop.dll`) and `HADOOP_HOME` pointing to that Hadoop home on Windows;
+- on Windows only, Hadoop native files compatible with the PySpark-bundled Hadoop 3.5.0 client (`winutils.exe` and `hadoop.dll`) and `HADOOP_HOME` pointing to that Hadoop home;
 - local copies of the four inputs listed in `configs/week2.local.json`.
 
-The replay demonstration will additionally require a compatible local Apache Kafka broker and Spark's Kafka connector matching the Spark version. The Kafka runtime/version and connector invocation are not yet part of the demonstrated workflow. No cloud account or paid service is required by the project design.
+Windows 11 is the currently documented host, not a team-wide operating-system requirement; other systems can run the same Python/Spark pipeline with OS-appropriate environment setup. No project-wide minimum RAM or drive letter has been established. The current maintainer's 8 GB host and `D:\Bharath\Installations` path are examples only. Full setup notes and official download links are maintained in `PREREQUISITES.md`. The replay demonstration will additionally require a compatible local Apache Kafka broker and Spark's Kafka connector matching the Spark version. The Kafka runtime/version and connector invocation are not yet part of the demonstrated workflow. No cloud account or paid service is required by the project design.
 
 ### 9.2 Run the current batch pipeline
 
 From the repository root in PowerShell, with prerequisites already available:
 
 ```powershell
-$env:HADOOP_HOME = 'D:\Bharath\Installations\Hadoop-3.5.0-source-build\hadoop-home'
+$env:HADOOP_HOME = '<your Hadoop 3.5.0 Windows native home>'
 python scripts\run_week2_etl.py
 ```
 

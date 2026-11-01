@@ -13,7 +13,7 @@
 - Keep annual data availability separate from its reference year. The current two-year lag is a declared proxy, not a verified publication vintage.
 - Do not present the exploratory NASA point as representative weather or proposal event examples as country-level binary labels; select final evaluation instances after coverage and outcome checks.
 - Keep raw FPMA/APK-Inform values local and do not redistribute or reproduce them in public outputs until reuse rights are confirmed.
-- Design bounded local runs for Windows 11 and 8 GB RAM; no cloud services or paid resources are in scope.
+- Design bounded local runs and tune parallelism/memory to the host. The current maintainer's Windows 11 / 8 GB machine is one reference environment, not a requirement for teammates. No cloud services or paid resources are currently in scope.
 
 ## Batch and streaming architecture
 
@@ -151,7 +151,7 @@ tests/                        # Planned for targeted contract checks; not added 
 
 `scripts/run_week2_etl.py` reads the JSON configuration and runs `src/foodshield/etl/week2.py` in Spark local mode. It writes source-specific bronze Parquet, typed silver Parquet, monthly point-weather screening data, the M0 monthly-price gold table, and a profile with schemas and counts. It fails for empty datasets, null grain keys, or duplicate grain keys. It does not yet build a joined M1–M4 feature table, event labels, model scores, or streaming records.
 
-PySpark 4.3.0, Java 17, and Apache-built Hadoop 3.5.0 Windows native files (`winutils.exe` and `hadoop.dll`) are available under `D:\Bharath\Installations`. The Week 2 ETL has written its Bronze, Silver, and Gold Parquet outputs and profile; pilot counts and source limitations are documented in `WEEK2_ETL.md`.
+The current maintainer's machine has PySpark 4.3.0, Java 17, and Apache-built Hadoop 3.5.0 Windows native files (`winutils.exe` and `hadoop.dll`) under `D:\Bharath\Installations`. This path and Windows native setup are host-specific, not shared team prerequisites; see `PREREQUISITES.md` for teammate setup. The Week 2 ETL has written its Bronze, Silver, and Gold Parquet outputs and profile; pilot counts and source limitations are documented in `WEEK2_ETL.md`.
 
 ## Streaming event and alert contract (planned)
 
@@ -161,7 +161,7 @@ Alert output should include `schema_version`, `record_id`, country/commodity/mon
 
 ## Scalability and execution approach
 
-- Start on the 8 GB Windows laptop in Spark local mode with bounded parallelism, shuffle partitions, driver memory, and source slices. Current Week 2 config uses `local[2]`, 1 GiB driver memory, and four SQL shuffle partitions.
+- Use Spark local mode with bounded parallelism, shuffle partitions, driver memory, and source slices matched to each host. The current Week 2 configuration (`local[2]`, 1 GiB driver memory, four SQL shuffle partitions) is the maintainer's reference profile, not a required setting for every machine.
 - Keep schemas explicit and transforms narrow; select needed columns before joins and aggregates. Avoid collecting full datasets to the driver, Python UDFs for ordinary SQL operations, and copies of the raw archives.
 - Do not partition small pilot outputs by month. For larger sources, measure output size and query patterns first; consider country/year partitions and avoid high-cardinality or tiny-file layouts.
 - Measure actual batch throughput, runtime, join/shuffle cost, and memory in later weeks. Targets remain targets until measured. Streaming latency/throughput requires a separately documented replay workload and runtime configuration.
