@@ -1,6 +1,6 @@
 {
   "pipeline": "week4_selected_faostat_sssu_m0_m4_features",
-  "generated_utc": "2026-11-01T17:23:37.651998+00:00",
+  "generated_utc": "2026-11-01T18:26:21.129314+00:00",
   "grain": [
     "country_code",
     "commodity_code",
@@ -388,7 +388,9 @@
     "Rolling statistics use prior rows only and require a full respective history to have non-null values.",
     "This feature build does not define an outcome, train a model, or establish performance."
   ],
-  "selected_price_source": "FAOSTAT monthly Wheat Producer Price (element 5530), CPI-adjusted with attributed SSSU all-items CPI chain",
+  "selected_price_source": "FAOSTAT_PP_monthly_element_5530",
+  "selected_country": "Ukraine",
+  "selected_commodity": "Wheat",
   "price_csv": "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv",
   "week2_source_config": "configs/week2.local.json",
   "source_boundary": "The FPMA price source is not read. Shared Week 2 QCL/TCL/NASA readers provide non-price signals.",

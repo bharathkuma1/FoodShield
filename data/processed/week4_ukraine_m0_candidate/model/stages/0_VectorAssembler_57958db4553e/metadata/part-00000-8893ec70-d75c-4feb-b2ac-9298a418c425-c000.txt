@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.VectorAssembler","timestamp":1793557657941,"sparkVersion":"4.3.0","uid":"VectorAssembler_57958db4553e","paramMap":{"handleInvalid":"error","inputCols":["price_real_mom_change","price_real_anomaly_z_12m"],"outputCol":"m0_features"},"defaultParamMap":{"handleInvalid":"error","outputCol":"VectorAssembler_57958db4553e__output"}}
