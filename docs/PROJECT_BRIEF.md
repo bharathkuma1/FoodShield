@@ -6,7 +6,7 @@
 **Course/team:** IISc DA231o Data Engineering at Scale, Data-Flux  
 **Research question:** Can multi-source temporal signals warn of future domestic wheat-price stress earlier or more reliably than price-only monitoring?
 
-FoodShield will integrate heterogeneous public data and study historical wheat-market stress. It aims to detect observable supply-stress signals earlier than a price-only approach. It does not aim to predict geopolitical events or their causes, and results must not imply causality.
+FoodShield will integrate heterogeneous public data and study historical wheat-market stress. It aims to warn of future domestic wheat-price stress earlier or more reliably than a price-only approach. It does not aim to predict geopolitical events or physical shortages, and results must not imply causality.
 
 ## Authoritative scope
 
@@ -95,6 +95,8 @@ artifacts/         # generated metrics, charts, demo outputs
 Keep notebooks optional and exploratory; promote repeatable pipeline logic into `src/`. Avoid duplicating submitted proposal materials under `docs/`.
 
 The current architecture baseline and implemented Week 2 paths are documented in [`docs/ARCHITECTURE.md`](ARCHITECTURE.md); the local Spark runner, schema/grain contracts, outputs, and setup steps are in [`docs/WEEK2_ETL.md`](WEEK2_ETL.md). Week 3 feature code and local run evidence are documented in [`docs/WEEK3_FEATURES.md`](WEEK3_FEATURES.md). Model evaluation and streaming packages remain planned work.
+
+Project-wide candidate variables, the shared M0–M4 comparison contract, and current pilot source readiness/sharing boundaries are maintained in [`docs/ARCHITECTURE.md`](ARCHITECTURE.md). Week-specific documents track implementation and decisions needed to instantiate that baseline; they do not redefine the overall project design.
 
 Synthetic development fixtures are generated only to unblock pipeline and model-interface development. Their generation recipe, seed, split, target rule, and limitations are in [`docs/SYNTHETIC_DATA.md`](SYNTHETIC_DATA.md). They must remain identifiable and must not be used to claim observed coverage or final evaluation performance.
 
