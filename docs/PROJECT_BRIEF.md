@@ -98,6 +98,8 @@ The current architecture baseline and implemented Week 2 paths are documented in
 
 Synthetic development fixtures are generated only to unblock pipeline and model-interface development. Their generation recipe, seed, split, target rule, and limitations are in [`docs/SYNTHETIC_DATA.md`](SYNTHETIC_DATA.md). They must remain identifiable and must not be used to claim observed coverage or final evaluation performance.
 
-The continuing professor-facing project manuscript, including the wheat-only scope, methods, evidence, software prerequisites, and current reproducibility instructions, is [`docs/PROJECT_SUBMISSION.md`](PROJECT_SUBMISSION.md).
+The continuing professor-facing project manuscript, including the wheat-only scope, methods, evidence, software prerequisites, and current reproducibility instructions, is [`docs/PROJECT_SUBMISSION.md`](PROJECT_SUBMISSION.md). Professor submission format and logistics are tracked separately in [`docs/COURSE_SUBMISSION_REQUIREMENTS.md`](COURSE_SUBMISSION_REQUIREMENTS.md); the scale-test protocol is in [`docs/SCALABILITY_EXPERIMENT.md`](SCALABILITY_EXPERIMENT.md).
+
+Week 4 outcome/source feasibility and evaluation-period decisions are tracked in [`docs/WEEK4_EVALUATION_PROTOCOL.md`](WEEK4_EVALUATION_PROTOCOL.md); no target or split is approved yet.
 
 Teammate software setup, per-OS requirements, trusted download links, and host-specific notes are maintained in [`docs/PREREQUISITES.md`](PREREQUISITES.md).
