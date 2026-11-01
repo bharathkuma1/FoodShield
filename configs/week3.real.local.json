@@ -1,0 +1,7 @@
+{
+  "input_mode": "week2",
+  "week2_output_root": "data/processed/week2_ukraine",
+  "input_is_synthetic": false,
+  "annual_availability_lag_years": 2,
+  "output_root": "data/processed/week3_ukraine_real"
+}
