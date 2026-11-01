@@ -48,6 +48,17 @@ These are the feasibility decisions recorded at the user's request. They are wor
 | Week 1 completion | Mark all four owner workstreams 100% for the Week 1 feasibility handoff. | Means source profiling, recommendation, caveats, and next-stage boundary are documented in `WEEK1_TASK_ASSIGNMENTS.md`; it does not mean teammates reviewed the decisions or implementation/model work is complete. |
 | Weeks 1–8 workstream ownership | Treat the current per-week owner mapping in `TEAM_RESPONSIBILITIES.md` as the agreed working default; update it when a change is explicitly called out. | User-directed working agreement. It assigns responsibilities and does not change the proposal's wheat-only, country–commodity–time, M0–M4, event-evaluation, or Spark scalability objectives. Completion percentages remain separate from ownership agreement. |
 
+## Week 4 working choices (review needed)
+
+These are the current implementation defaults selected by the project lead. They can be revised after team review; they are not a claim of final protocol approval.
+
+| Working choice | Current setting | Review note |
+|---|---|---|
+| Future stress label | Positive if the maximum SSSU-CPI-adjusted FAOSTAT Ukraine wheat farm-gate price in months `t+1` through `t+3` is at least 10% above the real price at origin month `t`. | **Review needed.** Keep 5%/15% rise labels as target sensitivity cases; these labels use the same price source as M0, strictly after `t`. |
+| Forecast horizon | 3 months. | **Review needed.** Keep 1- and 6-month horizons as sensitivity cases. |
+| Candidate chronological split | Training calendar 2011–2017, validation 2018–2020, final-test candidate 2021–2022; purge origins whose future label window crosses a boundary. | **Review needed.** Common M0–M4 labels requiring 36 months of past prices begin in 2013. Final-test labels are excluded from current artifacts. |
+| M0 baseline | Spark SQL anomaly score: past-only 12-month real-price anomaly plus month-over-month real-price change standardized using the training-period mean and sample standard deviation; select alert cutoff on validation by F1. | **Review needed.** This is a transparent rule-based baseline, not an MLlib-trained classifier. Validation threshold-selection metrics are calibration evidence, not final performance. No final-test labels or predictions are used in the current run. |
+
 ## Assumptions to validate
 
 - FAOSTAT QCL/TCL, NASA POWER, and selected FPMA data can support a useful common wheat/country/month analysis after temporal and geographic alignment. Feasibility is not proof of model adequacy.
@@ -60,7 +71,7 @@ These are the feasibility decisions recorded at the user's request. They are wor
 ## Later project decisions (outside the Week 1 feasibility handoff)
 
 1. Can Ukraine FPMA source terms and the Retail/Wholesale metadata discrepancy be resolved for any separate local comparison? This is not a blocker for the selected shared target.
-2. What exact future farm-gate producer-price stress rule, forecast horizon, and threshold-selection method should be used? **Target type and pilot source selected:** future Ukraine wheat farm-gate producer-price stress, not physical shortage, using FAOSTAT PP with a documented SSSU CPI chain for real-price analysis. At prediction month `t`, all M0–M4 features stop at `t`; the outcome is measured only in a later window. This is a future outcome from the same price source, not an independent-source label. Proposal event periods are contexts, not automatic labels or fixed test cases; 2007–08 is outside the selected series, and 2010/11 has insufficient pre-event history for the proposed multi-year training design. The 2022 context remains the eligible test candidate. Exact outcome formula, horizon, threshold method, and chronological split remain open. See `WEEK1_EVENT_CASES.md` and `WEEK4_EVALUATION_PROTOCOL.md`.
+2. Review the operational stress rule, forecast horizon, and alert-threshold method. **Current working choice (review needed):** a ≥10% increase in the maximum CPI-adjusted farm-gate price within three months, with a 3-month horizon, using FAOSTAT PP and the SSSU CPI chain. At origin `t`, all M0–M4 features stop at `t`; the outcome is measured only later. This is a future outcome from the same price source, not an independent-source label. The candidate split is training 2011–2017, validation 2018–2020, and final-test candidate 2021–2022, with horizon purges; exact dates and alert threshold remain review items. Proposal event periods are contexts, not automatic labels or fixed test cases; 2007–08 is outside the selected series, and 2010/11 has insufficient pre-event history for the proposed multi-year training design. See `WEEK1_EVENT_CASES.md` and `WEEK4_EVALUATION_PROTOCOL.md`.
 3. Can historical regional wheat-area weights and FAOSTAT publication vintages be obtained for strict as-of validation?
 4. Which detector/thresholding method will be used for M0–M4, and how will thresholds be selected without holdout leakage?
 5. What replay event schema, ordering, pacing, checkpoint/output behavior, and duplicate/restart semantics will the streaming demo support?

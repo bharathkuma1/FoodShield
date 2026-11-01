@@ -1,0 +1,552 @@
+{
+  "purpose": "Candidate target-label sensitivity profile for Week 4; this is label feasibility, not model performance.",
+  "generated_utc": "2026-11-01T17:28:03.045430+00:00",
+  "output_file": "data/processed/week4_stress_label_sensitivity.csv",
+  "output_sha256": "92193ea1b64802789688587eb0fe030c27d51991abd76d0af767b2343c86dceb",
+  "inputs": {
+    "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv": "d08225d0f163c6213c62b8071b01b3688f482e14dd79d47eacc5e1494016403d",
+    "data/processed/week4_ukraine_m0_m4_eligibility.csv": "daa05014206f83669921480d6a0c5f28f0a635d74162917dd4aabd2275ede196"
+  },
+  "common_origin_rule": "M4 feature-complete origins; M4 requires all M0-M3 core feature groups, so every reported origin is shared across M0-M4.",
+  "candidate_grid": {
+    "history_months": 36,
+    "historical_level_quantiles": [
+      80,
+      90,
+      95
+    ],
+    "real_price_rise_percent": [
+      5,
+      10,
+      15
+    ],
+    "horizons_months": [
+      1,
+      3,
+      6
+    ]
+  },
+  "working_periods_review_needed": {
+    "training": [
+      "2013-01",
+      "2017-12"
+    ],
+    "validation": [
+      "2018-01",
+      "2020-12"
+    ],
+    "held_out_test_starts": "2021-01"
+  },
+  "purge_rule": "Exclude an origin if its full future outcome horizon crosses the end of its candidate train or validation period.",
+  "threshold_note": "Rolling real-price quantiles use only the 36 observations available through forecast origin t; percentile uses linear interpolation at (n-1)*p. Outcome checks only months after t. A separate model alert threshold is not selected here.",
+  "working_target_review_needed": "The project lead selected realrise_10pct_futuremax_3m as the current working target; it may be revised after team review.",
+  "holdout_note": "No labels, price outcomes, or counts are calculated for origins on/after 2021-01. The candidate calendar remains review needed.",
+  "episode_count_note": "Positive-label episodes are contiguous runs of positive eligible calendar-month origins; missing or purged months break runs.",
+  "source_limit": "The future outcome uses the same FAOSTAT farm-gate price series as M0, with the SSSU CPI chain; temporal separation does not make it source-independent.",
+  "results": {
+    "trailing36m_q80_futuremax_1m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+1 exceeds the 80th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 1,
+      "history_percentile": 80,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 75,
+      "train_validation_positive_origins": 25,
+      "splits": {
+        "train": {
+          "eligible_origins": 43,
+          "positive_origins": 12,
+          "positive_origin_rate": 0.2791,
+          "contiguous_positive_origin_episodes": 5,
+          "first_origin": "2013-02",
+          "last_origin": "2017-11"
+        },
+        "validation": {
+          "eligible_origins": 32,
+          "positive_origins": 13,
+          "positive_origin_rate": 0.4062,
+          "contiguous_positive_origin_episodes": 6,
+          "first_origin": "2018-02",
+          "last_origin": "2020-11"
+        }
+      }
+    },
+    "trailing36m_q90_futuremax_1m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+1 exceeds the 90th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 1,
+      "history_percentile": 90,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 75,
+      "train_validation_positive_origins": 17,
+      "splits": {
+        "train": {
+          "eligible_origins": 43,
+          "positive_origins": 8,
+          "positive_origin_rate": 0.186,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-11"
+        },
+        "validation": {
+          "eligible_origins": 32,
+          "positive_origins": 9,
+          "positive_origin_rate": 0.2812,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2018-02",
+          "last_origin": "2020-11"
+        }
+      }
+    },
+    "trailing36m_q95_futuremax_1m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+1 exceeds the 95th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 1,
+      "history_percentile": 95,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 75,
+      "train_validation_positive_origins": 15,
+      "splits": {
+        "train": {
+          "eligible_origins": 43,
+          "positive_origins": 7,
+          "positive_origin_rate": 0.1628,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-11"
+        },
+        "validation": {
+          "eligible_origins": 32,
+          "positive_origins": 8,
+          "positive_origin_rate": 0.25,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2018-02",
+          "last_origin": "2020-11"
+        }
+      }
+    },
+    "realrise_5pct_futuremax_1m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+1 is at least 5% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 1,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 5,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 75,
+      "train_validation_positive_origins": 12,
+      "splits": {
+        "train": {
+          "eligible_origins": 43,
+          "positive_origins": 6,
+          "positive_origin_rate": 0.1395,
+          "contiguous_positive_origin_episodes": 5,
+          "first_origin": "2013-02",
+          "last_origin": "2017-11"
+        },
+        "validation": {
+          "eligible_origins": 32,
+          "positive_origins": 6,
+          "positive_origin_rate": 0.1875,
+          "contiguous_positive_origin_episodes": 5,
+          "first_origin": "2018-02",
+          "last_origin": "2020-11"
+        }
+      }
+    },
+    "realrise_10pct_futuremax_1m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+1 is at least 10% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 1,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 10,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 75,
+      "train_validation_positive_origins": 5,
+      "splits": {
+        "train": {
+          "eligible_origins": 43,
+          "positive_origins": 3,
+          "positive_origin_rate": 0.0698,
+          "contiguous_positive_origin_episodes": 3,
+          "first_origin": "2013-02",
+          "last_origin": "2017-11"
+        },
+        "validation": {
+          "eligible_origins": 32,
+          "positive_origins": 2,
+          "positive_origin_rate": 0.0625,
+          "contiguous_positive_origin_episodes": 2,
+          "first_origin": "2018-02",
+          "last_origin": "2020-11"
+        }
+      }
+    },
+    "realrise_15pct_futuremax_1m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+1 is at least 15% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 1,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 15,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 75,
+      "train_validation_positive_origins": 1,
+      "splits": {
+        "train": {
+          "eligible_origins": 43,
+          "positive_origins": 1,
+          "positive_origin_rate": 0.0233,
+          "contiguous_positive_origin_episodes": 1,
+          "first_origin": "2013-02",
+          "last_origin": "2017-11"
+        },
+        "validation": {
+          "eligible_origins": 32,
+          "positive_origins": 0,
+          "positive_origin_rate": 0.0,
+          "contiguous_positive_origin_episodes": 0,
+          "first_origin": "2018-02",
+          "last_origin": "2020-11"
+        }
+      }
+    },
+    "trailing36m_q80_futuremax_3m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+3 exceeds the 80th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 3,
+      "history_percentile": 80,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 71,
+      "train_validation_positive_origins": 36,
+      "splits": {
+        "train": {
+          "eligible_origins": 41,
+          "positive_origins": 17,
+          "positive_origin_rate": 0.4146,
+          "contiguous_positive_origin_episodes": 7,
+          "first_origin": "2013-02",
+          "last_origin": "2017-09"
+        },
+        "validation": {
+          "eligible_origins": 30,
+          "positive_origins": 19,
+          "positive_origin_rate": 0.6333,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2018-02",
+          "last_origin": "2020-09"
+        }
+      }
+    },
+    "trailing36m_q90_futuremax_3m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+3 exceeds the 90th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 3,
+      "history_percentile": 90,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 71,
+      "train_validation_positive_origins": 26,
+      "splits": {
+        "train": {
+          "eligible_origins": 41,
+          "positive_origins": 11,
+          "positive_origin_rate": 0.2683,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-09"
+        },
+        "validation": {
+          "eligible_origins": 30,
+          "positive_origins": 15,
+          "positive_origin_rate": 0.5,
+          "contiguous_positive_origin_episodes": 2,
+          "first_origin": "2018-02",
+          "last_origin": "2020-09"
+        }
+      }
+    },
+    "trailing36m_q95_futuremax_3m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+3 exceeds the 95th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 3,
+      "history_percentile": 95,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 71,
+      "train_validation_positive_origins": 24,
+      "splits": {
+        "train": {
+          "eligible_origins": 41,
+          "positive_origins": 10,
+          "positive_origin_rate": 0.2439,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-09"
+        },
+        "validation": {
+          "eligible_origins": 30,
+          "positive_origins": 14,
+          "positive_origin_rate": 0.4667,
+          "contiguous_positive_origin_episodes": 2,
+          "first_origin": "2018-02",
+          "last_origin": "2020-09"
+        }
+      }
+    },
+    "realrise_5pct_futuremax_3m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+3 is at least 5% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 3,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 5,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 71,
+      "train_validation_positive_origins": 28,
+      "splits": {
+        "train": {
+          "eligible_origins": 41,
+          "positive_origins": 14,
+          "positive_origin_rate": 0.3415,
+          "contiguous_positive_origin_episodes": 5,
+          "first_origin": "2013-02",
+          "last_origin": "2017-09"
+        },
+        "validation": {
+          "eligible_origins": 30,
+          "positive_origins": 14,
+          "positive_origin_rate": 0.4667,
+          "contiguous_positive_origin_episodes": 6,
+          "first_origin": "2018-02",
+          "last_origin": "2020-09"
+        }
+      }
+    },
+    "realrise_10pct_futuremax_3m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+3 is at least 10% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 3,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 10,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 71,
+      "train_validation_positive_origins": 21,
+      "splits": {
+        "train": {
+          "eligible_origins": 41,
+          "positive_origins": 12,
+          "positive_origin_rate": 0.2927,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-09"
+        },
+        "validation": {
+          "eligible_origins": 30,
+          "positive_origins": 9,
+          "positive_origin_rate": 0.3,
+          "contiguous_positive_origin_episodes": 5,
+          "first_origin": "2018-02",
+          "last_origin": "2020-09"
+        }
+      }
+    },
+    "realrise_15pct_futuremax_3m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+3 is at least 15% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 3,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 15,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 71,
+      "train_validation_positive_origins": 13,
+      "splits": {
+        "train": {
+          "eligible_origins": 41,
+          "positive_origins": 9,
+          "positive_origin_rate": 0.2195,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-09"
+        },
+        "validation": {
+          "eligible_origins": 30,
+          "positive_origins": 4,
+          "positive_origin_rate": 0.1333,
+          "contiguous_positive_origin_episodes": 2,
+          "first_origin": "2018-02",
+          "last_origin": "2020-09"
+        }
+      }
+    },
+    "trailing36m_q80_futuremax_6m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+6 exceeds the 80th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 6,
+      "history_percentile": 80,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 65,
+      "train_validation_positive_origins": 45,
+      "splits": {
+        "train": {
+          "eligible_origins": 38,
+          "positive_origins": 26,
+          "positive_origin_rate": 0.6842,
+          "contiguous_positive_origin_episodes": 7,
+          "first_origin": "2013-02",
+          "last_origin": "2017-06"
+        },
+        "validation": {
+          "eligible_origins": 27,
+          "positive_origins": 19,
+          "positive_origin_rate": 0.7037,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2018-02",
+          "last_origin": "2020-06"
+        }
+      }
+    },
+    "trailing36m_q90_futuremax_6m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+6 exceeds the 90th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 6,
+      "history_percentile": 90,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 65,
+      "train_validation_positive_origins": 32,
+      "splits": {
+        "train": {
+          "eligible_origins": 38,
+          "positive_origins": 17,
+          "positive_origin_rate": 0.4474,
+          "contiguous_positive_origin_episodes": 5,
+          "first_origin": "2013-02",
+          "last_origin": "2017-06"
+        },
+        "validation": {
+          "eligible_origins": 27,
+          "positive_origins": 15,
+          "positive_origin_rate": 0.5556,
+          "contiguous_positive_origin_episodes": 2,
+          "first_origin": "2018-02",
+          "last_origin": "2020-06"
+        }
+      }
+    },
+    "trailing36m_q95_futuremax_6m": {
+      "rule": "positive if any real farm-gate price in months t+1..t+6 exceeds the 95th percentile of the 36 consecutive monthly real prices ending at origin t",
+      "rule_family": "historical_level",
+      "horizon_months": 6,
+      "history_percentile": 95,
+      "minimum_real_price_rise_pct": null,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 65,
+      "train_validation_positive_origins": 30,
+      "splits": {
+        "train": {
+          "eligible_origins": 38,
+          "positive_origins": 16,
+          "positive_origin_rate": 0.4211,
+          "contiguous_positive_origin_episodes": 5,
+          "first_origin": "2013-02",
+          "last_origin": "2017-06"
+        },
+        "validation": {
+          "eligible_origins": 27,
+          "positive_origins": 14,
+          "positive_origin_rate": 0.5185,
+          "contiguous_positive_origin_episodes": 2,
+          "first_origin": "2018-02",
+          "last_origin": "2020-06"
+        }
+      }
+    },
+    "realrise_5pct_futuremax_6m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+6 is at least 5% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 6,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 5,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 65,
+      "train_validation_positive_origins": 41,
+      "splits": {
+        "train": {
+          "eligible_origins": 38,
+          "positive_origins": 21,
+          "positive_origin_rate": 0.5526,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-06"
+        },
+        "validation": {
+          "eligible_origins": 27,
+          "positive_origins": 20,
+          "positive_origin_rate": 0.7407,
+          "contiguous_positive_origin_episodes": 5,
+          "first_origin": "2018-02",
+          "last_origin": "2020-06"
+        }
+      }
+    },
+    "realrise_10pct_futuremax_6m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+6 is at least 10% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 6,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 10,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 65,
+      "train_validation_positive_origins": 34,
+      "splits": {
+        "train": {
+          "eligible_origins": 38,
+          "positive_origins": 21,
+          "positive_origin_rate": 0.5526,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-06"
+        },
+        "validation": {
+          "eligible_origins": 27,
+          "positive_origins": 13,
+          "positive_origin_rate": 0.4815,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2018-02",
+          "last_origin": "2020-06"
+        }
+      }
+    },
+    "realrise_15pct_futuremax_6m": {
+      "rule": "positive if maximum real farm-gate price in months t+1..t+6 is at least 15% above real price at origin t",
+      "rule_family": "rise_from_origin",
+      "horizon_months": 6,
+      "history_percentile": null,
+      "minimum_real_price_rise_pct": 15,
+      "training_and_validation_only": true,
+      "train_validation_candidate_origins": 65,
+      "train_validation_positive_origins": 25,
+      "splits": {
+        "train": {
+          "eligible_origins": 38,
+          "positive_origins": 18,
+          "positive_origin_rate": 0.4737,
+          "contiguous_positive_origin_episodes": 4,
+          "first_origin": "2013-02",
+          "last_origin": "2017-06"
+        },
+        "validation": {
+          "eligible_origins": 27,
+          "positive_origins": 7,
+          "positive_origin_rate": 0.2593,
+          "contiguous_positive_origin_episodes": 3,
+          "first_origin": "2018-02",
+          "last_origin": "2020-06"
+        }
+      }
+    }
+  }
+}

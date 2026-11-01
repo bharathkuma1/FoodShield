@@ -121,7 +121,7 @@ The professor's report expectation includes the data model, methods, platforms, 
 - Purge each partition boundary by the forecast horizon so a future label cannot reach across a split. Every predictor must be available by its forecast origin, including annual data with explicit availability dates.
 - Keep benchmark-only synthetic workload data separate from real-data model training, validation, test, event labels, and food-market conclusions. Use it only for controlled Spark/Kafka scale measurements when source data are too small to expose runtime scaling.
 
-This comparison contract is project-wide. The Ukraine pilot's selected price outcome is farm-gate producer-price stress, using FAOSTAT PP and the attributed SSSU CPI chain. `WEEK4_EVALUATION_PROTOCOL.md` tracks the remaining stress-rule, horizon, threshold, event, and split decisions that instantiate it.
+This comparison contract is project-wide. The Ukraine pilot uses FAOSTAT PP and the attributed SSSU CPI chain. The current working outcome is a ≥10% increase in CPI-adjusted producer price within three months; the project lead has marked the rule and candidate split **review needed**. `WEEK4_EVALUATION_PROTOCOL.md` tracks the working target, baseline, and review items.
 
 ### Current pilot source readiness (Ukraine)
 
@@ -134,7 +134,7 @@ This comparison contract is project-wide. The Ukraine pilot's selected price out
 | FAOSTAT wheat production | Annual 1992–2024 | Ukraine filtered extract and provenance sidecar are tracked. Contains production, yield, and harvested area with flags. |
 | FAOSTAT wheat trade | Annual 1992–2024 | Ukraine filtered extract and provenance sidecar are tracked. Contains import/export quantity and value with units/flags. |
 
-The original local Week 3 feature build uses the FPMA series and is not the shared selected-source panel. A separate source-only profile from the selected shared inputs mirrors the Week 3 past-only feature completeness rules: M0 has 145 eligible feature origins (January 2011–January 2023); M1 has 144 (January 2011–December 2022); M2 has 132 (February 2011–December 2022); M3/M4 have 121 (February 2011–December 2022). For a provisional three-month future-observation window, 119 M4 origins remain (February 2011–October 2022). These are feature/outcome-observation availability counts, not labeled stress cases or model results. Spark integration of the selected source is still required before treating this profile as the production feature pipeline. Production/trade joins use the provisional two-year lag; historical publication vintages have not been verified.
+The original local Week 3 feature build uses the FPMA series and is not the shared selected-source panel. The Week 4 Spark path now builds features from the selected FAOSTAT/SSSU price candidate and shared QCL/TCL/NASA inputs. Its observed counts match the source-only profile: M0 145; M1 144; M2 132; M3/M4 121. For a three-month future-observation window, 119 M4 origins remain (through October 2022). These are feature/outcome-observation availability counts, not model results. The M0 anomaly detector is implemented and calibrated on training/validation origins only; the final test remains untouched. Production/trade joins use the provisional two-year lag; historical publication vintages have not been verified.
 
 India is a possible comparator, not yet a full multi-year fallback: its profiled FPMA price series spans January 2014–September 2026, but the local India weather extract covers 2022 only. India-filtered FAOSTAT extracts exist locally but are not tracked on the team branch. No alternate country currently has a better verified M0–M4 common period. A country change requires a new coverage, rights, and feature-completeness profile.
 
@@ -145,19 +145,19 @@ India is a possible comparator, not yet a full multi-year fallback: its profiled
 - **FAOSTAT QCL production:** long form at country × commodity × element × data year; values carry unit, flag, and note. Current provisional availability date is January 1 of `data_year + 2`.
 - **FAOSTAT TCL trade:** long form at reporter country × commodity × import/export element × data year; quantity and value remain distinct and keep units/flags/notes. The selected bulk extract has no partner dimension.
 - **NASA POWER weather:** preserve daily parameters, units, time standard, coordinates, and spatial method. Current Ukraine data is a single-point screening sample. Planned national/crop-exposure features require verified region selection and wheat-area weights.
-- **Event evidence:** broad FAO-backed periods are retrospective global event-study contexts. The selected target type is future Ukraine wheat farm-gate producer-price stress, measured after the predictor cutoff; the exact label contract must be defined before classification metrics are meaningful.
+- **Event evidence:** broad FAO-backed periods are retrospective global event-study contexts. The current working target is future Ukraine wheat farm-gate producer-price stress: at origin `t`, a positive label means the maximum CPI-adjusted FAOSTAT producer price in `t+1..t+3` is at least 10% above the real price at `t`. This rule and the candidate chronological split are marked review needed. It is a future outcome from the same source as M0, not an independent-source label.
 
 ## Model progression and event validation
 
 | Model | Signals |
 |---|---|
-| M0 | Price |
+| M0 | Price; current baseline score combines past-only 12-month real-price anomaly with training-standardized month-over-month real-price change. The alert cutoff is selected on validation; rule is review needed. |
 | M1 | Price + weather |
 | M2 | Price + weather + production |
 | M3 | Price + weather + production + trade |
 | M4 | All feasible signals plus temporal lags and cross-signal interactions |
 
-Compare models by ablation under the project-level evaluation contract above. Report unavailable signals and coverage changes. The 2007–08, 2010/11, and 2022 windows are global contexts, not country-level binary labels. Under the selected pilot source, 2007–08 is out of coverage; 2010/11 is in coverage only from the start of the 2010 event, without the proposed multi-year pre-event history; 2022 is the current eligible test-event candidate. The primary outcome is future farm-gate producer-price stress measured after the predictor cutoff, from the same source as M0; it is temporally separated, not source-independent. Do not claim precision, recall, or predictive skill until the target and negative periods are operationally defined. Prevent threshold tuning on holdout cases.
+Compare models by ablation under the project-level evaluation contract above. Report unavailable signals and coverage changes. The 2007–08, 2010/11, and 2022 windows are global contexts, not country-level binary labels. Under the selected pilot source, 2007–08 is out of coverage; 2010/11 is in coverage only from the start of the 2010 event, without the proposed multi-year pre-event history; 2022 is the current eligible test-event candidate. The outcome is strictly after the predictor cutoff but uses the same source as M0. Treat validation scores as calibration evidence, not final performance, and do not open final-test labels until the review-needed choices are settled. Prevent threshold tuning on holdout cases.
 
 ## Repository layout
 
