@@ -12,7 +12,7 @@ Read `docs/PROJECT_BRIEF.md`, `docs/PLAN.md`, and `docs/DECISIONS.md` before cha
 ## Implementation practices
 
 - Use Python and the agreed Spark DataFrame/Spark SQL direction. Keep transformations reproducible and make schemas, data grain, and temporal rules explicit.
-- Prefer small, bounded local runs suitable for Windows 11 and 8 GB RAM. Keep datasets on D: where practical; avoid unnecessary copies and memory-heavy operations.
+- Prefer bounded local runs and tune resource settings to the machine running them. Windows 11, 8 GB RAM, and D: storage describe the current maintainer's development host, not requirements for every teammate. Avoid unnecessary copies and memory-heavy operations.
 - Preserve all submitted proposal, presentation, and archive materials. Never overwrite, move, or delete them.
 - Do not create cloud resources or incur paid service costs without explicit approval.
 - Make incremental, reviewable changes and use targeted checks for affected behavior. Avoid unrelated refactoring and dependency additions.

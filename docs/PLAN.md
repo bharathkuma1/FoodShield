@@ -34,7 +34,7 @@ By equal weekly milestone count, 2 of 8 roadmap weeks are complete (25%); this i
 
 ## Proposed local streaming benchmark targets
 
-These are engineering targets proposed for this project, not values prescribed by the TA and not achieved results. The TA note gives 1,000 events/s sustained, 2,000 events/s peak, and p95 latency ≤10 s as examples, while cautioning that the numbers should be chosen deliberately. For an 8 GB Windows laptop, start with a lighter, measurable target:
+These are engineering targets proposed for this project, not values prescribed by the TA and not achieved results. The TA note gives 1,000 events/s sustained, 2,000 events/s peak, and p95 latency ≤10 s as examples, while cautioning that the numbers should be chosen deliberately. These initial lower targets were drafted for the current maintainer's 8 GB Windows host; that hardware is not a team-wide requirement. Tune each local run to available resources and record host details, while keeping a documented reference configuration for comparisons:
 
 | Measure | Proposed target | Measurement definition |
 |---|---:|---|
