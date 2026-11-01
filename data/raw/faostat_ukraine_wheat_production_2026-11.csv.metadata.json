@@ -1,0 +1,64 @@
+{
+  "retrieved_utc": "2026-11-01",
+  "provider": "FAOSTAT",
+  "domain": "QCL",
+  "source_archive_url": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+  "catalog_url": "https://bulks-faostat.fao.org/production/datasets_E.json",
+  "source_archive_file": "data/raw/faostat_qcl_production_bulk_2026-11.zip",
+  "filter": {
+    "Area Code (M49)": "804",
+    "Item Code": "15",
+    "Item": "Wheat",
+    "Element": [
+      "Production",
+      "Yield",
+      "Area harvested"
+    ]
+  },
+  "output_file": "data/raw/faostat_ukraine_wheat_production_2026-11.csv",
+  "records": 99,
+  "year_range": [
+    1992,
+    2024
+  ],
+  "elements": {
+    "Area harvested": 33,
+    "Yield": 33,
+    "Production": 33
+  },
+  "flags": {
+    "A": 97,
+    "E": 1,
+    "I": 1
+  },
+  "units": {
+    "Area harvested": [
+      "ha"
+    ],
+    "Yield": [
+      "kg/ha"
+    ],
+    "Production": [
+      "t"
+    ]
+  },
+  "fields_preserved": [
+    "Area Code",
+    "Area Code (M49)",
+    "Area",
+    "Item Code",
+    "Item Code (CPC)",
+    "Item",
+    "Element Code",
+    "Element",
+    "Year Code",
+    "Year",
+    "Unit",
+    "Value",
+    "Flag",
+    "Note"
+  ],
+  "output_sha256": "4bd60ec1f79fb8859e56eaa09c23c268fa311b0a56a3618b3a4b7a293df0bb2a",
+  "license_note": "FAO statistical database terms specify CC BY 4.0 with a third-party data exception; recheck dataset metadata before reuse changes.",
+  "attribution": "FAO. 2026. FAOSTAT QCL. Accessed 1 November 2026. https://www.fao.org/faostat/en/#data/QCL. Licence: CC-BY-4.0, subject to third-party exceptions."
+}

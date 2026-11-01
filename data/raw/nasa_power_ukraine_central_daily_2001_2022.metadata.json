@@ -1,0 +1,24 @@
+{
+  "retrieved_utc": "2026-11-01",
+  "provider": "NASA POWER Daily API",
+  "request_url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR%2CT2M_MAX%2CT2M_MIN&community=AG&longitude=32.0&latitude=49.0&start=20010101&end=20221231&format=JSON&time-standard=UTC",
+  "output_file": "data/raw/nasa_power_ukraine_central_daily_2001_2022.json",
+  "latitude": 49.0,
+  "longitude": 32.0,
+  "time_standard": "UTC",
+  "period": [
+    "2001-01-01",
+    "2022-12-31"
+  ],
+  "parameters": {
+    "PRECTOTCORR": "mm/day",
+    "T2M_MAX": "C",
+    "T2M_MIN": "C"
+  },
+  "daily_values_per_parameter": 8035,
+  "sentinel_count_per_parameter": 0,
+  "limitation": "Single-point screening sample; not crop-weighted or nationally representative.",
+  "sha256": "b6931177322f18061fe82dca367f9505805e6f469f47fe9c660f030334aecc5f",
+  "license_note": "NASA POWER public data is listed under CC BY 4.0; include the NASA POWER citation. See https://registry.opendata.aws/nasa-power/ and https://power.larc.nasa.gov/docs/.",
+  "attribution": "These data were obtained from the NASA Langley Research Center POWER Project funded through the NASA Earth Science/Applied Science Program."
+}
