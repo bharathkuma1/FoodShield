@@ -60,11 +60,11 @@ These are Week 1 workstream owners. Current feasibility evidence makes Ukraine t
 
 The team agreed to carry the Week 1 signal owners into Week 2 Spark ETL: Bharath—price/M0; Abhijith—production; Jyoti—weather; Naman—trade. Week 2 implementation evidence and completion criteria are in [`docs/WEEK2_TASK_ASSIGNMENTS.md`](WEEK2_TASK_ASSIGNMENTS.md) and [`docs/WEEK2_ETL.md`](WEEK2_ETL.md).
 
-### Proposed Week 3 ownership
+### Agreed default Week 3 ownership
 
-For the analytics and feature-engineering milestone, the proposed workstream mapping follows the four Week 1/2 signal owners: Bharath—price/M0 features; Abhijith—production features and as-of availability; Jyoti—weather aggregation and features; Naman—trade features plus cross-signal join/completeness integration. This is a proposed assignment, not recorded teammate sign-off. Shared acceptance criteria and boundaries are in [`docs/WEEK3_TASK_ASSIGNMENTS.md`](WEEK3_TASK_ASSIGNMENTS.md).
+For the analytics and feature-engineering milestone, the agreed default workstream mapping follows the four Week 1/2 signal owners: Bharath—price/M0 features; Abhijith—production features and as-of availability; Jyoti—weather aggregation and features; Naman—trade features plus cross-signal join/completeness integration. Shared acceptance criteria and boundaries are in [`docs/WEEK3_TASK_ASSIGNMENTS.md`](WEEK3_TASK_ASSIGNMENTS.md).
 
-The current working responsibility allocation for all eight weeks, including provisional owners and per-week status, is maintained in [`docs/TEAM_RESPONSIBILITIES.md`](TEAM_RESPONSIBILITIES.md). Weeks 4–8 remain adjustable planning assignments, not frozen commitments.
+The current working responsibility allocation and per-week status for all eight weeks are maintained in [`docs/TEAM_RESPONSIBILITIES.md`](TEAM_RESPONSIBILITIES.md). Treat the current owners as agreed defaults; update them when a change is explicitly called out.
 
 ## Recommended project structure
 
