@@ -31,7 +31,7 @@ Docker, cloud accounts, paid services, Maven, Scala, Jupyter, and separate data-
 
 ## Hardware, operating system, and storage are per-machine
 
-There is no agreed project-wide minimum RAM, processor, operating system, or drive letter. The current maintainer develops on Windows 11 with 8 GB RAM ; these are personal machine details, not requirements for teammates. Use a local path appropriate to your computer, keep raw/processed data out of Git, and record OS/CPU/RAM/runtime details for each scalability result. Tune Spark settings to the host while keeping a fixed reference workload/configuration when comparing runs.
+There is no agreed project-wide minimum RAM, processor, operating system, or drive letter. The current maintainer develops on Windows 11 with 8 GB RAM ; these are personal machine details, not requirements for teammates. Use a local path appropriate to your computer. Keep acquired/processed data local except the small, explicitly allowlisted and attributed snapshots; record OS/CPU/RAM/runtime details for each scalability result. Tune Spark settings to the host while keeping a fixed reference workload/configuration when comparing runs.
 
 ## Get the code and prepare the Python environment
 
@@ -55,7 +55,7 @@ python --version
 java -version
 ```
 
-For a Windows Week 2 run, set `HADOOP_HOME` to that machine's compatible Hadoop 3.5.0 native home, then run `python scripts\run_week2_etl.py`. The ETL also needs the four input files configured in `configs/week2.local.json`; raw downloads are intentionally not in Git. Follow `docs/DATA_SOURCE_REGISTER.md` for the recorded URLs, retrieval steps, and reuse caveats. The committed synthetic fixture can be used to develop Week 3 plumbing before local raw inputs are ready; it is never final evaluation data. See `docs/SYNTHETIC_DATA.md`.
+For a Windows Week 2 run, set `HADOOP_HOME` to that machine's compatible Hadoop 3.5.0 native home. Run `python scripts\fetch_week2_inputs.py` to populate missing inputs from the URLs and filters in `configs/week2.local.json`; reviewed FAOSTAT/NASA snapshots are already versioned, while the FPMA response is fetched locally because partner reuse rights remain unresolved. The script never overwrites existing source files and records retrieval hashes in `data/raw/retrieval_manifest.json`. Then run `python scripts\run_week2_etl.py`. See `docs/DATA_SOURCE_REGISTER.md` for source terms and caveats. The synthetic fixture can unblock Week 3 plumbing, but is never final evaluation data; see `docs/SYNTHETIC_DATA.md`.
 
 ## Current maintainer reference profile
 

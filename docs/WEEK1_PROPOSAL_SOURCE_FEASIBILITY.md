@@ -70,7 +70,7 @@ FAOSTAT's official database terms generally apply CC BY 4.0 and require attribut
 
 ## Local files
 
-The following data and metadata are in the ignored local `data/raw/` directory on D:. The bulk archives are retained so the filtered CSVs can be regenerated without repeating the network download. `data/raw/` is Git-ignored, so these files remain local to this machine and are not included in commits.
+The files listed below were acquired locally under `data/raw/`. The current sharing policy versions only the reviewed, attributed Ukraine wheat FAOSTAT extracts and NASA POWER snapshot; these filtered snapshots are enough for collaborators to start from the same inputs. Full bulk archives, FPMA data pending reuse-rights confirmation, unrelated candidate downloads, and generated/derived outputs remain local and Git-ignored. Missing inputs can be retrieved with `python scripts/fetch_week2_inputs.py`; provenance and current sharing status are in [DATA_SOURCE_REGISTER.md](DATA_SOURCE_REGISTER.md).
 
 See [DATA_SOURCE_REGISTER.md](DATA_SOURCE_REGISTER.md) for the relative raw paths and exact download URLs/API requests, extraction filters, and retrieval instructions. The register also marks sources where the original request details were not retained.
 

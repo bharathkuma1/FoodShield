@@ -87,7 +87,7 @@ src/foodshield/
 configs/           # small, explicit run configurations
 scripts/           # bounded local entry points
 tests/             # targeted unit and data-contract checks
-data/              # local raw/bronze/silver/gold; per-host path, do not commit
+data/              # raw/processed data; per-host path, commit only explicitly approved snapshots
   synthetic/       # clearly marked development fixtures; never final evaluation evidence
 artifacts/         # generated metrics, charts, demo outputs
 ```
