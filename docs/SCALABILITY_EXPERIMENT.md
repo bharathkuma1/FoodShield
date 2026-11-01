@@ -1,6 +1,7 @@
 # FoodShield scalability experiment design
 
-**Status:** Proposed measurement protocol; no scalability result is claimed here.  
+**Status:** Proposed measurement protocol; no scalability result is claimed here.
+
 **Scope:** Spark batch processing and the TA-required local Kafka/Spark Structured Streaming replay. Wheat remains the only research commodity.
 
 ## Why the experiment is part of this project

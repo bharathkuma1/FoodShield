@@ -1,6 +1,7 @@
 # DA231o final submission requirements
 
-**Source:** professor's final-project instruction slide shared by the team.  
+**Source:** professor's final-project instruction slide shared by the team.
+
 **Purpose:** internal checklist for preparing one consistent team submission. This file tracks course logistics; it is not part of the professor-facing research manuscript.
 
 ## Team report
