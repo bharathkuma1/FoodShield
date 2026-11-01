@@ -28,7 +28,7 @@ Percentages indicate the workstream evidence currently present in this repositor
 | 1 | 100% | 100% | 100% | 100% | Feasibility handoffs documented. |
 | 2 | 100% | 100% | 100% | 100% | Local ETL outputs and owner deliverables documented. |
 | 3 | 100% | 100% | 100% | 100% | Spark feature build, real Week 2 monthly/as-of integration, coverage profile, and hand-reviewed synthetic lag/anomaly plus real annual-availability examples are documented. Local rights-bound data remains ignored; shared teammate review is pending. See `WEEK3_TASK_ASSIGNMENTS.md` and `WEEK3_FEATURES.md`. |
-| 4 | 0% | 85% | 25% | 45% | In progress; evidence-based estimates for Week 4 workstream artifacts, not individual effort. Overall Week 4 progress: **39%** (mean, rounded). |
+| 4 | 0% | 90% | 55% | 60% | In progress; evidence-based estimates for Week 4 workstream artifacts, not individual effort. Overall Week 4 progress: **51%** (mean, rounded). |
 | 5 | 0% | 0% | 0% | 0% | Planned; depends on Week 3 features and Week 4 protocol. |
 | 6 | 0% | 0% | 0% | 0% | Planned; depends on processed event contract. |
 | 7 | 0% | 0% | 0% | 0% | Planned; depends on model and replay outputs. |
@@ -39,11 +39,11 @@ Percentages indicate the workstream evidence currently present in this repositor
 | Owner | Progress | Evidence present | Remaining for this workstream |
 |---|---:|---|---|
 | Bharath | 0% | No Week 4 M0 detector/scoring baseline is implemented or documented as an accepted baseline yet. | Implement and document price-only M0 after the label and cutoff contract is reviewed. |
-| Abhijith | 85% | Local FPMA field/coverage and proxy-label sensitivity are profiled; official IFPA method and source-rights caveats are recorded; a CC BY FAOSTAT wheat producer-price alternative is downloaded/profiled; SSSU CPI is shared and reproducibly chained into a complete monthly farm-gate real-price candidate. | Resolve wholesale-versus-farm-gate target concept; review/approve deflator and target formula; profile final labels/event counts and as-of timing. |
-| Jyoti | 25% | Candidate chronological partitions and nominal weather-coverage boundary are documented as proposed. | Derive exact M0–M4 eligible periods, purge/embargo boundaries, and valid event/test eligibility from profiled feature completeness. |
-| Naman | 45% | Proposal event contexts and evaluation metric concepts are documented; the protocol separates event context from labels and final-test use. | Map independently sourced events to dated country-month evidence, finalize metric definitions and label alignment, and review the full evaluation protocol. |
+| Abhijith | 90% | Selected the CC BY FAOSTAT farm-gate price source as the pilot target, documented the SSSU reuse basis, and produced a shared CPI-adjusted candidate with source hashes. | Finalize stress formula/horizon and label sensitivity; integrate the selected source into the Spark pipeline; confirm availability assumptions. |
+| Jyoti | 55% | Profiled exact shared-source M0–M4 feature-eligible dates, common horizon coverage, and a candidate chronological split. | Review the split/purge after the horizon is selected; improve representative weather construction and document weather/as-of constraints. |
+| Naman | 60% | Mapped proposal event contexts to selected-source coverage: 2007–08 unavailable, 2010/11 lacks multi-year pre-event history, and 2022 has nine M4 origins under the provisional three-month window. | Complete target-label/event alignment and metric definitions; document small-event uncertainty and review the final evaluation protocol. |
 
-The **39% Week 4 overall figure** is the arithmetic mean of these four repository-evidence estimates, rounded to the nearest whole percent. It indicates milestone artifact completion only; it is not an estimate of personal effort or a claim that the target, split, or protocol is approved. Remaining work can proceed in parallel where inputs permit; the team must review and approve the shared target and evaluation contract before model metrics are reported.
+The **51% Week 4 overall figure** is the arithmetic mean of these four repository-evidence estimates, rounded to the nearest whole percent. It indicates milestone artifact completion only; it is not an estimate of personal effort or a claim that the label rule, split, or protocol is approved. Remaining work can proceed in parallel where inputs permit; the team must review and approve the shared target and evaluation contract before model metrics are reported.
 
 ## Assignment boundaries
 
