@@ -28,6 +28,7 @@ logs/
 
 # Local datasets and generated outputs
 data/raw/
+data/synthetic/
 data/interim/
 data/processed/
 data/external/

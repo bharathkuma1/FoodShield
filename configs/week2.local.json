@@ -1,0 +1,18 @@
+{
+  "country_code": "UKR",
+  "country_name": "Ukraine",
+  "faostat_area_m49": "804",
+  "commodity_code": "15",
+  "commodity_name": "Wheat",
+  "fpma_series_uuid": "a9d7b6ee-6a9d-43a7-bca4-aaa419311498",
+  "price_currency": "UAH",
+  "price_unit": "tonne",
+  "annual_availability_lag_years": 2,
+  "inputs": {
+    "fpma_price_json": "data/raw/fpma_ukraine_national_wheat_grain_wholesale.json",
+    "qcl_csv": "data/raw/faostat_ukraine_wheat_production_2026-11.csv",
+    "tcl_csv": "data/raw/faostat_ukraine_wheat_trade_all_measures_2026-11.csv",
+    "nasa_power_json": "data/raw/nasa_power_ukraine_central_daily_2001_2022.json"
+  },
+  "output_root": "data/processed/week2_ukraine"
+}
