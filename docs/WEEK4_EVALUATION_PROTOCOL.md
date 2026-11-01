@@ -41,16 +41,16 @@ For a three-month horizon, two candidate definitions were compared:
 
 | Candidate label | Training positives / eligible origins (episodes) | Validation positives / eligible origins (episodes) | Interpretation |
 |---|---:|---:|---|
-| Maximum future real price at least 5% above origin-month real price | 14/41 (5) | 14/30 (6) | More frequent, less severe increase. |
-| **Maximum future real price at least 10% above origin-month real price** | **12/41 (4)** | **9/30 (5)** | **Recommended provisional primary target:** directly measures a material real-price rise while retaining multiple validation episodes. |
-| Maximum future real price at least 15% above origin-month real price | 9/41 (4) | 4/30 (2) | More severe, but validation support is sparse. |
-| Future price exceeds trailing 36-month real-price 90th percentile | 11/41 (4) | 15/30 (2) | Measures an unusually high level, not the size of a rise; labels cluster into few long episodes. |
+| Maximum future real price at least 5% above origin-month real price | 15/42 (6) | 14/30 (6) | More frequent, less severe increase. |
+| **Maximum future real price at least 10% above origin-month real price** | **12/42 (4)** | **9/30 (5)** | **Recommended provisional primary target:** directly measures a material real-price rise while retaining multiple validation episodes. |
+| Maximum future real price at least 15% above origin-month real price | 9/42 (4) | 4/30 (2) | More severe, but validation support is sparse. |
+| Future price exceeds trailing 36-month real-price 90th percentile | 12/42 (5) | 15/30 (2) | Measures an unusually high level, not the size of a rise; labels cluster into few long episodes. |
 
-The scan also covers 1- and 6-month horizons and 5/10/15% rise thresholds, plus 80th/90th/95th-percentile historical-level cutoffs. Because a common 36-month history is required for the comparison, the proposed 2011–2017 training calendar contributes labeled origins only from February 2013 onward; the usable train slice is therefore shorter than the calendar suggests. With the 10% rise rule, the 1-month case has 3/43 training and 2/32 validation positives (2 validation episodes); the 3-month case has 12/41 and 9/30 (5 validation episodes); the 6-month case has 21/38 and 13/27 (4 validation episodes). The 3-month option gives a useful compromise between a short warning window with few labels and a longer window with more frequent positives. Across this short validation period, the 3-month 10% rise rule gives similar positive-month rates in training (29%) and validation (30%). The 15% rule gives only two validation episodes; the trailing-quantile rule produces long clustered episodes and a higher validation rate. These small counts do not establish predictive value. An episode is currently a contiguous run of positive eligible calendar origins; a gap or purged month separates episodes.
+The scan also covers 1- and 6-month horizons and 5/10/15% rise thresholds, plus 80th/90th/95th-percentile historical-level cutoffs. The configurable label run uses all common M0–M4 origins that have the required 36-month history and whose complete outcome window fits inside the training or validation period. With the 10% rise rule, the 1-month case has 3/44 training and 2/32 validation positives (3 and 2 episodes); the 3-month case has 12/42 and 9/30 (4 and 5 episodes); the 6-month case has 21/39 and 13/27 (4 and 4 episodes). The 3-month option gives a useful compromise between a short warning window with few labels and a longer window with more frequent positives. Across this short validation period, the 3-month 10% rise rule gives similar positive-month rates in training (29%) and validation (30%). The 15% rule gives only two validation episodes; the trailing-quantile rule produces long clustered episodes and a higher validation rate. These small counts do not establish predictive value. An episode is currently a contiguous run of positive eligible calendar origins; a gap or purged month separates episodes.
 
 **Current working choice — review needed:** use a 3-month forecast horizon and label a positive when the maximum CPI-adjusted FAOSTAT farm-gate price over the next three months is at least 10% above the real price observed at origin `t`. Use 5% and 15% as target-definition sensitivity checks, and 1/6 months as horizon sensitivity checks. The real-price rise threshold defines the outcome; it is separate from the model alert-score threshold, which is selected using validation only. The project lead requested that the team review this choice and revise it later if needed; see `DECISIONS.md`.
 
-The detailed rule-by-period counts and row-level train/validation labels are generated at `data/processed/week4_stress_label_sensitivity.json` and `.csv` (git-ignored derived outputs). The script records input hashes and the no-holdout-label rule so teammates can reproduce the profile from shared inputs. No test-period labels, alert scores, or model metrics are included.
+The detailed rule-by-period counts and row-level train/validation labels are in `data/processed/week4_stress_label_sensitivity.json` and `.csv`. These current candidate artifacts are committed for the team and can be regenerated from configured inputs. The script records input hashes and the no-holdout-label rule. No test-period labels, alert scores, or model metrics are included.
 
 ### CPI source, reuse and real-price construction
 
@@ -68,10 +68,10 @@ This resolves the mechanical CPI-chain and join-feasibility item for the selecte
 
 ## Week 4 work order
 
-1. **Done:** profile candidate labels/horizons on common M0–M4 dates, with counts/episodes from training and validation only. The 3-month/10% rise is the current working choice; review needed.
-2. Use the working label and horizon for the bounded M0 build; keep the target and prediction cutoff in config so a later review can change them without rewriting the pipeline.
-3. Use the candidate chronological split below for development, mark it review needed, and keep final-test labels/metrics out of current outputs. Add rolling-origin evaluation because the final event sample is small.
-4. Integrate the selected FAOSTAT/SSSU price source into the Spark M0–M4 feature pipeline and implement/profile M0. Compare M1–M4 only under the shared contract in [`ARCHITECTURE.md`](ARCHITECTURE.md), reporting warning lead time, missed events/false alarms, and agreed metrics only after evaluation choices are reviewed.
+1. **Done:** profile candidate labels/horizons on common M0–M4 dates, with training/validation counts and episodes only. The 3-month/10% rise remains the working choice; review needed.
+2. **Done:** generate labels from configured inputs and train the price-only M0 MLlib logistic-regression model. Train-only fitting and validation-only cutoff selection are implemented; final-test labels and predictions are excluded.
+3. **In progress:** have the team review and lock the target, forecast horizon, chronological split and purge rules. Add rolling-origin evaluation because the final event sample is small. Keep the final-test set unopened until those choices are recorded.
+4. **In progress:** the selected-source Spark feature pipeline and M0 baseline are implemented. Implement M1–M4 with the same classifier and common-origin contract, then report warning lead time, missed events/false alarms and the agreed metrics after protocol review.
 
 ### Candidate chronological schedule (proposed, not locked)
 
