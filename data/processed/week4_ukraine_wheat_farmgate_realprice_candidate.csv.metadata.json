@@ -1,0 +1,22 @@
+{
+  "purpose": "Week 4 candidate price/deflator feasibility screen; not an approved target, label, or IFPA score.",
+  "generated_utc": "2026-11-01T15:21:41.093802+00:00",
+  "output_file": "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv",
+  "output_sha256": "d08225d0f163c6213c62b8071b01b3688f482e14dd79d47eacc5e1494016403d",
+  "records": 157,
+  "month_range": [
+    "2010-01",
+    "2023-01"
+  ],
+  "missing_months": [],
+  "price_source": "data/raw/faostat_ukraine_monthly_wheat_producer_prices_2026-11.csv",
+  "price_source_sha256": "df6f92d1d8521b2643e78e61f66e77879a7df9637e87f5233de00460879db675",
+  "price_scope": "FAOSTAT Ukraine wheat Producer Price (LCU/tonne), element 5530; farm-gate producer price, not FPMA wholesale.",
+  "cpi_source": "data/raw/ukrstat_ukraine_monthly_all_items_cpi_2026-11.csv",
+  "cpi_source_sha256": "648b85db57bf918d51f57f0653d9342a809db617d136d0b3d32fb01b53ccc96c",
+  "cpi_series": "SSSU all-items monthly CPI change relative to previous month.",
+  "deflator_method": "Set December 2000 CPI index to 100. For each later month multiply the previous index by that month's OBS_VALUE / 100. Real price = nominal LCU/tonne * 100 / chained CPI index.",
+  "anchor": "2000-12 = 100",
+  "interpretation_limit": "General consumer CPI is a broad inflation deflator, not a wheat-specific affordability or supply-stress label. The constant-price scale depends on the anchor; anomaly comparisons are invariant to a positive scale factor. This screen does not resolve the target price concept.",
+  "citation": "FAOSTAT Producer Prices, CC BY 4.0; State Statistics Service of Ukraine (SSSU), all-items CPI. Cite both source producers when using the extract."
+}
