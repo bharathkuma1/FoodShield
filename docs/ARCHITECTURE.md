@@ -95,13 +95,50 @@ Silver data stays source-specific and long form. The planned gold feature table 
 
 Preserve source units in silver. If unit conversion is needed, write a separately named feature and record the conversion factor; do not silently combine nominal and real prices or different market/product definitions.
 
+### Project-level signal and target variables
+
+The professor's report expectation includes the data model, methods, platforms, evaluation design, metrics, scalability goals, plots, analysis, and summary. These candidate variables make the project architecture concrete; they do not expand the wheat-only research objective. Exact feature selection and the target formula remain subject to data profiling and the Week 4 evaluation decision.
+
+| Variable group | Candidate fields | Model role |
+|---|---|---|
+| Panel key and provenance | `country_code`, `commodity_code`, `month`, source/series ID, unit/currency, availability date, quality flags, weather spatial basis | Country–wheat–month key and audit fields; metadata is not a predictor. |
+| Price history | Real wheat price; lags (1, 3, 6, 12 months); prior-window means/standard deviations; month-over-month change; past-only anomaly | M0 price-only baseline; keep nominal, real, and USD measures distinct. |
+| Weather | Monthly corrected precipitation total; mean daily maximum/minimum temperature; valid-day counts; location/spatial method; past-only lags/anomalies | M1. Current Ukraine data is a single-point screening signal. |
+| Production | Annual wheat production (t), yield (kg/ha), area harvested (ha), reference year, `feature_available_from`, flag/note | M2; use only values available by the forecast origin. Current two-year lag is a proxy. |
+| Trade | Annual import/export quantity (t) and value (1000 USD), reference year, `feature_available_from`, flag/note | M3; retain quantity/value as separate measures and use as-of availability. |
+| Temporal/cross-signal | Selected lagged relationships, rolling/anomaly features, price–weather interactions | M4; calculate from past-only information and document selection. |
+| Target and evaluation | Future price-stress score/label at the selected horizon; model alert score/flag; split ID; forecast origin; event onset and warning lead time | Target and threshold are future-outcome definitions, not model inputs; neither may be tuned on final test data. |
+
+### Project-level evaluation contract
+
+- Evaluate M0–M4 on identical eligible forecast origins, future target labels, horizon, and chronological partitions. Change predictor groups by stage while holding the evaluation sample fixed.
+- The primary ablation uses the intersection of months where all required stages and the target are eligible. A longer-coverage M0-only result may be reported separately as supplementary, not as a direct ablation comparison.
+- Fit learned preprocessing and model parameters on training only. Use validation to select settings and alert thresholds; leave final test untouched. The current protocol does not refit on validation after selection.
+- Purge each partition boundary by the forecast horizon so a future label cannot reach across a split. Every predictor must be available by its forecast origin, including annual data with explicit availability dates.
+- Keep benchmark-only synthetic workload data separate from real-data model training, validation, test, event labels, and food-market conclusions. Use it only for controlled Spark/Kafka scale measurements when source data are too small to expose runtime scaling.
+
+This comparison contract is project-wide. `WEEK4_EVALUATION_PROTOCOL.md` tracks the remaining target, horizon, event, and calendar decisions that instantiate it.
+
+### Current pilot source readiness (Ukraine)
+
+| Signal | Profiled period | Project status and limitation |
+|---|---|---|
+| FPMA monthly wheat price | January 2001–October 2026 | Present locally; raw values and real-source derived outputs are Git-ignored pending APK-Inform reuse-right confirmation. Series metadata also has a Retail/Wholesale mismatch. |
+| NASA POWER weather | Daily January 2001–December 2022; monthly coverage 264/310 price months | Ukraine point snapshot and request metadata are tracked on the team branch. One central point only; not nationally representative or crop-weighted. |
+| FAOSTAT wheat production | Annual 1992–2024 | Ukraine filtered extract and provenance sidecar are tracked. Contains production, yield, and harvested area with flags. |
+| FAOSTAT wheat trade | Annual 1992–2024 | Ukraine filtered extract and provenance sidecar are tracked. Contains import/export quantity and value with units/flags. |
+
+The local Week 3 profile reports 220 M4 feature-complete rows out of 310 price-month rows after current source coverage and lookback rules. Exact first/last eligible dates must be recalculated after the target is finalized. Production/trade monthly joins currently rely on a provisional two-year availability lag; historical publication vintages have not been verified.
+
+India is a possible comparator, not yet a full multi-year fallback: its profiled FPMA price series spans January 2014–September 2026, but the local India weather extract covers 2022 only. India-filtered FAOSTAT extracts exist locally but are not tracked on the team branch. No alternate country currently has a better verified M0–M4 common period. A country change requires a new coverage, rights, and feature-completeness profile.
+
 ### Source and time grain
 
 - **FPMA price:** preserve source observation frequency; use the provider's calculated monthly values as the M0 month-level input rather than averaging weekly rows without a separately approved rule. Store nominal, real, and USD fields as separate measures with currency/unit metadata.
 - **FAOSTAT QCL production:** long form at country × commodity × element × data year; values carry unit, flag, and note. Current provisional availability date is January 1 of `data_year + 2`.
 - **FAOSTAT TCL trade:** long form at reporter country × commodity × import/export element × data year; quantity and value remain distinct and keep units/flags/notes. The selected bulk extract has no partner dimension.
 - **NASA POWER weather:** preserve daily parameters, units, time standard, coordinates, and spatial method. Current Ukraine data is a single-point screening sample. Planned national/crop-exposure features require verified region selection and wheat-area weights.
-- **Event evidence:** broad FAO-backed periods are retrospective global event-study contexts. An independent, observable stress target is a separate contract needed before classification metrics are meaningful.
+- **Event evidence:** broad FAO-backed periods are retrospective global event-study contexts. The selected target type is future domestic wheat-price stress, measured after the predictor cutoff; the exact label contract must be defined before classification metrics are meaningful.
 
 ## Model progression and event validation
 
@@ -113,7 +150,7 @@ Preserve source units in silver. If unit conversion is needed, write a separatel
 | M3 | Price + weather + production + trade |
 | M4 | All feasible signals plus temporal lags and cross-signal interactions |
 
-Compare models by ablation on common supported holdout periods. Report unavailable signals and coverage changes. The 2007–08, 2010/11, and 2022 windows are context for event-study timing; do not claim precision, recall, or predictive skill until the independent target and negative periods are operationally defined. Prevent threshold tuning on the holdout cases.
+Compare models by ablation under the project-level evaluation contract above. Report unavailable signals and coverage changes. The 2007–08, 2010/11, and 2022 windows are context for event-study timing; they are not country-level binary labels. The primary outcome is future domestic wheat-price stress measured after the predictor cutoff; it is temporally separated but uses FPMA at later dates, not an independent source. Do not claim precision, recall, or predictive skill until the target and negative periods are operationally defined. Prevent threshold tuning on holdout cases.
 
 ## Repository layout
 
