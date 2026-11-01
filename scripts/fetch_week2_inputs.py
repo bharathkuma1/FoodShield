@@ -31,6 +31,10 @@ FAOSTAT_TCL_URL = (
     "https://bulks-faostat.fao.org/production/"
     "Trade_CropsLivestock_E_All_Data_(Normalized).zip"
 )
+FAOSTAT_CPI_URL = (
+    "https://bulks-faostat.fao.org/production/"
+    "ConsumerPriceIndices_E_All_Data_(Normalized).zip"
+)
 FAOSTAT_FIELDS = [
     "Area Code",
     "Area Code (M49)",
@@ -47,6 +51,27 @@ FAOSTAT_FIELDS = [
     "Flag",
     "Note",
 ]
+CPI_FIELDS = [
+    "Area Code",
+    "Area Code (M49)",
+    "Area",
+    "Item Code",
+    "Item",
+    "Element Code",
+    "Element",
+    "Months Code",
+    "Months",
+    "Year Code",
+    "Year",
+    "Unit",
+    "Value",
+    "Flag",
+    "Note",
+]
+CPI_ITEMS = {
+    "23012": "Consumer Prices, General Indices (2015 = 100)",
+    "23013": "Consumer Prices, Food Indices (2015 = 100)",
+}
 
 
 def sha256_file(path: Path) -> str:
@@ -251,6 +276,100 @@ def extract_faostat(
     return {"path": output.relative_to(root).as_posix(), "sha256": output_sha, "records": count, "downloaded_now": True}
 
 
+def extract_faostat_cpi(*, area_m49: str, output: Path, root: Path) -> dict[str, Any]:
+    """Fetch and filter official monthly Ukraine General and Food CPI values."""
+    if output.exists():
+        if not output.is_file() or output.stat().st_size == 0:
+            raise ValueError(f"Existing CPI extract is empty or invalid: {output}")
+        return {
+            "path": output.relative_to(root).as_posix(),
+            "sha256": sha256_file(output),
+            "downloaded_now": False,
+        }
+
+    expected_member = "ConsumerPriceIndices_E_All_Data_(Normalized).csv"
+    temporary_dir = output.parent / ".source_download_cache"
+    archive_path, archive_sha = download_bulk_to_temp(FAOSTAT_CPI_URL, temporary_dir)
+    temp_output = output.with_name(output.name + ".tmp")
+    count = 0
+    years: list[int] = []
+    records_by_item: dict[str, int] = {}
+    flags_by_item: dict[str, dict[str, int]] = {}
+    seen_keys: set[tuple[str, str, str]] = set()
+    try:
+        with zipfile.ZipFile(archive_path) as archive:
+            if expected_member not in archive.namelist():
+                raise ValueError(f"Expected {expected_member} not found in {FAOSTAT_CPI_URL}")
+            with archive.open(expected_member) as raw, temp_output.open("w", encoding="utf-8", newline="") as out:
+                import io
+
+                text = io.TextIOWrapper(raw, encoding="utf-8-sig", newline="")
+                reader = csv.DictReader(text)
+                if reader.fieldnames is None or not set(CPI_FIELDS).issubset(reader.fieldnames):
+                    raise ValueError(f"Unexpected FAOSTAT CPI schema in {expected_member}")
+                writer = csv.DictWriter(out, fieldnames=CPI_FIELDS, lineterminator="\n")
+                writer.writeheader()
+                for row in reader:
+                    source_m49 = row.get("Area Code (M49)", "").strip().lstrip("'")
+                    item_code = row.get("Item Code", "").strip()
+                    if (
+                        source_m49 == str(area_m49)
+                        and item_code in CPI_ITEMS
+                        and row.get("Element", "").strip() == "Value"
+                    ):
+                        key = (item_code, row.get("Year", "").strip(), row.get("Months Code", "").strip())
+                        if key in seen_keys:
+                            raise ValueError(f"Duplicate FAOSTAT CPI month for key {key}")
+                        seen_keys.add(key)
+                        writer.writerow({field: row.get(field, "") for field in CPI_FIELDS})
+                        count += 1
+                        years.append(int(row["Year"]))
+                        records_by_item[item_code] = records_by_item.get(item_code, 0) + 1
+                        flag = row.get("Flag", "").strip()
+                        item_flags = flags_by_item.setdefault(item_code, {})
+                        item_flags[flag] = item_flags.get(flag, 0) + 1
+        if count == 0:
+            raise ValueError(f"No FAOSTAT CPI rows matched M49 {area_m49}")
+        temp_output.replace(output)
+    finally:
+        archive_path.unlink(missing_ok=True)
+        temp_output.unlink(missing_ok=True)
+        try:
+            temporary_dir.rmdir()
+        except OSError:
+            pass
+
+    output_sha = sha256_file(output)
+    sidecar = {
+        "provider": "FAOSTAT",
+        "domain": "CP",
+        "source_archive_url": FAOSTAT_CPI_URL,
+        "source_archive_sha256": archive_sha,
+        "retrieved_utc": datetime.now(timezone.utc).isoformat(),
+        "filter": {
+            "Area Code (M49)": str(area_m49),
+            "Item Code": sorted(CPI_ITEMS),
+            "Element": "Value",
+        },
+        "output_file": output.relative_to(root).as_posix(),
+        "records": count,
+        "year_range": [min(years), max(years)],
+        "records_by_item": records_by_item,
+        "flags_by_item": flags_by_item,
+        "output_sha256": output_sha,
+        "fields_preserved": CPI_FIELDS,
+        "license_note": "FAO statistical database terms specify CC BY 4.0 with attribution unless metadata states otherwise; preserve flags because CP values may come from external organizations or be imputed, and check third-party exceptions before redistribution.",
+        "citation": "FAO. 2026. FAOSTAT Consumer Price Indices. Accessed on retrieval date. https://www.fao.org/faostat/en/#data/CP Licence: CC-BY-4.0, subject to third-party exceptions.",
+    }
+    write_json_atomically(output.with_name(output.name + ".metadata.json"), sidecar)
+    return {
+        "path": output.relative_to(root).as_posix(),
+        "sha256": output_sha,
+        "records": count,
+        "downloaded_now": True,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=ROOT / "configs" / "week2.local.json")
@@ -274,6 +393,13 @@ def main() -> None:
             output=resolve_input(ROOT, inputs["qcl_csv"]),
             root=ROOT,
             domain="QCL",
+        )
+    )
+    results["sources"].append(
+        extract_faostat_cpi(
+            area_m49=area,
+            output=resolve_input(ROOT, inputs["cpi_csv"]),
+            root=ROOT,
         )
     )
     results["sources"].append(
