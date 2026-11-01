@@ -1,4 +1,4 @@
-# FoodShield: A Scalable Multi-Signal Early-Warning Platform for Wheat Supply Stress
+# FoodShield: A Scalable Multi-Signal Early-Warning Platform for Future Wheat-Price Stress
 
 **Authors:** Bharath Kumar; Abhijith C R; Jyoti Prakash Das; Naman Singh Shekhawat
 **Course:** DA231o Data Engineering at Scale, Data-Flux
@@ -7,11 +7,11 @@
 
 ## Abstract
 
-FoodShield investigates whether multiple time-varying indicators can provide earlier warning of observable wheat-supply stress than a price-only monitor. The study is framed as historical analysis at a country–commodity–month grain. Its analytical progression compares a price-only baseline (M0) with models that add weather (M1), production (M2), trade (M3), and temporal or cross-signal features (M4). The project does not seek to predict geopolitical events or establish that any one signal causes a market response. It also includes a local replay demonstration in which historical or processed records are sent through Kafka and consumed with Spark Structured Streaming.
+FoodShield investigates whether multiple time-varying indicators can provide earlier or more reliable warning of future domestic wheat-price stress than a price-only monitor. The study is framed as historical analysis at a country–commodity–month grain. Its analytical progression compares a price-only baseline (M0) with models that add weather (M1), production (M2), trade (M3), and temporal or cross-signal features (M4). The project does not seek to predict geopolitical events or physical shortages, or establish that any one signal causes a market response. It also includes a local replay demonstration in which historical or processed records are sent through Kafka and consumed with Spark Structured Streaming.
 
-The feasibility-supported pilot is Ukraine wheat, with India retained as a comparator. The selected public-source families are FAO FPMA wheat prices, FAOSTAT wheat production and trade, and NASA POWER meteorology. The analytical workflow preserves source meaning and provenance while organizing observations into typed layers and a monthly wheat panel. Weather currently serves as a point-based screening signal, annual-data availability timing remains provisional, and an independent monthly stress target has not yet been established. No detection-skill or performance result is claimed in this manuscript. Conclusions about early-warning effectiveness require a valid target, representative weather where feasible, and completed historical and streaming evaluation.
+The feasibility-supported pilot is Ukraine wheat, with India retained as a comparator. The selected public-source families are FAO FPMA wheat prices, FAOSTAT wheat production and trade, and NASA POWER meteorology. The analytical workflow preserves source meaning and provenance while organizing observations into typed layers and a monthly wheat panel. The selected evaluation target type is future domestic wheat-price stress, measured after each prediction cutoff; it is a market-price outcome, not physical-shortage prediction, and it uses the FPMA series at a later time rather than an independent data source. Weather currently serves as a point-based screening signal, annual-data availability timing remains provisional, and the exact target rule and forecast horizon are not yet established. No detection-skill or performance result is claimed in this manuscript.
 
-**Keywords:** wheat supply stress; early warning; food prices; temporal data integration; Apache Spark; Kafka; data engineering
+**Keywords:** future wheat-price stress; early warning; food prices; temporal data integration; Apache Spark; Kafka; data engineering
 
 ## 1. Introduction
 
@@ -25,14 +25,14 @@ FoodShield is a research and educational prototype. It evaluates historical obse
 
 ### 2.1 Research question
 
-Can multi-source temporal signals detect emerging wheat-supply stress earlier than price-only monitoring, while preserving valid information timing and making data coverage and uncertainty visible?
+Can multi-source temporal signals warn of future domestic wheat-price stress earlier or more reliably than price-only monitoring, while preserving valid information timing and making data coverage and uncertainty visible?
 
 ### 2.2 Objectives
 
 1. Integrate wheat price, weather, production, and trade records at a country–wheat–month analytical grain where source coverage permits.
 2. Compare a price-only baseline with progressively richer signal sets using common evaluation periods.
 3. Prevent temporal leakage by distinguishing an observation's reference period from the date it could reasonably have been available.
-4. Evaluate historical stress contexts using evidence independent of model inputs, and avoid treating broad global event descriptions as automatic country-level labels.
+4. Evaluate future domestic wheat-price stress after each prediction cutoff, use external event evidence to contextualize candidate periods, and avoid treating broad global event descriptions as automatic country-level labels.
 5. Demonstrate a bounded local historical replay through Kafka and Spark Structured Streaming, with measured throughput, latency, and record accounting.
 6. Report source limitations, missingness, coverage, and measured outcomes so that results can be reproduced and interpreted within their scope.
 
@@ -91,7 +91,7 @@ NASA POWER daily corrected precipitation and maximum/minimum temperature are the
 
 ### 5.4 Historical evaluation and target validity
 
-The proposal's historical event periods provide independent global event-study context. Model detection timing may be described relative to these windows only with explicit geographic interpretation. Precision, recall, F1, and false-positive rate require a separate observable country-month target, negative periods, and a documented thresholding protocol. The target must not be constructed solely from the price series that M0 is evaluated against. Threshold selection must not use the holdout event periods.
+The proposal's historical event periods provide external global event context; they are not country-level labels by themselves. The selected target type is future domestic wheat-price stress. At prediction month `t`, every model stage uses only features available by `t`; the stress label is calculated from price observations strictly after `t`, using a predeclared horizon and rule. The label therefore uses the same FPMA source as M0 at a later time: it is temporally separated, not source-independent. FPMA reuse rights and its metadata discrepancy remain gates for public reporting. Define the stress rule and threshold on training/validation data only, and reserve eligible later periods/events for final evaluation. Detection lead time measures how early a valid warning occurs before future price stress; processing/alert latency measures system runtime and is a separate streaming metric.
 
 ### 5.5 Streaming demonstration
 
@@ -119,13 +119,13 @@ Apache Spark is the primary batch and streaming compute engine. Kafka provides t
 
 Source integration preserves source meaning and metadata while producing typed analytical layers, a monthly price baseline, and a joined wheat feature panel. Coverage profiling identifies gaps and shows where adding signals or requiring feature lookback history reduces the common analysis period. The available evidence characterizes data readiness and temporal coverage; it does not establish model skill or operational warning effectiveness.
 
-No M0–M4 detection metrics have been measured in the current project evidence. No independent monthly stress target has been approved. No crop-weighted weather signal has been produced. No Kafka/Spark replay benchmark has been measured. Therefore, no conclusion about early-warning performance, detection lead time, throughput, or latency is currently warranted.
+No M0–M4 detection metrics have been measured in the current project evidence. The target type is selected, but the operational stress rule, horizon, threshold-selection method, and final chronological split remain open. No crop-weighted weather signal has been produced. No Kafka/Spark replay benchmark has been measured. Therefore, no conclusion about early-warning performance, detection lead time, throughput, or processing latency is currently warranted.
 
 ## 8. Evaluation plan and reporting criteria
 
 ### 8.1 Analytical evaluation
 
-Once an independent target and valid model inputs are available, report detection lead time, precision, recall, F1, and false-positive rate with the target definition, event dates, negative periods, geographic scope, thresholds, and holdout protocol. Compare M0–M4 on the same supported months wherever possible. Report how sample size and missingness change as signals are added. Separate event context from validated outcomes and avoid causal interpretation.
+After the future price-stress rule, horizon, and chronological split are fixed, report warning lead time, precision, recall, F1, and false-positive rate with target definition, event dates, negative periods, geographic scope, thresholds, and holdout protocol. Compare M0–M4 on the same supported months wherever possible. Report how eligible coverage changes as signals are added. Separate global event context from the observed future price outcome and avoid causal interpretation.
 
 ### 8.2 Data and engineering evaluation
 
@@ -167,14 +167,14 @@ Use [`DATA_SOURCE_REGISTER.md`](DATA_SOURCE_REGISTER.md) for source URLs, API re
 1. **Price rights and metadata:** the Ukraine FPMA series has unresolved source-partner reuse rights and a Retail/Wholesale metadata discrepancy. Public redistribution of raw values or value-revealing outputs is restricted pending confirmation.
 2. **Weather geography:** the current NASA data are a single point. They cannot support national or crop-weighted conclusions.
 3. **Annual-data timing:** the provisional availability lag does not reconstruct what was publicly known at each historical date.
-4. **Event labels:** international event windows are not country-level outcome labels. An independent stress target is required for classification metrics.
+4. **Outcome interpretation:** the selected target measures future domestic wheat-price stress from the same price source used in M0, at a strictly later time. It is not a source-independent label or a measure of physical shortage. International event windows are contextual evidence, not country-level labels.
 5. **Coverage and comparability:** candidate countries and source series differ in start date, market level, product definition, and coverage. Cross-country conclusions require harmonized and profiled data.
 6. **Model and runtime evidence:** model performance, causal relationships, scale-out behavior, and streaming targets have not been established by the current run.
 7. **Scope:** findings, when available, apply to wheat and the geographies/time periods supported by validated sources. Other commodities are outside this study.
 
 ## 11. Discussion and conclusion
 
-The project has established a source-aware, layered processing foundation for a wheat-only historical study and has materialized a Ukraine pilot price baseline with associated production, trade, and exploratory weather tables. The evidence currently supports feasibility of a bounded local ETL workflow, not the effectiveness of a multi-signal warning model. The next analytical conclusions depend on representative weather construction, a defensible availability policy for annual signals, independent stress-target definition, and evaluation on common historical periods. The local Kafka replay remains an engineering demonstration to be measured separately from historical model evaluation.
+The project has established a source-aware, layered processing foundation for a wheat-only historical study and has materialized a Ukraine pilot price baseline with associated production, trade, and exploratory weather tables. The evidence currently supports feasibility of a bounded local ETL workflow, not the effectiveness of a multi-signal warning model. The next analytical conclusions depend on an operational future-price-stress rule, forecast horizon, representative weather construction, defensible availability timing, and evaluation on common historical periods. The local Kafka replay remains an engineering demonstration to be measured separately from historical warning lead time.
 
 FoodShield's central contribution will be assessed by whether a carefully timed and independently evaluated multi-signal approach improves on M0, while making data limits and uncertainty explicit. Until that comparison is completed, early-warning improvement remains the research question rather than a result.
 

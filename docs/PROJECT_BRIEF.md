@@ -4,7 +4,7 @@
 
 **Project:** FoodShield: A Scalable Multi-Signal Early-Warning Platform for Food Supply Shocks  
 **Course/team:** IISc DA231o Data Engineering at Scale, Data-Flux  
-**Research question:** Can multi-source temporal signals detect emerging food-supply stress earlier than price-only monitoring?
+**Research question:** Can multi-source temporal signals warn of future domestic wheat-price stress earlier or more reliably than price-only monitoring?
 
 FoodShield will integrate heterogeneous public data and study historical wheat-market stress. It aims to detect observable supply-stress signals earlier than a price-only approach. It does not aim to predict geopolitical events or their causes, and results must not imply causality.
 
@@ -38,7 +38,7 @@ Compare stages through chronological validation and ablation. Train/calibrate on
 
 ## Evaluation
 
-Measure detection lead time, precision, recall, F1, and false-positive rate against an explicit observed outcome; ablation contribution; data quality (missingness, join completeness, temporal alignment, reproducibility); and batch processing runtime, throughput, speedup, scaling efficiency, and join/shuffle cost. Add streaming throughput and end-to-end alert latency under a documented local configuration. Record targets separately from observed results. A future price-stress outcome measures wheat-market price stress, not physical shortage; any export-flow outcome needs its own coverage and reporting-gap profile.
+The selected primary outcome type is future domestic wheat-price stress, not physical shortage. It is measured strictly after each prediction cutoff; it shares the FPMA source with the historical price predictor, so it is temporally separated but not source-independent. The stress rule, horizon, and threshold-selection method remain open. Measure detection lead time, precision, recall, F1, and false-positive rate against that explicit future outcome; also report ablation contribution, data quality, and batch/streaming performance. Keep warning lead time (how early a model crosses its alert threshold before future price stress) distinct from processing/alert latency (runtime from input to output). Record targets separately from measured results.
 
 ## Team
 
