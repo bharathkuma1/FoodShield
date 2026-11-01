@@ -14,6 +14,7 @@
     "fpma_metadata_json": "data/raw/fpma_ukraine_national_wheat_grain_wholesale_metadata.json",
     "qcl_csv": "data/raw/faostat_ukraine_wheat_production_2026-11.csv",
     "tcl_csv": "data/raw/faostat_ukraine_wheat_trade_all_measures_2026-11.csv",
+    "cpi_csv": "data/raw/faostat_ukraine_monthly_cpi_2026-11.csv",
     "nasa_power_json": "data/raw/nasa_power_ukraine_central_daily_2001_2022.json"
   },
   "nasa_power": {
