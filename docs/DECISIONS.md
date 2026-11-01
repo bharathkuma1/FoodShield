@@ -15,6 +15,8 @@ This log separates requirements established by the submitted proposal and TA fee
 | Establish numeric throughput and latency targets and report actual outcomes only after measurement. | TA feedback. The TA did not prescribe exact values. |
 | Work within Windows 11, 8 GB RAM, and prefer D: drive for data; no cloud resources or paid billing without explicit approval. | Team working constraints. |
 | Preserve proposal/presentation files and archive; no relocation or overwrite. | Team working constraints. |
+| Assign Week 1 source-profiling ownership as Bharath—price/baseline; Abhijith—production; Jyoti—weather; Naman—trade/event evidence. | Team agreement recorded in `docs/WEEK1_TASK_ASSIGNMENTS.md`; this assigns workstreams and does not select the final country, source, or event labels. |
+| Carry the same four signal owners into Week 2 Spark ETL: Bharath—price/M0; Abhijith—production; Jyoti—weather; Naman—trade. | Team agreement recorded in `docs/WEEK2_TASK_ASSIGNMENTS.md`; ownership agreement does not itself establish individual effort or implementation completion. |
 
 ## Proposed engineering choices (not yet team-approved)
 
@@ -25,25 +27,43 @@ This log separates requirements established by the submitted proposal and TA fee
 | Measure replay completeness by reconciling valid input records with processed accounting; do not promise exactly-once behavior. | Avoids expanding the task into delivery semantics beyond the TA request. |
 | Use local Spark mode and a single-node Kafka setup for the initial replay demonstration. | Lightweight starting point for an 8 GB laptop; exact runtime/deployment method remains open. |
 | Keep source code in a `src/foodshield/` package with configs, scripts, tests, local data, and generated artifacts separated. | Recommended project organization; it keeps implementation, local datasets, and outputs distinct. |
+| Use chronological train/validation/test evaluation: start with 3–5 pre-event years for simple calibration, reserve later event periods as untouched tests, and use earlier rolling-origin folds when coverage permits. | Matches early-warning deployment and prevents looking ahead. At monthly grain 3–5 years provide only 36–60 aligned rows, so treat the span as an initial minimum, not a mandatory cap; keep the detector simple and document the actual split. |
+
+## Week 1 working decisions
+
+These are the feasibility decisions recorded at the user's request. They are working project choices for the next stage, not a claim that all teammates separately voted or that third-party rights have been cleared. Revisit a choice if its stated evidence or constraint changes.
+
+| Decision | Working choice | Boundary / reason |
+|---|---|---|
+| Pilot geography | Ukraine remains the strongest current single-country starting candidate based on the downloaded input-source overlap; India remains an alternative/comparator. Reassess geography after representative weather and outcome coverage are checked. | Current monthly price and point-weather files overlap in 2001–2022 for Ukraine; India's current price/weather overlap is 2022 only. A point-weather series is not a country-representative exposure. |
+| M0 price | Use FPMA Ukraine National Average, wheat 3rd class bid/EXW/processing, wholesale, UAH/tonne, calculated monthly series (UUID `a9d7b6ee-6a9d-43a7-bca4-aaa419311498`). | Preserve original weekly observations and monthly calculated series separately. Metadata says `market_type=Retail` while `price_type=WHOLESALE`; document the mismatch and verify before treating it as resolved. |
+| Price reuse | Retain the downloaded source for feasibility and controlled project analysis with FAO/source attribution. Do not redistribute raw source rows or publish charts/tables that expose underlying APK-Inform values until reuse rights are confirmed. | FAO's terms warn that third-party components may require separate permission ([FAO terms](https://www.fao.org/contact-us/terms/en/)); the FPMA partner page identifies APK-Inform ([partner profile](https://www.fao.org/giews/food-prices/data-partners/detail/en/c/237592/)). This is a conservative rights disposition, not a legal finding that the existing copy is licensed. |
+| M1 weather plan | NASA POWER daily parameters `PRECTOTCORR`, `T2M_MAX`, `T2M_MIN`; next stage should request grids over wheat-producing administrative regions and weight by verified regional wheat harvested area. | The current 49°N, 32°E point is API/coverage screening only. The downloaded Ukraine regional crop-statistics archive lists 2011–2021; it does not substantiate area weights for the 2007–08 or 2010 cases. Until historical weights are found, compare M1–M4 on their common verified period and report earlier cases as M0-only context. |
+| M2/M3 annual availability | For monthly forecast year `Y`, provisionally use annual data only when `data_year <= Y - 2`; preserve FAOSTAT flags and notes. | A two-year lag is a cautious proxy, not an observed release date or historical data vintage. Run sensitivity or exclude annual features from strict as-of claims if vintage evidence is unavailable. |
+| M3 trade grain | Use country-reporter aggregate wheat import/export quantity and value from TCL. Do not fetch bilateral TM for Week 1. | Current TCL extracts do not include partners. The 52M-row detailed matrix is unnecessary unless a partner-specific hypothesis is approved. |
+| Event/case selection | Treat 2007–08, 2010–11, and 2022 as proposal examples, not required cases. Select final evaluation instances after the target/outcome definition and common, quality-checked source coverage are established; other documented wheat-stress episodes may be substituted. | Current Ukraine feature files overlap from 2001–2022 at a single weather point; India overlaps in 2022 at a single Haryana point. Neither overlap establishes representative weather or a valid independent label. See `WEEK1_EVENT_CASES.md` for coverage. |
+| Week 1 completion | Mark all four owner workstreams 100% for the Week 1 feasibility handoff. | Means source profiling, recommendation, caveats, and next-stage boundary are documented in `WEEK1_TASK_ASSIGNMENTS.md`; it does not mean teammates reviewed the decisions or implementation/model work is complete. |
+| Week 3 workstream scope | Use the four signal owners for price/M0, production, weather, and trade/integration feature work, with explicit temporal availability and join-quality evidence. | Proposed allocation is documented in `WEEK3_TASK_ASSIGNMENTS.md`; teammate review/sign-off is not recorded. It does not change the proposal's wheat-only, country–commodity–time, M0–M4, event-evaluation, or Spark scalability objectives. |
 
 ## Assumptions to validate
 
-- The candidate FAO food-price, FAOSTAT production/trade, and NASA POWER data can support a common wheat/country/month analysis with adequate overlap. This is not established yet.
-- Historical event periods and usable event labels can be defined consistently from documented evidence and available data.
+- FAOSTAT QCL/TCL, NASA POWER, and selected FPMA data can support a useful common wheat/country/month analysis after temporal and geographic alignment. Feasibility is not proof of model adequacy.
+- The provisional two-year lag is conservative enough for the intended feature cadence; actual public-release dates may require longer lags.
+- Regional crop-area weights can be extracted consistently for some years; no representative weather signal is yet produced.
+- The broad event-study windows are suitable validation contexts, but are not operational positive/negative labels.
 - Kafka and Spark Structured Streaming can run together within laptop memory limits for a bounded replay workload.
 - Proposed numeric streaming targets are appropriate after a baseline measurement on the actual laptop.
 
-## Unresolved questions
+## Later project decisions (outside the Week 1 feasibility handoff)
 
-1. Which countries or regions have sufficient overlapping price, weather, production, and trade coverage, and which will be selected?
-2. Which exact dataset editions/files, access methods, and licensing/attribution terms will be used?
-3. What operational definition, onset date, and severity criteria will define each historical stress event and a valid warning?
-4. What event-time and publication/availability lag rules will apply to annual production and trade records?
-5. Which detector/thresholding method will be used for M0–M4, and how will thresholds be selected without holdout leakage?
-6. What replay event schema, ordering, pacing, checkpoint/output behavior, and duplicate/restart semantics will the streaming demo support?
-7. What Kafka local runtime is practical on the Windows laptop (for example, native process or container), given memory and setup constraints?
-8. After a small benchmark run, should the initial 100/250 events/s targets be retained or adjusted with a documented rationale?
-9. Which dashboard technology and final output format best fit the remaining time and laptop constraints?
+1. Can the Ukraine FPMA underlying source terms and metadata be confirmed before public release? If not, which verified-permission price series can replace it while preserving the research scope?
+2. Which observable wheat-stress outcome and threshold should be forecast/evaluated, and over what horizon? **Recommendation for team review:** use future domestic wheat-market price stress as the primary measurable outcome if FPMA reuse rights are cleared; at prediction month `t`, M0 uses only price history through `t`, M1–M4 use the same cutoff, and the label is measured only in a future window. Call this price stress, not physical shortage. Treat monthly HS 1001 export net weight as a secondary/corroborating outcome only after full coverage and missingness are profiled; the current Ukraine preview confirms sampled 2010–11 and 2022 records but not 2007–08 continuity. The proposal's three events are candidate contexts only; select final instances from usable common coverage. Neither threshold/horizon nor final cases are approved yet. See `WEEK1_EVENT_CASES.md` and `DATA_SOURCE_REGISTER.md`.
+3. Can historical regional wheat-area weights and FAOSTAT publication vintages be obtained for strict as-of validation?
+4. Which detector/thresholding method will be used for M0–M4, and how will thresholds be selected without holdout leakage?
+5. What replay event schema, ordering, pacing, checkpoint/output behavior, and duplicate/restart semantics will the streaming demo support?
+6. What Kafka local runtime is practical on the Windows laptop (for example, native process or container), given memory and setup constraints?
+7. After a small benchmark run, should the initial 100/250 events/s targets be retained or adjusted with a documented rationale?
+8. Which dashboard technology and final output format best fit the remaining time and laptop constraints?
 
 ## Source materials reviewed
 

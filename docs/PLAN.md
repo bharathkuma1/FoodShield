@@ -4,14 +4,31 @@ The roadmap follows the project's eight-week schedule and incorporates the TA's 
 
 | Week | Focus and deliverables | Dependencies | Acceptance criteria |
 |---|---|---|---|
-| 1 | Data discovery and ingestion spike; source inventory, sample downloads, quality/coverage profile; select candidate countries and event definitions. | None | Feasibility table records source/version, frequency, coverage, identifiers, units, missingness, access method, and known limitations. Selection rationale documented; no source presumed available. |
-| 2 | Bronze/Silver/Gold ETL with Spark; schemas, normalization, Parquet storage, data-quality checks. | W1 source/coverage decisions | A small reproducible run produces layered datasets at documented paths; schemas and row/key quality checks are inspectable. |
-| 3 | Spark analytics and feature engineering; country–commodity–month alignment, price/weather/production/trade features, explicit temporal availability and lags. | W2 normalized datasets | Feature definitions and timing rules are documented; joins have completeness summaries and no known future leakage in a reviewed sample. |
-| 4 | Price-only M0 baseline; define thresholding and historical evaluation protocol. | W1 event definitions; W3 price features | M0 can be run reproducibly on selected history and reports detection timestamps and agreed quality metrics, including false positives. |
+| 1 | Data discovery and ingestion spike; source inventory, sample downloads, quality/coverage profile; compare candidate countries and draft event definitions. Workstream owners: Bharath—price/baseline; Abhijith—production; Jyoti—weather; Naman—trade/event evidence. | None | Shared profiles and reproducible download references are documented; working country/source/event windows, availability lag, weather coverage limits, and unresolved rights are recorded with rationale. All four Week 1 feasibility handoffs are complete; implementation/validation gates remain. See `docs/WEEK1_TASK_ASSIGNMENTS.md` and `docs/DECISIONS.md`. |
+| 2 | Bronze/Silver/Gold ETL with Spark; schemas, normalization, Parquet storage, data-quality checks. Agreed owners carried forward from W1: Bharath—price/M0; Abhijith—production; Jyoti—weather; Naman—trade. | W1 source/coverage decisions | A small reproducible run produces layered datasets at documented paths; schemas and row/key quality checks are inspectable. See `docs/WEEK2_TASK_ASSIGNMENTS.md` and `docs/WEEK2_ETL.md`. |
+| 3 | Spark analytics and feature engineering; country–commodity–month alignment, price/weather/production/trade features, explicit temporal availability and lags. Proposed owners: Bharath—price/M0 features; Abhijith—production availability/features; Jyoti—weather aggregation/features; Naman—trade features and integration-quality reporting. | W2 normalized datasets | Feature definitions and timing rules are documented; joins have completeness summaries and no known future leakage in a reviewed sample. See `docs/WEEK3_TASK_ASSIGNMENTS.md`; ownership is proposed for team confirmation. |
+| 4 | Price-only M0 baseline; define the observed future-stress outcome, forecast horizon, thresholds, and chronological train/validation/test split. Start with 3–5 pre-event training years, extending or using rolling-origin folds when the verified history supports it. | W1 source/outcome feasibility; W3 price features and availability rules | M0 can be run reproducibly on pre-event data and evaluated on untouched later periods/events against observed outcomes; threshold selection uses no test data, and missed events/false alarms are reported. |
 | 5 | Multi-signal progression M1–M4 and ablation. | W3 features; W4 baseline | Each feasible stage has a reproducible run; unavailable signals are explicitly reported; comparison uses consistent event/holdout definitions. |
 | 6 | Local Kafka replay and Spark Structured Streaming; produce replayed observations and stress alerts. | Stable event schema and at least one processed historical slice | One documented local run replays records end-to-end and emits traceable alerts; measured throughput/latency is reported against proposed targets, with configuration and limitations. |
 | 7 | Evaluation and scalability: lead time, precision, recall, F1, false-positive rate; streaming latency/throughput; batch runtime, throughput, and scaling behavior. | W4–W6 outputs | Results tables distinguish targets from observations; methods, data volume, machine/runtime settings, and limitations are recorded. |
 | 8 | Dashboard, final report, presentation, reproducibility package, and demo. | W1–W7 evidence | Demo can be repeated from written steps; report and slides state scope, methods, results, limitations, and no unsupported claims. |
+
+## Current roadmap and teammate status
+
+**Status snapshot:** Week 4 handoff. Percentages are completion of the documented workstream deliverable in this workspace, not personal effort, attendance, or teammate approval.
+
+| Week | Bharath Kumar | Abhijith C R | Jyoti Prakash Das | Naman Singh Shekhawat | Roadmap status |
+|---|---:|---:|---:|---:|---|
+| 1 — source feasibility | 100% | 100% | 100% | 100% | Complete as a documented feasibility handoff. |
+| 2 — Spark ETL | 100% | 100% | 100% | 100% | Complete as a reproducible local implementation/run; ownership carried forward from Week 1 was agreed. |
+| 3 — analytics/features | 0% | 0% | 0% | 0% | Not started; proposed ownership is documented in `docs/WEEK3_TASK_ASSIGNMENTS.md`, pending teammate confirmation. |
+| 4 — M0 baseline/evaluation protocol | 0% | 0% | 0% | 0% | Not started; depends on Week 3 features and target/split decisions. |
+| 5 — M1–M4 and ablation | 0% | 0% | 0% | 0% | Not started. |
+| 6 — Kafka/Spark streaming replay | 0% | 0% | 0% | 0% | Not started. |
+| 7 — evaluation/scalability | 0% | 0% | 0% | 0% | Not started. |
+| 8 — dashboard/submission/demo | 0% | 0% | 0% | 0% | Not started. |
+
+By equal weekly milestone count, 2 of 8 roadmap weeks are complete (25%); this is a schedule snapshot, not an effort-weighted project-completion estimate. Week 1 and Week 2 tracker details and their acceptance boundaries are in `docs/WEEK1_TASK_ASSIGNMENTS.md` and `docs/WEEK2_TASK_ASSIGNMENTS.md`. Week 1 is feasibility only; Week 2 completion does not clear data rights, representative weather, target definition, or evaluation gates.
 
 ## Proposed local streaming benchmark targets
 
