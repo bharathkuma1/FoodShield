@@ -23,6 +23,27 @@ The nominal Ukraine all-signal input overlap is January 2001–December 2022 bef
 
 The outcome comparison and cited evidence are already summarized in [`WEEK1_EVENT_CASES.md`](WEEK1_EVENT_CASES.md). This draft does not approve its recommendation.
 
+## First deliverable: local target feasibility screen
+
+**Status:** Preliminary, local-only sensitivity screen; not the approved target formula, a model result, or a public data release.
+
+The local FPMA response contains provider-calculated monthly observations from January 2001 through October 2026. The monthly `price_value_real` field is present for all but the latest month in this snapshot; the series metadata does not explain the exact deflator/calculation for this API field. FAO's official [SDG 2.c.1 methodology](https://unstats.un.org/sdgs/metadata/files/Metadata-02-0C-01.pdf) says its price-anomaly indicator uses real prices to account for inflation, requires a five-year series, and combines standardized quarterly and annual compound-growth anomalies. This supports a CPI-adjusted target design but does **not** verify that the local API field follows that exact calculation. Preserve the provider-calculated monthly series and do not average weekly rows into a replacement monthly series. The official [FAO database terms](https://www.fao.org/contact-us/terms/db-terms-of-use/en) state that third-party datasets may have separate reuse restrictions; FAO identifies [APK-Inform as this series' data partner](https://www.fao.org/giews/food-prices/data-partners/detail/en/c/237592/), but no public permission covering this series' redistribution/reuse was identified in this feasibility check. Keep the data and derived outputs local until terms are confirmed. The Retail/Wholesale metadata discrepancy also remains unresolved.
+
+To see whether a simple future-stress label would be usable, a local screening proxy was calculated as follows: for each month with five previous same-calendar-month real-price values, take the z-score of the current log real price against the mean and sample standard deviation of those five previous same-month log prices. This uses only prior years for the reference. It is a simple seasonal-level proxy, **not** FAO's official Indicator of Food Price Anomalies (IFPA), whose published method combines CPI-adjusted quarterly and annual compound-growth anomalies. The official IFPA categories (moderately high at 0.5–<1; abnormally high at ≥1) apply to the official IFPA score; they must not be transferred to this custom proxy as if the scores were equivalent. See the [FAO SDG 2.c.1 metadata](https://unstats.un.org/sdgs/metadata/files/Metadata-02-0C-01.pdf) and [GIEWS/FPMA anomaly-method paper](https://www.fao.org/giews/food-prices/research/detail/en/c/235685/).
+
+For candidate forecast origins January 2006–December 2022 (204 months), a positive `H`-month label means at least one of the next `H` monthly proxy scores reaches the listed cutoff. Outcome prices are available after December 2022 in the local FPMA snapshot, so labels for late-2022 origins can use future outcome months without extending the predictor-input window beyond the weather period.
+
+| Proxy score cutoff | H=1 positive origins | H=3 positive origins | H=6 positive origins | Interpretation for sensitivity only |
+|---:|---:|---:|---:|---|
+| 0.5 | 108/204 (52.9%) | 148/204 (72.5%) | 168/204 (82.4%) | Too frequent for a useful primary binary warning target in this proxy. |
+| 1.0 | 69/204 (33.8%) | 105/204 (51.5%) | 135/204 (66.2%) | Still labels about half of three-month origins positive. |
+| 1.5 | 27/204 (13.2%) | 46/204 (22.5%) | 73/204 (35.8%) | More selective; plausible candidate for follow-up profiling. |
+| 2.0 | 12/204 (5.9%) | 21/204 (10.3%) | 33/204 (16.2%) | Strict; leaves few positive origins and only three contiguous high-score episodes in the scored price history through March 2023. |
+
+Overlapping future windows cause adjacent origins to share the same stress month, so these positive-origin counts are not independent event counts. The screen suggests that a three-month horizon is workable for sensitivity analysis, while a 0.5 or 1.0 cutoff may be too common under this particular proxy. A 1.5 cutoff is a useful comparison candidate, not a selected threshold. Validate candidate labels against the proposal's externally documented contexts, explain the 2022 local-price behavior, and check a provider/official IFPA measure before fixing the rule. The current proxy's effective date range is not yet intersected with the exact M4 feature-complete dates.
+
+**Deliverable outcome:** price-series fields and monthly coverage profiled; candidate-label prevalence sensitivity recorded; official target-method and third-party-rights boundaries checked. Still open: verify the exact `price_value_real` calculation or obtain CPI and calculate real prices explicitly; compute and profile an official-faithful IFPA-style score; inspect event-level label alignment; compute exact common M0–M4 dates; and obtain/confirm reuse terms. Week 4 remains in progress.
+
 ## Week 4 work order
 
 1. Profile candidate future price-stress labels, the FPMA real-price field definition, source rights, and metadata; establish positive-event counts and independently documented context.
