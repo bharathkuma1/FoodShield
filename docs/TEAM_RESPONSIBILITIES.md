@@ -27,7 +27,7 @@ Percentages indicate the workstream evidence currently present in this repositor
 |---|---:|---:|---:|---:|---|
 | 1 | 100% | 100% | 100% | 100% | Feasibility handoffs documented. |
 | 2 | 100% | 100% | 100% | 100% | Local ETL outputs and owner deliverables documented. |
-| 3 | 0% | 0% | 0% | 0% | Planned; feature implementation not started. |
+| 3 | 100% | 100% | 100% | 100% | Spark feature build, real Week 2 monthly/as-of integration, coverage profile, and hand-reviewed synthetic lag/anomaly plus real annual-availability examples are documented. Local rights-bound data remains ignored; shared teammate review is pending. See `WEEK3_TASK_ASSIGNMENTS.md` and `WEEK3_FEATURES.md`. |
 | 4 | 0% | 0% | 0% | 0% | Planned; target and evaluation protocol remain open. |
 | 5 | 0% | 0% | 0% | 0% | Planned; depends on Week 3 features and Week 4 protocol. |
 | 6 | 0% | 0% | 0% | 0% | Planned; depends on processed event contract. |

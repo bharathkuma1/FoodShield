@@ -78,7 +78,7 @@ These rules carry the course's Spark DataFrame discipline into the wheat domain 
 |---|---|---|
 | `ingestion/` | Read source snapshots using explicit schemas; record retrieval/version metadata; keep feature logic out of source adapters. | Planned; Week 2 readers currently live in `etl/week2.py`. |
 | `transforms/` | Normalize source identifiers, units, dates, missing values, flags, notes, and annual availability into silver contracts. | Initial source transforms are in `etl/week2.py`; split into modules as sources are added. |
-| `features/` | Align signals to country–commodity–month; compute temporal lags/interactions; enforce availability before joins. | Planned for Week 3. |
+| `features/` | Align signals to country–commodity–month; compute temporal lags/interactions; enforce availability before joins. | Week 3 synthetic and local Week 2 feature runs complete; retain the coverage and rights caveats in `WEEK3_FEATURES.md`. |
 | `models/` | Implement the price baseline and staged M1–M4 detectors/scorers behind a shared interface. | Planned for Weeks 4–5. |
 | `evaluation/` | Store event-study contexts/target definitions, holdouts, metrics, ablations, and runtime measurements. | Planned for Weeks 4–7; no binary target is approved yet. |
 | `streaming/` | Replay processed history to local Kafka; consume with Spark Structured Streaming; emit traceable stress alerts. | Planned for Week 6; not a live ingestion service. |
@@ -132,7 +132,7 @@ scripts/
 src/foodshield/
   ingestion/                  # Source-specific readers and snapshot metadata (planned)
   transforms/                 # Bronze/silver contracts and normalization (planned)
-  features/                   # Country-commodity-month alignment and lags (planned)
+  features/                   # Country-commodity-month temporal feature engineering (implemented Week 3)
   models/                     # M0-M4 detector/scoring interfaces (planned)
   evaluation/                 # Event studies, targets, metrics, ablations (planned)
   streaming/                  # Historical replay, stream consumer, alert writer (planned)
