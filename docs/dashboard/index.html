@@ -346,6 +346,17 @@ document.addEventListener("pointerdown", ensureAudio, {once: false}); document.a
 const prefs = {sound: true, popups: true, popFrom: "2022-01"};
 try { const s = JSON.parse(localStorage.getItem("fs-alert-prefs") || "{}"); Object.assign(prefs, s); } catch (e) { /* storage unavailable */ }
 const savePrefs = () => { try { localStorage.setItem("fs-alert-prefs", JSON.stringify(prefs)); } catch (e) { /* ignore */ } };
+// Pop-up and sound switches. The same setting can appear in the live panel and the replay; all copies stay in step.
+const prefBoxes = [];
+function prefToggle(parent, label, key) {
+  const l = h("label", null, parent); l.style.display = "inline-flex"; l.style.gap = "6px"; l.style.alignItems = "center"; l.style.fontSize = "13px"; l.style.color = "var(--text-primary)";
+  const i = h("input", null, l); i.type = "checkbox"; i.checked = !!prefs[key];
+  i.addEventListener("change", () => { prefs[key] = i.checked; savePrefs(); ensureAudio();
+    prefBoxes.forEach(b => { if (b.key === key) b.el.checked = i.checked; });
+    if (!prefs.popups) document.getElementById("toasts").replaceChildren();
+    drawLive(); });
+  l.appendChild(document.createTextNode(label)); prefBoxes.push({key, el: i}); return i;
+}
 function beep() {
   if (!prefs.sound || !audio || audio.state !== "running") return;
   const t = audio.currentTime; [0, 0.18].forEach((dt, i) => { const o = audio.createOscillator(), g = audio.createGain();
@@ -750,9 +761,7 @@ function buildLive() {
   }
   const top = h("div", null, box, "controls");
   const s = h("span", null, top, "status"); liveUI.dot = h("i", null, s, "dot"); liveUI.text = h("span", "Connecting…", s);
-  const chk = (label, key) => { const l = h("label", null, top); l.style.display = "inline-flex"; l.style.gap = "6px"; l.style.alignItems = "center"; l.style.fontSize = "13px";
-    const i = h("input", null, l); i.type = "checkbox"; i.checked = prefs[key]; i.addEventListener("change", () => { prefs[key] = i.checked; savePrefs(); ensureAudio(); drawLive(); }); l.appendChild(document.createTextNode(label)); };
-  chk("Pop-ups", "popups"); chk("Sound", "sound");
+  prefToggle(top, "Pop-ups", "popups"); prefToggle(top, "Sound", "sound");
   const pf = h("label", "for ", top); pf.style.fontSize = "13px"; const ps = h("select", null, pf); ps.setAttribute("aria-label", "Pop-ups for which months");
   [["2022-01", "alerts from Jan 2022 (demo window)"], ["", "every alert"]].forEach(([v, t]) => { const o = h("option", t, ps); o.value = v; }); ps.value = prefs.popFrom || "";
   ps.addEventListener("change", () => { prefs.popFrom = ps.value; savePrefs(); });
@@ -814,6 +823,8 @@ function renderStreaming() {
     playB.addEventListener("click", () => st.timer ? stop() : play());
     resetB.addEventListener("click", () => { stop(); st.i = 0; feed.replaceChildren(); count(); });
     sel.addEventListener("change", () => { stop(); st.run = sel.value; st.i = 0; feed.replaceChildren(); count(); });
+    // Switches sit on the left, next to Play, so pop-ups (top right) never cover them.
+    h("span", "Alerts:", c3.row, "note"); prefToggle(c3.row, "Pop-ups", "popups"); prefToggle(c3.row, "Sound", "sound");
     h("div", "Pop-ups during playback are shown for the measured window only (from the paced part of the run), so the fast warm-up does not flood the screen.", c3.c, "note");
     count();
   }
