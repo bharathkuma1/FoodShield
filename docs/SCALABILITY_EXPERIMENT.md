@@ -1,6 +1,6 @@
 # FoodShield scalability experiment design
 
-**Status:** Proposed measurement protocol; no scalability result is claimed here.
+**Status:** Measurement protocol. Following it, the Week 7 batch series and the streaming series were run in Week 7; results are in [`WEEK7_SCALABILITY.md`](WEEK7_SCALABILITY.md). The single reference runs below came first.
 
 **Scope:** Spark batch processing and the TA-required local Kafka/Spark Structured Streaming replay. Wheat remains the only research commodity.
 
@@ -32,6 +32,22 @@ Use the same documented replay event schema and a fixed local Kafka/Spark config
 
 The professor-facing manuscript may omit source extract row counts. It should still state the benchmark workload sizes, input/output sizes, machine/runtime settings, and observed metrics needed to reproduce and interpret the scalability experiment. Clearly label benchmark-only synthetic inputs and keep their results out of the food-supply research conclusions.
 
+## Measured so far (reference runs, not the scaling series)
+
+These are single runs on one machine: Claude cloud workspace, Linux, 2 cores, 7 GB RAM, Spark 4.3.0 `local[2]`. They have no repeats and no warm-up policy, so they are reference points for the Week 7 series, not scaling results. Details: [`D9_SCALE.md`](D9_SCALE.md).
+
+| Workload | Input | Steps measured | Result |
+|---|---|---|---|
+| D9-A: full FAOSTAT QCL + TCL + PP archives | 22.7 million rows, 3.2 GB of CSV | Unzip, CSV count, Parquet write (year-partitioned), Parquet count, the same filter query on CSV and Parquet | 248 MB of Parquet; whole run 2 min 40 s; query 11–44× faster on Parquet |
+| D9-B: gridded daily weather | 1,864,120 rows, 68 MB of CSV | Read and count; daily → monthly per cell → wheat-weighted national | 2.8 s and 8.3 s |
+| Week 6: Kafka → Structured Streaming replay | 1,864,486 records (+1% duplicates) | Producer and consumer rates, backlog, alert latency (p50/p95/max) | About 5,000 events/s at full speed, alert p95 2.6 s; at a paced 250 or 100 events/s the p95 was 1.9 or 1.7 s (`WEEK6_STREAMING.md`) |
+
 ## Next dependency
 
-Week 4 must first define an eligible future-stress outcome, forecast horizon, threshold-selection method, and chronological evaluation periods. The scalability benchmark can proceed separately once its fixed pipeline slice and workload schema are stable; it does not need to wait for model-performance results.
+The Week 4 outcome, horizon, threshold method and split are now fixed (D1–D4). The Week 7 batch series can start from the D9-A Parquet slice:
+
+- repeat each run with a warm-up;
+- vary workload size with the labelled synthetic expansion (D9-E);
+- vary Spark parallelism, shuffle partitions and driver memory one factor at a time.
+
+The streaming series can start from the Week 6 replay (`scripts/run_week6_replay.py`), varying the offered rate, partitions, trigger interval and `maxOffsetsPerTrigger`.

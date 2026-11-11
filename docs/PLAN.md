@@ -15,7 +15,7 @@ The roadmap follows the project's eight-week schedule and incorporates the TA's 
 
 ## Current roadmap and teammate status
 
-**Status snapshot:** Week 4 handoff. Percentages are completion of the documented workstream deliverable in this workspace, not personal effort, attendance, or teammate approval.
+**Status snapshot:** percentages as of the Week 4 snapshot; roadmap status text updated through Week 8. Percentages are completion of the documented workstream deliverable in this workspace, not personal effort, attendance, or teammate approval.
 
 The end-to-end per-teammate allocation and detailed progress basis for all eight weeks are in [`docs/TEAM_RESPONSIBILITIES.md`](TEAM_RESPONSIBILITIES.md). Current ownership for Weeks 1–8 is the agreed working default; modify it when a change is explicitly called out. Future-week progress remains 0% until deliverables are complete.
 
@@ -24,13 +24,17 @@ The end-to-end per-teammate allocation and detailed progress basis for all eight
 | 1 — source feasibility | 100% | 100% | 100% | 100% | Complete as a documented feasibility handoff. |
 | 2 — Spark ETL | 100% | 100% | 100% | 100% | Complete as a reproducible local implementation/run; ownership carried forward from Week 1 was agreed. |
 | 3 — analytics/features | 100% | 100% | 100% | 100% | Local Spark feature run, Week 2 real-input alignment, coverage profile, and selected date/as-of review are complete; shared teammate review/sign-off remains. |
-| 4 — M0 baseline/evaluation protocol | 80% | 95% | 55% | 65% | Selected-source Spark features and M0 train/validation calibration run; the 3-month/10% outcome and candidate split are working choices marked review needed. Final-test labels remain untouched. Overall Week 4 evidence completion: 74%. |
-| 5 — M1–M4 and ablation | 0% | 0% | 0% | 0% | Not started. |
-| 6 — Kafka/Spark streaming replay | 0% | 0% | 0% | 0% | Not started. |
-| 7 — evaluation/scalability | 0% | 0% | 0% | 0% | Not started. |
-| 8 — dashboard/submission/demo | 0% | 0% | 0% | 0% | Not started. |
+| 4 — M0 baseline/evaluation protocol | 80% | 95% | 55% | 65% | Percentages are the Week 4 snapshot. Since then (V2) the outcome, horizon, split, M0 baseline, weather, lag and test rules were confirmed as D1–D9, and the rolling-origin backtest was added (`WEEK4_REVIEW_V2.md`). The remaining step is team review of the percentages. |
+| 5 — M1–M4 and ablation | — | — | — | — | Implemented on `feature/workinprogress_v2`: M1–M4 with one estimator on identical origins, rolling-origin backtest, 3-year-lag sensitivity, frozen protocol and guarded one-time test script. D10/D11 confirmed; real 2021–2022 test opened once, in Week 5 (`FINAL_TEST_RESULTS.md`). Per-owner percentages to be set at team review. See `WEEK5_ABLATION.md`. |
+| 6 — Kafka/Spark streaming replay | — | — | — | — | **Built and checked in the Claude workspace (D12, D14).** Kafka 4.4.0 KRaft replay of 1,864,486 records into Spark Structured Streaming, with checks and measured runs in `WEEK6_STREAMING.md`. The laptop run (the demo and the reported numbers) waits for Java 17+ and the Hadoop native files on the laptop. Percentages are set at the joint review. |
+| 7 — evaluation/scalability | — | — | — | — | **Done in the Claude workspace (D14).** Model evaluation with lead times, threshold trade-off, probability quality and D1/D2 label sensitivity (`WEEK7_MODEL_EVALUATION.md`). Data quality with as-of and streaming-equals-batch tests (`WEEK7_DATA_QUALITY.md`). Batch scaling series and streaming series (`WEEK7_SCALABILITY.md`). The laptop repeat is optional. Percentages are set at the joint review. |
+| 8 — dashboard/submission/demo | — | — | — | — | **Drafted in the Claude workspace (D14).** Offline dashboard (`docs/dashboard/index.html`), final report draft (shared Claude doc), 12-slide deck with speaker notes and a demo script (`WEEK8_REPORT_AND_SLIDES_PLAN.md`). Laptop runs done (every check passed; numbers in the report and slides). Waiting on team emails and the joint review. Percentages are set at the joint review. |
 
-By equal weekly milestone count, 3 of 8 roadmap weeks are complete (37.5%); this is a schedule snapshot, not an effort-weighted project-completion estimate. Week 1 and Week 2 tracker details and their acceptance boundaries are in `docs/WEEK1_TASK_ASSIGNMENTS.md` and `docs/WEEK2_TASK_ASSIGNMENTS.md`. Week 1 is feasibility only; completed Week 2/3 implementation does not clear data rights, representative weather, target definition, or evaluation gates.
+**V2 update (Week 4):** Week 4 review evidence and the decisions awaiting confirmation are in [`WEEK4_REVIEW_V2.md`](WEEK4_REVIEW_V2.md). Workstream percentages above are unchanged until the team reviews it.
+
+**D9 update:** The data-engineering scale runs A (full FAOSTAT archives, 22.7 million rows) and B (232-cell gridded weather, 1.86 million daily rows) are complete, with measured timings in [`D9_SCALE.md`](D9_SCALE.md). They are inputs to the Week 6 streaming and Week 7 scalability work. Percentages are unchanged until team review.
+
+By equal weekly milestone count, Weeks 1–3 are complete. Weeks 4 and 5 have their deliverables in place on `feature/workinprogress_v2` and await team sign-off, so 3 to 5 of 8 weeks are complete (37.5–62.5%). This is a schedule snapshot, not an effort-weighted project-completion estimate. Week 1 and Week 2 tracker details and their acceptance boundaries are in `docs/WEEK1_TASK_ASSIGNMENTS.md` and `docs/WEEK2_TASK_ASSIGNMENTS.md`. Week 1 is feasibility only; completed Week 2/3 implementation does not clear data rights, representative weather, target definition, or evaluation gates.
 
 ## Proposed local streaming benchmark targets
 

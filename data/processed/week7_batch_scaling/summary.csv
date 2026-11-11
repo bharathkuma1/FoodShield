@@ -1,0 +1,19 @@
+domain,driver_memory,factor,format,input_bytes_on_disk,master,max_s,mean_s,median_s,min_s,note,repeats,result_rows,rows,rows_ok,rows_per_s_median,sd_s,series,series0_matches_d9b,shuffle_partitions,shuffle_write_mb,speedup_vs_reference_k30,spilled_mb,stage1_median_s,stage2_median_s,tag,tasks
+,2g,1,,,local[2],2.785,2.442,2.316,2.225,,3,,1864120,True,804888.0,0.301,size,True,8,1.9,,0.0,1.417,0.996,size_k1_local2_sp8_2g,24
+,2g,10,,,local[2],6.968,6.056,5.689,5.512,,3,,18641200,True,3276709.0,0.794,size,True,8,23.2,,0.0,4.695,0.993,size_k10_local2_sp8_2g,26
+,2g,30,,,local[2],14.062,13.794,13.981,13.34,,3,,55923600,True,3999971.0,0.396,size,True,8,66.3,,0.0,12.65,1.256,size_k30_local2_sp8_2g,32
+,2g,100,,,local[2],44.373,42.676,43.208,40.447,,3,,186412000,True,4314294.0,2.016,size,True,8,215.8,,0.0,41.203,2.005,size_k100_local2_sp8_2g,54
+,2g,30,,,local[1],25.103,22.961,22.116,21.664,"local[2] speed-up over local[1] = 1.58x, parallel efficiency 79%",3,,55923600,True,2528649.0,1.869,cores,True,8,65.9,0.632,0.0,20.832,1.419,cores_k30_local1_sp8_2g,30
+,2g,30,,,local[2],15.167,13.578,13.47,12.096,,3,,55923600,True,4151715.0,1.538,shuffle,True,2,62.5,1.038,0.0,12.654,0.93,shuffle_k30_local2_sp2_2g,20
+,2g,30,,,local[2],13.405,12.609,12.561,11.86,,3,,55923600,True,4452161.0,0.774,shuffle,True,4,64.1,1.113,0.0,11.625,1.013,shuffle_k30_local2_sp4_2g,24
+,2g,30,,,local[2],15.258,14.73,14.585,14.346,,3,,55923600,True,3834323.0,0.473,shuffle,True,16,68.7,0.959,0.0,13.181,1.5,shuffle_k30_local2_sp16_2g,48
+,2g,30,,,local[2],19.167,17.867,18.026,16.408,,3,,55923600,True,3102385.0,1.386,shuffle,True,64,73.1,0.776,0.0,15.483,2.543,shuffle_k30_local2_sp64_2g,145
+,2g,30,,,local[2],28.236,27.536,27.35,27.022,,3,,55923600,True,2044739.0,0.628,shuffle,True,200,77.7,0.511,0.0,20.066,7.284,shuffle_k30_local2_sp200_2g,421
+,1g,30,,,local[2],17.132,15.87,15.518,14.96,,3,,55923600,True,3603789.0,1.128,memory,True,8,66.3,0.901,0.0,14.095,1.307,memory_k30_local2_sp8_1g,32
+,4g,30,,,local[2],16.286,15.424,15.706,14.279,,3,,55923600,True,3560652.0,1.033,memory,True,8,66.3,0.89,0.0,14.343,1.294,memory_k30_local2_sp8_4g,32
+QCL,,,csv,545005770,,3.327,2.782,2.637,2.382,,3,6087,,,,0.489,faostat_query,,,,,,,,faostat_QCL_csv,
+QCL,,,parquet,37906314,,1.054,0.977,0.954,0.923,,3,6087,,,,0.068,faostat_query,,,,,,,,faostat_QCL_parquet,
+TCL,,,csv,2432821186,,10.608,10.163,10.509,9.372,,3,11549,,,,0.687,faostat_query,,,,,,,,faostat_TCL_csv,
+TCL,,,parquet,202342083,,0.795,0.746,0.747,0.695,,3,11549,,,,0.05,faostat_query,,,,,,,,faostat_TCL_parquet,
+PP,,,csv,214286652,,1.345,1.259,1.268,1.163,,3,10854,,,,0.091,faostat_query,,,,,,,,faostat_PP_csv,
+PP,,,parquet,9335472,,0.522,0.497,0.489,0.479,,3,10854,,,,0.023,faostat_query,,,,,,,,faostat_PP_parquet,

@@ -23,6 +23,10 @@ The fixture has 96 monthly rows (2015-01 through 2022-12), source-compatible whe
 
 `demo_split` is a code-development split: 2015 warm-up, 2016–2020 training (five years), 2021 validation, 2022 test. Three marked `SIM-*` scenarios create synthetic weather anomalies followed by synthetic price shocks in those splits. The `synthetic_demo_future_price_stress` column uses a demo-only rule: a 15% real-price increase within the next three months; it is not the team-approved target. The final three labels are blank because the full future horizon is not present.
 
+## Week 4 synthetic showcase test window (V2)
+
+`python scripts/generate_week4_synthetic_showcase.py` builds 500 synthetic versions of the real 2021–2022 test window and scores them with the frozen Week 4 M0 model. Recipe and seed: `configs/synthetic_week4_showcase.local.json`. It mirrors the real window's structure: the same 20 eligible origins, features, label rule, model and alert cutoff. Prices come from a calendar-aligned half-year block bootstrap of 2011–2020 real-price returns, starting from the real December 2020 price; no real price after December 2020 is read, so the real test labels stay unopened. Outputs in `data/synthetic/week4_showcase/`: one typical showcase path (real 2020 history rows marked `is_synthetic=false`, synthetic rows `true`), per-scenario metrics and a metadata sidecar. It is for demonstrating the scoring and evaluation flow only. The bootstrap reuses training-period behaviour and contains no 2022-style war shock, so its metrics are not FoodShield results.
+
 ## Safe use
 
 - Use the fixture to exercise Spark joins, schema handling, temporal cutoffs, M0–M4 feature code, and model/report interfaces.

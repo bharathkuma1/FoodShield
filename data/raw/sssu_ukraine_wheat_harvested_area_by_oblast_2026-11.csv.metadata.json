@@ -1,0 +1,25 @@
+{
+  "provider": "State Statistics Service of Ukraine (SSSU)",
+  "dataset": "Areas, gross harvests and crop yield (monthly)",
+  "dataflow": "DF_AREA_HARVESTS_CROP_YIELD_M, version 3.0.1 (DSD_AREA_HARVESTS_CROP_YIELD_M 4.0.0)",
+  "request_url": "https://stat.gov.ua/sdmx/workspaces/default:integration/registry/sdmx/3.0/data/dataflow/SSSU/DF_AREA_HARVESTS_CROP_YIELD_M/3.0.1/AREA_HARVEST_AGRICULTURAL_CROP.*.C_0040.ALL_AGRICULTURAL_HOLDINGS.*?dimensionAtObservation=TIME_PERIOD",
+  "accept_header": "application/vnd.sdmx.data+csv;version=2.0.0;labels=id;timeFormat=normalized;keys=both",
+  "retrieved_utc": "2026-11-06",
+  "source_response_sha256": "1b39b2d9f95f89e4a140e28aefd0322cebdc6b0865b946c714c98c05c501bfe9",
+  "source_response_rows": 1450,
+  "source_coverage": "Monthly harvest-progress observations, 2015-M07 to 2026-M09, Ukraine plus 24 oblasts; SSSU dataset updated 18.09.2025, next update 21.10.2026.",
+  "series": {
+    "indicator": "AREA_HARVEST_AGRICULTURAL_CROP (harvested area)",
+    "breakdown": "C_0040 Wheat (winter + spring)",
+    "farm_type": "ALL_AGRICULTURAL_HOLDINGS",
+    "unit": "1020 hectare, SCALE 3 (thousand hectares)"
+  },
+  "extract_rule": "For each region and year 2015-2021, keep the latest month in the source (final season value: month 10 for 2015-2019, month 11 for 2020-2021). 175 rows: Ukraine total + 24 oblasts x 7 years.",
+  "quality_check": "For every year the 24 oblast values sum exactly to the national total.",
+  "output_file": "data/raw/sssu_ukraine_wheat_harvested_area_by_oblast_2026-11.csv",
+  "output_sha256": "fef4ec3ea38e1b720f994696f7c388822040ef542f570f687f947335db39b585",
+  "territorial_note": "SSSU: Data for 2014-2021, January, February 2022 exclude the temporarily occupied territories of the Autonomous Republic of Crimea, the city of Sevastopol and a part of temporarily occupied territories in the Donetsk and Luhansk regions. Beginning from March 2022 data exclude the territories which are temporarily occupied by the russian federation and part of territories where the military actions are/were conducted.",
+  "not_covered": "2010-2014 regional areas are not in the SDMX series; the earlier archive ZIP (2011-2021 bulletins) remains unparsed.",
+  "reuse_basis": "Official state statistical information; Ukraine Law 2524-IX Article 27(1) use/distribution rights, Article 27(3) attribution to SSSU.",
+  "citation": "State Statistics Service of Ukraine (SSSU), Areas, gross harvests and crop yield (monthly), accessed 6 November 2026 via SSSU SDMX API v3. https://stat.gov.ua/en/datasets/areas-gross-harvests-and-crop-yield-monthly"
+}

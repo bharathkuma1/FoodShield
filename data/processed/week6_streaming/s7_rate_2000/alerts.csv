@@ -1,0 +1,98 @@
+observation_month,model_stage,score,cutoff,alert,latency_s,reason_codes
+2016-12,M0,0.394776,0.193408,1,4.367,price_real_anomaly_z_12m:+0.407 price_real_mom_change:+0.034
+2017-01,M0,0.371773,0.193408,1,2.753,price_real_mom_change:+0.855 price_real_anomaly_z_12m:-0.511
+2017-02,M0,0.209684,0.193408,1,3.357,price_real_anomaly_z_12m:-0.555 price_real_mom_change:+0.097
+2017-03,M0,0.190912,0.193408,0,1.798,price_real_anomaly_z_12m:-0.687 price_real_mom_change:+0.111
+2017-04,M0,0.180306,0.193408,0,2.192,price_real_anomaly_z_12m:-0.558 price_real_mom_change:-0.088
+2017-05,M0,0.205174,0.193408,1,2.780,price_real_mom_change:-0.270 price_real_anomaly_z_12m:-0.216
+2017-06,M0,0.252756,0.193408,1,3.443,price_real_mom_change:-0.224 price_real_anomaly_z_12m:+0.008
+2017-07,M0,0.294254,0.193408,1,2.028,price_real_mom_change:-0.291 price_real_anomaly_z_12m:+0.284
+2017-08,M0,0.371789,0.193408,1,2.284,price_real_anomaly_z_12m:+0.352 price_real_mom_change:-0.008
+2017-09,M0,0.374689,0.193408,1,2.602,price_real_anomaly_z_12m:+0.550 price_real_mom_change:-0.194
+2017-10,M0,0.410935,0.193408,1,2.760,price_real_mom_change:+0.341 price_real_anomaly_z_12m:+0.167
+2017-11,M0,0.335431,0.193408,1,2.833,price_real_anomaly_z_12m:+0.340 price_real_mom_change:-0.155
+2017-12,M0,0.375465,0.193408,1,2.928,price_real_anomaly_z_12m:+0.209 price_real_mom_change:+0.150
+2018-01,M0,0.340449,0.193408,1,1.983,price_real_mom_change:+0.469 price_real_anomaly_z_12m:-0.262
+2018-02,M0,0.240515,0.193408,1,2.433,price_real_anomaly_z_12m:-0.303 price_real_mom_change:+0.022
+2018-03,M0,0.236608,0.193408,1,2.960,price_real_anomaly_z_12m:-0.153 price_real_mom_change:-0.150
+2018-04,M0,0.234868,0.193408,1,1.832,price_real_anomaly_z_12m:-0.530 price_real_mom_change:+0.217
+2018-05,M0,0.173267,0.193408,0,2.360,price_real_anomaly_z_12m:-0.898 price_real_mom_change:+0.203
+2018-06,M0,0.185032,0.193408,0,2.777,price_real_mom_change:-0.350 price_real_anomaly_z_12m:-0.264
+2018-07,M0,0.266868,0.193408,1,1.584,price_real_mom_change:-0.341 price_real_anomaly_z_12m:+0.198
+2018-08,M0,0.290741,0.193408,1,1.952,price_real_anomaly_z_12m:-0.975 price_real_mom_change:+0.951
+2018-09,M0,0.168083,0.193408,0,2.634,price_real_anomaly_z_12m:-0.651 price_real_mom_change:-0.081
+2018-10,M0,0.190276,0.193408,0,2.930,price_real_anomaly_z_12m:-0.630 price_real_mom_change:+0.050
+2018-11,M0,0.204883,0.193408,1,1.561,price_real_anomaly_z_12m:-0.340 price_real_mom_change:-0.147
+2018-12,M0,0.263004,0.193408,1,1.920,price_real_mom_change:-0.309 price_real_anomaly_z_12m:+0.147
+2019-01,M0,0.267184,0.193408,1,2.107,price_real_anomaly_z_12m:-0.787 price_real_mom_change:+0.646
+2019-02,M0,0.167152,0.193408,0,2.500,price_real_anomaly_z_12m:-0.943 price_real_mom_change:+0.206
+2019-03,M0,0.189848,0.193408,0,2.632,price_real_mom_change:-0.418 price_real_anomaly_z_12m:-0.165
+2019-04,M0,0.287547,0.193408,1,1.572,price_real_mom_change:-0.251 price_real_anomaly_z_12m:+0.212
+2019-05,M0,0.373242,0.193408,1,2.037,price_real_anomaly_z_12m:+0.827 price_real_mom_change:-0.477
+2019-06,M0,0.452335,0.193408,1,2.893,price_real_anomaly_z_12m:+1.063 price_real_mom_change:-0.386
+2019-07,M0,0.450806,0.193408,1,3.127,price_real_anomaly_z_12m:+1.451 price_real_mom_change:-0.780
+2019-08,M0,0.550980,0.193408,1,1.446,price_real_anomaly_z_12m:+0.921 price_real_mom_change:+0.152
+2019-09,M0,0.448283,0.193408,1,1.961,price_real_anomaly_z_12m:+0.757 price_real_mom_change:-0.097
+2019-10,M0,0.451057,0.193408,1,2.704,price_real_anomaly_z_12m:+0.568 price_real_mom_change:+0.104
+2019-11,M0,0.411678,0.193408,1,1.678,price_real_anomaly_z_12m:+0.452 price_real_mom_change:+0.059
+2019-12,M0,0.377885,0.193408,1,2.081,price_real_anomaly_z_12m:+0.391 price_real_mom_change:-0.021
+2020-01,M0,0.462416,0.193408,1,2.812,price_real_mom_change:+0.640 price_real_anomaly_z_12m:+0.078
+2020-02,M0,0.349195,0.193408,1,1.920,price_real_mom_change:+0.431 price_real_anomaly_z_12m:-0.185
+2020-03,M0,0.232224,0.193408,1,2.308,price_real_anomaly_z_12m:-0.251 price_real_mom_change:-0.076
+2020-04,M0,0.259370,0.193408,1,2.438,price_real_anomaly_z_12m:-0.936 price_real_mom_change:+0.755
+2020-05,M0,0.151030,0.193408,0,2.602,price_real_anomaly_z_12m:-0.964 price_real_mom_change:+0.105
+2020-06,M0,0.144593,0.193408,0,1.415,price_real_anomaly_z_12m:-0.484 price_real_mom_change:-0.426
+2020-07,M0,0.193408,0.193408,0,1.501,price_real_mom_change:-0.357 price_real_anomaly_z_12m:-0.203
+2020-08,M0,0.285427,0.193408,1,1.638,price_real_anomaly_z_12m:-0.332 price_real_mom_change:+0.283
+2020-09,M0,0.281283,0.193408,1,1.783,price_real_anomaly_z_12m:-0.686 price_real_mom_change:+0.616
+2020-10,M0,0.222316,0.193408,1,2.002,price_real_anomaly_z_12m:-1.066 price_real_mom_change:+0.682
+2020-11,M0,0.163472,0.193408,0,2.191,price_real_anomaly_z_12m:-0.953 price_real_mom_change:+0.189
+2020-12,M0,0.150762,0.193408,0,2.168,price_real_anomaly_z_12m:-0.576 price_real_mom_change:-0.285
+2021-01,M0,0.278829,0.193408,1,2.163,price_real_anomaly_z_12m:-1.498 price_real_mom_change:+1.416
+2021-01,M4,0.226082,0.254096,0,2.163,price_real_anomaly_z_12m:-1.555 price_real_mom_change:+1.385 import_quantity_t_yoy_sym_change:+0.231
+2021-02,M0,0.139417,0.193408,0,1.223,price_real_anomaly_z_12m:-1.065 price_real_mom_change:+0.113
+2021-02,M4,0.101322,0.254096,0,1.223,price_real_anomaly_z_12m:-1.106 import_quantity_t_yoy_sym_change:+0.231 t2m_min_mean_c_clim_z:-0.191
+2021-03,M0,0.137596,0.193408,0,1.475,price_real_anomaly_z_12m:-0.598 price_real_mom_change:-0.369
+2021-03,M4,0.127977,0.254096,0,1.475,price_real_anomaly_z_12m:-0.621 price_real_mom_change:-0.361 import_quantity_t_yoy_sym_change:+0.231
+2021-04,M0,0.147740,0.193408,0,1.876,price_real_mom_change:-0.767 price_real_anomaly_z_12m:-0.117
+2021-04,M4,0.127280,0.254096,0,1.876,price_real_mom_change:-0.750 import_quantity_t_yoy_sym_change:+0.231 t2m_min_mean_c_clim_z:-0.158
+2021-05,M0,0.311088,0.193408,1,2.106,price_real_mom_change:+0.295 price_real_anomaly_z_12m:-0.221
+2021-05,M4,0.280521,0.254096,1,2.106,price_real_mom_change:+0.288 import_quantity_t_yoy_sym_change:+0.231 price_real_anomaly_z_12m:-0.230
+2021-06,M0,0.224427,0.193408,1,2.403,price_real_mom_change:-0.366 price_real_anomaly_z_12m:-0.006
+2021-06,M4,0.143796,0.254096,0,2.403,precipitation_sum_mm_clim_z:-0.551 price_real_mom_change:-0.358 import_quantity_t_yoy_sym_change:+0.231
+2021-07,M0,0.218781,0.193408,1,2.561,price_real_mom_change:-0.868 price_real_anomaly_z_12m:+0.463
+2021-07,M4,0.274780,0.254096,1,2.561,price_real_mom_change:-0.849 price_real_anomaly_z_12m:+0.481 t2m_min_mean_c_clim_z:+0.354
+2021-08,M0,0.515547,0.193408,1,1.501,price_real_mom_change:+0.759 price_real_anomaly_z_12m:+0.171
+2021-08,M4,0.444796,0.254096,1,1.501,price_real_mom_change:+0.742 precipitation_sum_mm_clim_z:-0.407 import_quantity_t_yoy_sym_change:+0.231
+2021-09,M0,0.374952,0.193408,1,1.985,price_real_mom_change:+0.277 price_real_anomaly_z_12m:+0.080
+2021-09,M4,0.285229,0.254096,1,1.985,t2m_min_mean_c_clim_z:-0.446 price_real_mom_change:+0.271 import_quantity_t_yoy_sym_change:+0.231
+2021-10,M0,0.337390,0.193408,1,1.973,price_real_mom_change:+0.200 price_real_anomaly_z_12m:-0.007
+2021-10,M4,0.370360,0.254096,1,1.973,precipitation_sum_mm_clim_z:+0.280 import_quantity_t_yoy_sym_change:+0.231 price_real_mom_change:+0.196
+2021-11,M0,0.320956,0.193408,1,1.960,price_real_mom_change:+0.348 price_real_anomaly_z_12m:-0.229
+2021-11,M4,0.346796,0.254096,1,1.960,price_real_mom_change:+0.340 price_real_anomaly_z_12m:-0.238 import_quantity_t_yoy_sym_change:+0.231
+2021-12,M0,0.247346,0.193408,1,1.637,price_real_mom_change:-0.149 price_real_anomaly_z_12m:-0.095
+2021-12,M4,0.209111,0.254096,0,1.637,import_quantity_t_yoy_sym_change:+0.231 precipitation_sum_mm_clim_z:-0.212 price_real_mom_change:-0.146
+2022-01,M0,0.321037,0.193408,1,1.180,price_real_mom_change:+0.638 price_real_anomaly_z_12m:-0.519
+2022-01,M4,0.273230,0.254096,1,1.180,price_real_mom_change:+0.624 import_quantity_t_yoy_sym_change:-0.588 price_real_anomaly_z_12m:-0.538
+2022-02,M0,0.188235,0.193408,0,1.983,price_real_anomaly_z_12m:-0.321 price_real_mom_change:-0.272
+2022-02,M4,0.178262,0.254096,0,1.983,import_quantity_t_yoy_sym_change:-0.588 price_real_anomaly_z_12m:-0.333 price_real_mom_change:-0.266
+2022-03,M0,0.205033,0.193408,1,1.061,price_real_mom_change:-0.631 price_real_anomaly_z_12m:+0.145
+2022-03,M4,0.157363,0.254096,0,1.061,price_real_mom_change:-0.618 import_quantity_t_yoy_sym_change:-0.588 import_value_1000_usd_yoy_sym_change:+0.183
+2022-04,M0,0.293960,0.193408,1,0.982,price_real_mom_change:-0.649 price_real_anomaly_z_12m:+0.641
+2022-04,M4,0.204352,0.254096,0,0.982,price_real_anomaly_z_12m:+0.665 price_real_mom_change:-0.635 import_quantity_t_yoy_sym_change:-0.588
+2022-05,M0,0.339211,0.193408,1,1.304,price_real_anomaly_z_12m:+1.353 price_real_mom_change:-1.151
+2022-05,M4,0.256476,0.254096,1,1.304,price_real_anomaly_z_12m:+1.404 price_real_mom_change:-1.126 import_quantity_t_yoy_sym_change:-0.588
+2022-06,M0,0.408703,0.193408,1,1.707,price_real_anomaly_z_12m:+1.228 price_real_mom_change:-0.729
+2022-06,M4,0.342149,0.254096,1,1.707,price_real_anomaly_z_12m:+1.275 price_real_mom_change:-0.713 import_quantity_t_yoy_sym_change:-0.588
+2022-07,M0,0.393076,0.193408,1,1.293,price_real_anomaly_z_12m:+1.050 price_real_mom_change:-0.616
+2022-07,M4,0.311841,0.254096,1,1.293,price_real_anomaly_z_12m:+1.090 price_real_mom_change:-0.603 import_quantity_t_yoy_sym_change:-0.588
+2022-08,M0,0.588031,0.193408,1,1.766,price_real_anomaly_z_12m:+0.692 price_real_mom_change:+0.532
+2022-08,M4,0.543017,0.254096,1,1.766,price_real_anomaly_z_12m:+0.718 import_quantity_t_yoy_sym_change:-0.588 price_real_mom_change:+0.520
+2022-09,M0,0.535607,0.193408,1,1.248,price_real_mom_change:+0.561 price_real_anomaly_z_12m:+0.450
+2022-09,M4,0.263096,0.254096,1,1.248,precipitation_sum_mm_clim_z:-0.856 import_quantity_t_yoy_sym_change:-0.588 price_real_mom_change:+0.549
+2022-10,M0,0.424109,0.193408,1,1.891,price_real_anomaly_z_12m:+0.332 price_real_mom_change:+0.230
+2022-10,M4,0.331348,0.254096,1,1.891,import_quantity_t_yoy_sym_change:-0.588 price_real_anomaly_z_12m:+0.345 price_real_mom_change:+0.225
+2022-11,M0,0.352217,0.193408,1,0.964,price_real_anomaly_z_12m:+0.288 price_real_mom_change:-0.029
+2022-11,M4,0.230930,0.254096,0,0.964,import_quantity_t_yoy_sym_change:-0.588 price_real_anomaly_z_12m:+0.299 precipitation_sum_mm_clim_z:-0.295
+2022-12,M0,0.276014,0.193408,1,2.510,price_real_mom_change:-0.440 price_real_anomaly_z_12m:+0.344
+2022-12,M4,0.202175,0.254096,0,2.510,import_quantity_t_yoy_sym_change:-0.588 price_real_mom_change:-0.430 price_real_anomaly_z_12m:+0.357

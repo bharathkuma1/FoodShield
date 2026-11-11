@@ -1,0 +1,53 @@
+{
+  "purpose": "Week 6 local replay (decision D12): daily grid weather, monthly real price and annual production/trade records -> Kafka 4.4.0 (KRaft, one broker) -> Spark Structured Streaming -> M0/M4 alerts. Engineering demonstration only; adds no test evidence.",
+  "kafka": {
+    "archive": "Kafka/kafka_2.13-4.4.0.tgz",
+    "archive_sha512": "f5ceba8a265ab6bb2d68362b1f6859a95e15d60ef92ba83b43fdf065b557dc18e98d6383c15b9977320e25b3a2c8b6f11decb17b0fa6c0f163423793a0eb95cb",
+    "home": "Kafka/kafka_2.13-4.4.0",
+    "data_dir": "data/interim/week6/kafka-data",
+    "bootstrap": "127.0.0.1:9092",
+    "controller_port": 9093,
+    "heap": "-Xmx512m -Xms512m"
+  },
+  "topics": {
+    "observations": {"name": "foodshield.observations", "partitions": 3},
+    "alerts": {"name": "foodshield.alerts", "partitions": 1}
+  },
+  "spark": {
+    "kafka_jars_dir": "Kafka",
+    "master": "local[2]",
+    "driver_memory": "1g",
+    "shuffle_partitions": 4
+  },
+  "streaming": {
+    "trigger_seconds": 1,
+    "max_offsets_per_trigger": 200000,
+    "dedupe_watermark": "45 days"
+  },
+  "inputs": {
+    "grid_daily_csv": "data/raw/nasa_power_grid/nasa_power_grid_daily_2001_2022.csv",
+    "grid_cells": "configs/d9b_grid_cells.json",
+    "grid_batch_monthly_csv": "data/processed/d9b_grid_weather/nasa_power_grid_wheat_weighted_monthly.csv",
+    "price_csv": "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv",
+    "qcl_csv": "data/raw/faostat_ukraine_wheat_production_2026-11.csv",
+    "tcl_csv": "data/raw/faostat_ukraine_wheat_trade_all_measures_2026-11.csv"
+  },
+  "availability": {
+    "weather_daily_lag_days": 1,
+    "price": "first day of the next month",
+    "annual_lag_years": 2
+  },
+  "models": {
+    "frozen_report": "data/processed/final_test/final_test_report.json",
+    "variant": "corrected",
+    "annual_lag": 2,
+    "stages": ["M0", "M4"]
+  },
+  "targets": {
+    "sustained_events_per_s": 100,
+    "burst_events_per_s": 250,
+    "alert_latency_p95_s": 10
+  },
+  "output_root": "data/processed/week6_streaming",
+  "work_root": "data/interim/week6/runs"
+}

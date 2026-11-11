@@ -39,12 +39,29 @@ logs/
 !/data/raw/ukrstat_ukraine_monthly_all_items_cpi_2026-11.csv.metadata.json
 !/data/raw/nasa_power_ukraine_central_daily_2001_2022.json
 !/data/raw/nasa_power_ukraine_central_daily_2001_2022.metadata.json
+!/data/raw/sssu_ukraine_wheat_harvested_area_by_oblast_2026-11.csv
+!/data/raw/sssu_ukraine_wheat_harvested_area_by_oblast_2026-11.csv.metadata.json
+# D9-B: keep only the provenance manifest (request URL + SHA-256 per cell), not the 68 MB CSV.
+!/data/raw/nasa_power_grid/
+/data/raw/nasa_power_grid/*
+!/data/raw/nasa_power_grid/nasa_power_grid_daily_2001_2022.manifest.json
+# Browser downloads land in the repository root; never commit them.
+/*.zip
+/*.bundle
+/nasa_power_grid_daily_*_part*
+# Week 6: Kafka archive, connector jars and the unpacked broker stay local (downloaded, verified by hash).
+/Kafka/
 # Share the explicitly synthetic Week 3 development fixture; ignore other generated data.
 /data/synthetic/*
 !/data/synthetic/week3_ukraine/
 /data/synthetic/week3_ukraine/*
 !/data/synthetic/week3_ukraine/ukraine_wheat_monthly_synthetic.csv
 !/data/synthetic/week3_ukraine/ukraine_wheat_monthly_synthetic.metadata.json
+!/data/synthetic/week4_showcase/
+/data/synthetic/week4_showcase/*
+!/data/synthetic/week4_showcase/ukraine_wheat_test_window_synthetic_showcase.csv
+!/data/synthetic/week4_showcase/ukraine_wheat_test_window_synthetic_showcase.metadata.json
+!/data/synthetic/week4_showcase/scenario_metrics.csv
 data/interim/
 data/processed/
 !/data/processed/
@@ -53,6 +70,23 @@ data/processed/
 !/data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv.metadata.json
 !/data/processed/week4_ukraine_m0_m4_eligibility.csv
 !/data/processed/week4_ukraine_m0_m4_eligibility.csv.metadata.json
+!/data/processed/week4_ukraine_weather_wheat_area_weighted_monthly.csv
+!/data/processed/week4_ukraine_weather_wheat_area_weighted_monthly.csv.metadata.json
+!/data/processed/week4_rolling_origin/
+!/data/processed/week4_rolling_origin_m0_eligible/
+!/data/processed/week5_ablation_lag2/
+!/data/processed/week5_ablation_lag3/
+!/data/processed/final_test/
+!/data/processed/d9a_faostat_bulk/
+!/data/processed/d9b_grid_weather/
+!/data/processed/week6_streaming/
+!/data/processed/week7_batch_scaling/
+!/data/processed/week7_batch_scaling_laptop/
+!/data/processed/d9a_faostat_bulk_laptop/
+!/data/processed/week7_model_evaluation/
+!/data/processed/week7_data_quality/
+!/data/processed/week7_label_sensitivity/
+!/data/processed/week8_dashboard/
 data/external/
 outputs/
 artifacts/

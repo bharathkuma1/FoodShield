@@ -1,0 +1,23 @@
+{
+  "purpose": "Synthetic stand-in for the real 2021-2022 test window, used only to demonstrate how the frozen M0 model scores, alerts and is evaluated. Not observed data and not evaluation evidence.",
+  "week4_config": "configs/week4_v2.local.json",
+  "seed": 20261106,
+  "scenarios": 500,
+  "bootstrap": {
+    "method": "calendar-aligned half-year block bootstrap of monthly real-price log returns",
+    "pool_years": [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
+    "blocks": "H1 = Jan-Jun returns, H2 = Jul-Dec returns; each synthetic half-year is drawn with replacement from the same half of a pool year, so harvest seasonality is kept."
+  },
+  "anchor": {
+    "real_history_start": "2020-01",
+    "real_history_end": "2020-12",
+    "note": "The synthetic path starts from the real December 2020 price and uses real 2020 prices only as feature history (all pre-test)."
+  },
+  "synthetic_months": ["2021-01", "2023-01"],
+  "test_origin_mask": "Real M4_features_complete origins from the eligibility file between test_start and the last origin whose 3-month outcome window ends by 2023-01.",
+  "frozen_model": {
+    "model_path": "data/processed/week4_ukraine_m0_candidate/model",
+    "profile": "data/processed/week4_ukraine_m0_candidate/m0_profile.json"
+  },
+  "output_dir": "data/synthetic/week4_showcase"
+}

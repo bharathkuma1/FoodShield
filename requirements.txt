@@ -1,1 +1,3 @@
 pyspark[ml]==4.3.0
+# Week 6 (D12): pure-Python Kafka client for the replay producer and the alert writer.
+kafka-python==3.0.13

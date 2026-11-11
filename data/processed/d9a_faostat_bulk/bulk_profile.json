@@ -1,0 +1,148 @@
+{
+  "pipeline": "d9a_faostat_bulk",
+  "generated_utc": "2026-11-07T08:59:06.718167+00:00",
+  "machine": {
+    "os": "Linux-6.18.44-fc-v310-x86_64-with-glibc2.39",
+    "cpu_count": 2,
+    "python": "3.13.18"
+  },
+  "spark": {
+    "master": "local[2]",
+    "driver_memory": "3g",
+    "version": "4.3.0"
+  },
+  "domains": {
+    "QCL": {
+      "archive": "Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+      "archive_sha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+      "archive_bytes": 33921825,
+      "csv_bytes": 545005770,
+      "extract_seconds": 0.84,
+      "csv_rows": 4209110,
+      "count_csv_seconds": 3.83,
+      "write_parquet_seconds": 22.25,
+      "parquet_bytes": 37611826,
+      "year_partitions": 64,
+      "parquet_rows": 4209110,
+      "count_parquet_seconds": 0.54,
+      "years": [
+        1961,
+        2024
+      ],
+      "areas": 244,
+      "items": 301,
+      "query_wheat_2010_2022_rows": 6087,
+      "query_csv_seconds": 3.79,
+      "query_parquet_seconds": 0.34,
+      "ukraine_wheat_reconciliation": {
+        "extract_rows": 99,
+        "bulk_rows": 99,
+        "matched_keys": 99,
+        "value_mismatches": 0,
+        "only_in_extract": 0,
+        "only_in_bulk": 0,
+        "status": "exact match"
+      }
+    },
+    "TCL": {
+      "archive": "Trade_CropsLivestock_E_All_Data_(Normalized).zip",
+      "archive_sha256": "effb07f6ee6c1f086e2dd4c11742d2ba9495552fb11c11ea64aa7edbd7a32380",
+      "archive_bytes": 273514210,
+      "csv_bytes": 2432821186,
+      "extract_seconds": 5.97,
+      "csv_rows": 17143873,
+      "count_csv_seconds": 3.96,
+      "write_parquet_seconds": 72.1,
+      "parquet_bytes": 200772883,
+      "year_partitions": 64,
+      "parquet_rows": 17143873,
+      "count_parquet_seconds": 0.23,
+      "years": [
+        1961,
+        2024
+      ],
+      "areas": 283,
+      "items": 616,
+      "query_wheat_2010_2022_rows": 11549,
+      "query_csv_seconds": 14.61,
+      "query_parquet_seconds": 0.33,
+      "ukraine_wheat_reconciliation": {
+        "extract_rows": 132,
+        "bulk_rows": 132,
+        "matched_keys": 132,
+        "value_mismatches": 0,
+        "only_in_extract": 0,
+        "only_in_bulk": 0,
+        "status": "exact match"
+      }
+    },
+    "PP": {
+      "archive": "Prices_E_All_Data_(Normalized).zip",
+      "archive_sha256": "327f70a2230032d3966d6e9583ec5caf0e9416aa9fd91b444e02f6b8665c984d",
+      "archive_bytes": 11684078,
+      "csv_bytes": 214286652,
+      "extract_seconds": 0.26,
+      "csv_rows": 1319583,
+      "count_csv_seconds": 0.5,
+      "write_parquet_seconds": 6.84,
+      "parquet_bytes": 9262756,
+      "year_partitions": 35,
+      "parquet_rows": 1319583,
+      "count_parquet_seconds": 0.16,
+      "years": [
+        1991,
+        2025
+      ],
+      "areas": 182,
+      "items": 235,
+      "query_wheat_2010_2022_rows": 10854,
+      "query_csv_seconds": 1.56,
+      "query_parquet_seconds": 0.23,
+      "ukraine_wheat_reconciliation": {
+        "extract_rows": 157,
+        "bulk_rows": 187,
+        "matched_keys": 157,
+        "value_mismatches": 0,
+        "only_in_extract": 0,
+        "only_in_bulk": 30,
+        "status": "exact match"
+      },
+      "d9d_scoping_countries_with_120plus_monthly_wheat_prices_2010_2022": {
+        "count": 31,
+        "countries": [
+          "Hungary (156)",
+          "Lithuania (156)",
+          "Poland (156)",
+          "Canada (156)",
+          "Finland (156)",
+          "United Kingdom of Great Britain and Northern Ireland (156)",
+          "Belarus (156)",
+          "Slovakia (156)",
+          "Ukraine (156)",
+          "Romania (156)",
+          "Czechia (156)",
+          "Russian Federation (156)",
+          "Austria (155)",
+          "Spain (151)",
+          "Netherlands (Kingdom of the) (150)",
+          "Serbia (145)",
+          "South Africa (145)",
+          "Peru (145)",
+          "Rwanda (145)",
+          "Armenia (145)",
+          "United States of America (145)",
+          "T\u00fcrkiye (144)",
+          "Palestine (144)",
+          "Germany (144)",
+          "Kazakhstan (144)",
+          "Albania (140)",
+          "Kyrgyzstan (134)",
+          "Bulgaria (133)",
+          "Croatia (132)",
+          "Slovenia (122)",
+          "Belgium (121)"
+        ]
+      }
+    }
+  }
+}

@@ -30,7 +30,7 @@ This log separates requirements established by the submitted proposal and TA fee
 | Measure replay completeness by reconciling valid input records with processed accounting; do not promise exactly-once behavior. | Avoids expanding the task into delivery semantics beyond the TA request. |
 | Use local Spark mode and a single-node Kafka setup for the initial replay demonstration. | A bounded local starting point; tune per host. Exact Kafka runtime/deployment method remains open. |
 | Keep source code in a `src/foodshield/` package with configs, scripts, tests, local data, and generated artifacts separated. | Recommended project organization; it keeps implementation, local datasets, and outputs distinct. |
-| Use chronological train/validation/test evaluation: start with 3–5 pre-event years for simple calibration, reserve later event periods as untouched tests, and use earlier rolling-origin folds when coverage permits. | Matches early-warning deployment and prevents looking ahead. At monthly grain 3–5 years provide only 36–60 aligned rows, so treat the span as an initial minimum, not a mandatory cap; keep the detector simple and document the actual split. |
+| Use chronological train/validation/test evaluation: start with 3–5 pre-event years for simple calibration, reserve later event periods as untouched tests, and use earlier rolling-origin folds when coverage permits. *(Confirmed as D3.)* | Matches early-warning deployment and prevents looking ahead. At monthly grain 3–5 years provide only 36–60 aligned rows, so treat the span as an initial minimum, not a mandatory cap; keep the detector simple and document the actual split. |
 
 ## Week 1 working decisions
 
@@ -41,16 +41,18 @@ These are the feasibility decisions recorded at the user's request. They are wor
 | Pilot geography | Ukraine remains the strongest current single-country starting candidate based on the downloaded input-source overlap; India remains an alternative/comparator. Reassess geography after representative weather and outcome coverage are checked. | Current monthly price and point-weather files overlap in 2001–2022 for Ukraine; India's current price/weather overlap is 2022 only. A point-weather series is not a country-representative exposure. |
 | M0 price and future outcome | Use FAOSTAT Ukraine monthly Wheat Producer Price (LCU/tonne), element 5530, as the farm-gate price series for both price-only monitoring and the strictly future outcome. Use the SSSU all-items CPI chain where a real-price measure is needed. | The source and retrieval snapshots are shared with provenance in `DATA_SOURCE_REGISTER.md`. FAOSTAT observations are 2010-01–2023-01; SSSU CPI is chained with December 2000=100. The CPI deflator is broad consumer inflation, not wheat-specific. No substitution is made in the underlying project objective: the chosen outcome is price stress at the producer/farm-gate stage. |
 | FPMA secondary data | Keep Ukraine FPMA/APK-Inform observations local and outside shared model inputs/labels unless reuse permission is obtained. | FAO identifies APK-Inform as a source partner and warns that third-party material can have separate terms. FPMA metadata also contains a Retail/Wholesale discrepancy. The project's shared target no longer depends on FPMA. |
-| M1 weather plan | NASA POWER daily parameters `PRECTOTCORR`, `T2M_MAX`, `T2M_MIN`; next stage should request grids over wheat-producing administrative regions and weight by verified regional wheat harvested area. | The current 49°N, 32°E point is API/coverage screening only. The downloaded Ukraine regional crop-statistics archive lists 2011–2021; it does not substantiate area weights for the 2007–08 or 2010 cases. Until historical weights are found, compare M1–M4 on their common verified period and report earlier cases as M0-only context. |
+| M1 weather plan | NASA POWER daily parameters `PRECTOTCORR`, `T2M_MAX`, `T2M_MIN`; next stage should request grids over wheat-producing administrative regions and weight by verified regional wheat harvested area. **Done in V2:** 24-oblast wheat-area-weighted series (D5); full 232-cell grid check (D9-B). | The current 49°N, 32°E point is API/coverage screening only. The downloaded Ukraine regional crop-statistics archive lists 2011–2021; it does not substantiate area weights for the 2007–08 or 2010 cases. Until historical weights are found, compare M1–M4 on their common verified period and report earlier cases as M0-only context. |
 | M2/M3 annual availability | For monthly forecast year `Y`, provisionally use annual data only when `data_year <= Y - 2`; preserve FAOSTAT flags and notes. | A two-year lag is a cautious proxy, not an observed release date or historical data vintage. Run sensitivity or exclude annual features from strict as-of claims if vintage evidence is unavailable. |
 | M3 trade grain | Use country-reporter aggregate wheat import/export quantity and value from TCL. Do not fetch bilateral TM for Week 1. | Current TCL extracts do not include partners. The 52M-row detailed matrix is unnecessary unless a partner-specific hypothesis is approved. |
 | Event/case selection | Treat 2007–08, 2010–11, and 2022 as proposal examples, not required cases. Select final evaluation instances after the target/outcome definition and common, quality-checked source coverage are established; other documented wheat-stress episodes may be substituted. | Current Ukraine feature files overlap from 2001–2022 at a single weather point; India overlaps in 2022 at a single Haryana point. Neither overlap establishes representative weather or a valid future-price-stress label. See `WEEK1_EVENT_CASES.md` for coverage. |
 | Week 1 completion | Mark all four owner workstreams 100% for the Week 1 feasibility handoff. | Means source profiling, recommendation, caveats, and next-stage boundary are documented in `WEEK1_TASK_ASSIGNMENTS.md`; it does not mean teammates reviewed the decisions or implementation/model work is complete. |
 | Weeks 1–8 workstream ownership | Treat the current per-week owner mapping in `TEAM_RESPONSIBILITIES.md` as the agreed working default; update it when a change is explicitly called out. | User-directed working agreement. It assigns responsibilities and does not change the proposal's wheat-only, country–commodity–time, M0–M4, event-evaluation, or Spark scalability objectives. Completion percentages remain separate from ownership agreement. |
 
-## Week 4 working choices (review needed)
+## Week 4 working choices (superseded by the Week 4 V2 decisions)
 
-These are the current implementation defaults selected by the project lead. They can be revised after team review; they are not a claim of final protocol approval.
+**Superseded:** these working choices were confirmed, unchanged, as D1–D4 in the next section. The table is kept for history.
+
+These were the implementation defaults selected by the project lead before the V2 review.
 
 | Working choice | Current setting | Review note |
 |---|---|---|
@@ -59,25 +61,110 @@ These are the current implementation defaults selected by the project lead. They
 | Candidate chronological split | Training calendar 2011–2017, validation 2018–2020, final-test candidate 2021–2022; purge origins whose future label window crosses a boundary. | **Review needed.** The configured common-origin label run yields 42 eligible training origins and 30 validation origins for the current 3-month target. Final-test labels are excluded from current artifacts. |
 | M0 baseline | Spark MLlib binomial logistic regression using price-only `price_real_mom_change` and `price_real_anomaly_z_12m`; fit on training origins, with MLlib standardization and L2 regularization, then select the alert cutoff on validation by F1. | **Review needed.** The ≥10%/3-month rule defines the future outcome label; the detector is learned from labeled training data. Validation threshold-selection metrics are calibration evidence, not final performance. No final-test labels or predictions are used. Apply the same estimator family across M0–M4 for the signal ablation. |
 
+## Week 4 V2 decisions (confirmed at the Week 4 review)
+
+Abhijith C R confirmed the recommended option for each item at the Week 4 review and asked to proceed to Week 5. This records that direction; it is not a claim that every teammate voted. Teammates can reopen any item before the real test set is opened. Evidence: [`WEEK4_REVIEW_V2.md`](WEEK4_REVIEW_V2.md).
+
+| # | Decision | Confirmed choice |
+|---|---|---|
+| D1 | Stress label | Positive if the maximum CPI-adjusted FAOSTAT farm-gate price in t+1..t+3 is at least 10% above the price at t. 5% and 15% remain sensitivity checks. |
+| D2 | Forecast horizon | 3 months; 1 and 6 months remain sensitivity checks. |
+| D3 | Chronological split | Train 2011–2017, validate 2018–2020, test 2021–2022, horizon-length purge at each boundary. The 2014–2020 rolling-origin backtest is the standard second evaluation for every stage. |
+| D4 | M0 baseline | Unchanged Spark MLlib logistic regression on two price features (L2 0.1, standardization); alert cutoff by best F1 on validation. Always report threshold-free AUC and the always-alert and momentum baselines next to F1. |
+| D5 | Weather for M1–M4 | Wheat-area-weighted 24-oblast NASA POWER series (`configs/week4_v2.local.json`); the single point is kept only as a sensitivity check. |
+| D6 | Annual availability lag | Keep `data_year + 2` (1 January) and report a 3-year-lag sensitivity run for M2–M4. |
+| D7 | Synthetic data | Demo and pipeline testing only; never in results, labels or coverage claims. |
+| D8 | Real 2021–2022 test | Open once, for M0–M4 together, after the M1–M4 configuration is frozen. |
+| D9 | Data-engineering scale | (A) process full FAOSTAT bulk archives in Spark; (B) gridded NASA POWER weather over the wheat area; (C) daily-granularity Kafka replay; (E) labelled synthetic scaling runs. (D) a multi-country wheat panel is raised with the team and professor because it changes scope. |
+
+### Week 5 decisions (confirmed in Week 5)
+
+Abhijith C R confirmed D10, D11 and the D8 go-ahead in Week 5, after the examples in `WEEK5_ABLATION.md`. This record was committed before the real test was opened.
+
+| # | Decision | Confirmed choice |
+|---|---|---|
+| D10 | M1–M3 feature definitions | Corrected features are primary: weather vs the same calendar month in the prior 10 years; annual signals as bounded year-on-year change. The Week 3 definitions are reported as a robustness variant. |
+| D11 | Calendar season | Price-only M0 stays the primary baseline; "season in every stage" is pre-registered as a robustness analysis and reported alongside. |
+| D8 | Real 2021–2022 test | Go: run `scripts/run_final_test_once.py --confirm-open-test` once against `configs/week5_frozen_protocol.json`. |
+
+Original proposal text:
+
+### Week 5 proposals
+
+Evidence: [`WEEK5_ABLATION.md`](WEEK5_ABLATION.md).
+
+- **D10:** adopt the corrected M1–M3 features as primary. Weather is compared with the same calendar month in prior years; annual signals use a bounded year-on-year change. The Week 3 definitions measured season (weather) and only the sign of change (annual signals).
+- **D11:** keep price-only M0 as the primary baseline and pre-register "season in every stage" as a robustness analysis.
+- **D8 go-ahead:** run `scripts/run_final_test_once.py --confirm-open-test` once against `configs/week5_frozen_protocol.json`.
+
+Earlier proposal list (kept for history):
+
+- confirm target, horizon, split and M0 baseline unchanged;
+- add the 2014–2020 rolling-origin backtest as the standard second evaluation;
+- adopt the wheat-area-weighted 24-oblast weather for M1–M4;
+- choose a way forward on annual-data availability timing;
+- restrict the synthetic showcase to demo use;
+- open the real 2021–2022 test once, for M0–M4 together.
+
+Outcome: confirmed as D1–D11 above. The real test was opened once, in Week 5; results are in [`FINAL_TEST_RESULTS.md`](FINAL_TEST_RESULTS.md).
+
+### D9 progress
+
+| Item | Status |
+|---|---|
+| A. Full FAOSTAT archives in Spark | **Done.** QCL, TCL and PP: 22.7 million rows, 3.2 GB of CSV → 248 MB of Parquet in 2 min 40 s. Ukraine wheat matches the model extracts exactly. The optional detailed trade matrix (TM, 411 MB) was not downloaded, consistent with the Week 1 M3 trade-grain decision. |
+| B. Gridded NASA POWER weather | **Done.** 232 cells, 1,864,120 daily rows. The national series correlates with the 24-point series at ≥ 0.9986 after removing the season, so D5's 24-point weather is kept. |
+| C. Daily Kafka replay | **Built and checked (Week 6, D12).** 1,864,486 records through Kafka 4.4.0 and Spark Structured Streaming; every check passed; about 5,000 events/s at full speed on 2 cores; alert p95 under 3 s. Laptop runs (Windows 11, 16 cores): every check passed; 6,610 events/s at full speed; both targets met with alert p95 of 3.1 s or less (`WEEK6_LAPTOP_RESULTS.md`). |
+| E. Synthetic scaling runs | Week 7. |
+| D. Multi-country panel | **Extension work after the core project (D13, revised).** Feasibility: 31 countries have at least 120 of 156 monthly wheat producer prices for 2010–2022. |
+
+Evidence: [`D9_SCALE.md`](D9_SCALE.md).
+
+### Week 6 and scope decisions (confirmed at the start of Week 6)
+
+Abhijith C R confirmed these at the start of Week 6. The team is doing a joint review of the whole project, and his confirmation is used to move forward in the meantime.
+
+| # | Decision | Confirmed choice |
+|---|---|---|
+| D12 | Week 6 streaming design | **(a) Runtime:** native Apache Kafka 4.4.0 in KRaft mode, one broker on the project laptop, no Docker. The demo and the reported streaming measurements run on that laptop; development tests may also run in the Claude workspace. **(b) Replay content:** the 1,864,120 daily grid-weather rows plus the monthly price and annual production/trade records, sent in the order they would have become available. Spark Structured Streaming builds the monthly features and scores the already-fitted M0 and M4 models. The pass test is that streamed alerts equal batch alerts month for month. The replay is an engineering demonstration and adds no test evidence. **(c) Targets:** keep the proposed ones (at least 100 events/s sustained and 250 events/s burst, alert p95 ≤ 10 s); measure first, then revisit. **(d) Delivery:** at-least-once delivery, with checkpoints and de-duplication by `record_id`; no exactly-once claim. |
+| D13 | Multi-country wheat panel (D9-D) | **Revised at the start of Week 6: extension work, not project scope.** Following the team's approval, the project stays single-country (Ukraine). The panel is planned as extended work after the core project is complete. Feasibility evidence is kept: 31 countries have enough monthly wheat producer prices. *(Earlier the same day, D13 read "Go"; it was revised before any panel work started.)* |
+| D14 | Working mode | Claude does the work of all four workstreams in one shared place; the whole team reviews it together. The repository stays in the local folder (`feature/workinprogress_v2`) for now; pushing to GitHub waits for the joint review. Workstream ownership in `TEAM_RESPONSIBILITIES.md` is kept for review and accountability. |
+
+### Week 8 decision (confirmed in Week 8)
+
+Abhijith C R confirmed this in Week 8, on the same basis as D12–D14.
+
+| # | Decision | Confirmed choice |
+|---|---|---|
+| D15 | Dashboard technology and format (closes question 8) | **One static, offline HTML page** (`docs/dashboard/index.html`, built by `scripts/build_week8_dashboard.py`; no framework, nothing to install). Five tabs: Overview; **Explorer** (compare any two stages, period, stress definition, annual delay and alert cutoff, recomputed in the browser from the saved month-by-month scores, nothing retrained); **What if?** (nudge one month's inputs for the frozen test models); **Streaming** (replay a saved laptop run, plus a live view); Scale. Defaults reproduce the reported numbers exactly; any other setting is labelled "exploring", and a cutoff moved on the test period carries a warning that it is not a fair test. **Live mode:** `scripts/serve_dashboard.py` (Python standard library, 127.0.0.1 only, read-only) serves the page and the running replay's alerts; the page pops up each new stress alert (from January 2022 by default, the paced demo window) with optional sound. `RUN_DEMO_LIVE.bat` starts the server and the demo together. Streamlit was not chosen: it needs an install and a running process and adds demo risk. |
+
 ## Assumptions to validate
 
 - FAOSTAT QCL/TCL, NASA POWER, and selected FPMA data can support a useful common wheat/country/month analysis after temporal and geographic alignment. Feasibility is not proof of model adequacy.
 - The provisional two-year lag is conservative enough for the intended feature cadence; actual public-release dates may require longer lags.
-- Regional crop-area weights can be extracted consistently for some years; no representative weather signal is yet produced.
+- Regional crop-area weights can be extracted consistently for some years. *Update, Week 4:* SSSU oblast wheat areas are available. The weighted weather series uses fixed 2015–2020 shares (D5), and the 232-cell grid confirms it (D9-B). Weights for years before 2011 are still unavailable.
 - The broad event-study windows are suitable validation contexts, but are not operational positive/negative labels.
 - Kafka and Spark Structured Streaming can run together within laptop memory limits for a bounded replay workload.
 - Proposed numeric streaming targets are appropriate after a baseline measurement on the actual laptop.
 
 ## Later project decisions (outside the Week 1 feasibility handoff)
 
+**Status (Week 8):**
+
+- **Resolved:** questions 2 and 4, by D1–D4.
+- **Partly resolved:** question 3. Area weights are fixed at 2015–2020 shares, and the FAO publication vintage is approximated by the D6 lag with a 3-year sensitivity run.
+- **Resolved for Week 6 (D12):** questions 5, 6 and 7.
+- **Resolved for Week 8 (D15):** question 8.
+- **Not needed:** question 1, which is not a blocker.
+
 1. Can Ukraine FPMA source terms and the Retail/Wholesale metadata discrepancy be resolved for any separate local comparison? This is not a blocker for the selected shared target.
-2. Review the operational stress rule, forecast horizon, and alert-threshold method. **Current working choice (review needed):** a ≥10% increase in the maximum CPI-adjusted farm-gate price within three months, with a 3-month horizon, using FAOSTAT PP and the SSSU CPI chain. At origin `t`, all M0–M4 features stop at `t`; the outcome is measured only later. This is a future outcome from the same price source, not an independent-source label. The candidate split is training 2011–2017, validation 2018–2020, and final-test candidate 2021–2022, with horizon purges; exact dates and alert threshold remain review items. Proposal event periods are contexts, not automatic labels or fixed test cases; 2007–08 is outside the selected series, and 2010/11 has insufficient pre-event history for the proposed multi-year training design. See `WEEK1_EVENT_CASES.md` and `WEEK4_EVALUATION_PROTOCOL.md`.
+2. *(Resolved by D1–D4.)* Review the operational stress rule, forecast horizon, and alert-threshold method. **Working choice at the time:** a ≥10% increase in the maximum CPI-adjusted farm-gate price within three months, with a 3-month horizon, using FAOSTAT PP and the SSSU CPI chain. At origin `t`, all M0–M4 features stop at `t`; the outcome is measured only later. This is a future outcome from the same price source, not an independent-source label. The candidate split is training 2011–2017, validation 2018–2020, and final-test candidate 2021–2022, with horizon purges; exact dates and alert threshold remain review items. Proposal event periods are contexts, not automatic labels or fixed test cases; 2007–08 is outside the selected series, and 2010/11 has insufficient pre-event history for the proposed multi-year training design. See `WEEK1_EVENT_CASES.md` and `WEEK4_EVALUATION_PROTOCOL.md`.
 3. Can historical regional wheat-area weights and FAOSTAT publication vintages be obtained for strict as-of validation?
-4. Which detector/thresholding method will be used for M0–M4, and how will thresholds be selected without holdout leakage?
+4. *(Resolved by D4.)* Which detector/thresholding method will be used for M0–M4, and how will thresholds be selected without holdout leakage?
 5. What replay event schema, ordering, pacing, checkpoint/output behavior, and duplicate/restart semantics will the streaming demo support?
 6. What Kafka local runtime is practical on the Windows laptop (for example, native process or container), given memory and setup constraints?
 7. After a small benchmark run, should the initial 100/250 events/s targets be retained or adjusted with a documented rationale?
-8. Which dashboard technology and final output format best fit the remaining time and laptop constraints?
+8. *(Resolved by D15.)* Which dashboard technology and final output format best fit the remaining time and laptop constraints?
 
 ## Source materials reviewed
 
