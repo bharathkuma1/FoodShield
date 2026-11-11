@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FoodShield Results</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface-0: #f4f3ef; --surface-1: #fcfcfb; --surface-2: #f0efea; --border: #e3e1da; --grid: #ebe9e3;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #7a7974;
+  --series-1: #2a78d6; --series-2: #eb6834; --band: #f2e3d9; --good: #0a7d0a; --critical: #c42f2f; --accent: #2a78d6;
+  --s-m0: #2a78d6; --s-m4: #eb6834; --s-season: #1baf7a; --s-m1: #eda100; --s-m2: #e87ba4; --s-m3: #6250d6;
+  --alert-bg: #fbe9e7; --info-bg: #e8f1fb;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface-0: #121211; --surface-1: #1a1a19; --surface-2: #242422; --border: #33332f; --grid: #2a2a27;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+    --series-1: #3987e5; --series-2: #d95926; --band: #3a2b22; --good: #4cc24c; --critical: #e66767; --accent: #3987e5;
+    --s-m0: #3987e5; --s-m4: #d95926; --s-season: #199e70; --s-m1: #c98500; --s-m2: #d55181; --s-m3: #9085e9;
+    --alert-bg: #3a2020; --info-bg: #1c2a3b;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0: #121211; --surface-1: #1a1a19; --surface-2: #242422; --border: #33332f; --grid: #2a2a27;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+  --series-1: #3987e5; --series-2: #d95926; --band: #3a2b22; --good: #4cc24c; --critical: #e66767; --accent: #3987e5;
+  --s-m0: #3987e5; --s-m4: #d95926; --s-season: #199e70; --s-m1: #c98500; --s-m2: #d55181; --s-m3: #9085e9;
+  --alert-bg: #3a2020; --info-bg: #1c2a3b;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface-0); color: var(--text-primary);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
+header h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
+header p { margin: 0; color: var(--text-secondary); max-width: 820px; }
+.meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin: 18px 0 4px; border-bottom: 1px solid var(--border); }
+.tabs button { font: inherit; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--text-secondary);
+  padding: 8px 12px; cursor: pointer; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--text-primary); border-bottom-color: var(--accent); font-weight: 600; }
+.tabs button:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 20px 0; }
+.tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.tile .v { font-size: 24px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.tile .k { font-size: 12px; color: var(--text-secondary); }
+.tile .s { font-size: 12px; color: var(--text-muted); }
+section { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin: 16px 0; }
+section h2 { font-size: 16px; margin: 0 0 2px; }
+section h3 { font-size: 14px; margin: 14px 0 4px; }
+section .lede { color: var(--text-secondary); margin: 0 0 10px; font-size: 13px; max-width: 860px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-secondary); margin: 4px 0 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.key-line { width: 16px; height: 2px; border-radius: 1px; display: inline-block; }
+.key-dash { width: 16px; height: 0; border-top: 2px dashed var(--text-muted); display: inline-block; }
+.key-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.key-band { width: 14px; height: 10px; border-radius: 2px; display: inline-block; background: var(--band); }
+.chart { position: relative; width: 100%; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { fill: var(--text-muted); font-size: 11px; font-family: inherit; }
+.gridline { stroke: var(--grid); stroke-width: 1; }
+.tip { position: absolute; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0;
+  transition: opacity .08s; min-width: 150px; z-index: 2; }
+.tip .t { color: var(--text-secondary); margin-bottom: 4px; }
+.tip .r { display: flex; align-items: center; gap: 6px; }
+.tip .r b { font-variant-numeric: tabular-nums; color: var(--text-primary); }
+.tip .r i { font-style: normal; color: var(--text-secondary); }
+details { margin-top: 8px; font-size: 12px; }
+summary { cursor: pointer; color: var(--text-secondary); }
+table { border-collapse: collapse; width: 100%; margin-top: 6px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+th { color: var(--text-secondary); font-weight: 600; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.ok { color: var(--good); font-weight: 600; white-space: nowrap; } .bad { color: var(--critical); font-weight: 600; }
+.note { font-size: 12px; color: var(--text-muted); }
+.scroll { overflow-x: auto; }
+code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--surface-2); padding: 1px 4px; border-radius: 4px; }
+/* controls */
+.controls { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; background: var(--surface-2);
+  border-radius: 10px; padding: 12px 14px; margin: 8px 0 12px; }
+.control { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-secondary); min-width: 0; }
+.control .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+select, .btn, .seg button { font: inherit; font-size: 13px; color: var(--text-primary); background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; }
+select { max-width: 100%; }
+.btn { cursor: pointer; } .btn:hover { border-color: var(--text-muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; cursor: pointer; background: var(--surface-1); }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+input[type=range] { width: 180px; accent-color: var(--accent); }
+.readout { font-variant-numeric: tabular-nums; color: var(--text-primary); font-weight: 600; min-width: 40px; display: inline-block; }
+.banner { border-radius: 8px; padding: 8px 12px; font-size: 13px; margin: 0 0 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.banner.reported { background: var(--surface-2); color: var(--text-secondary); }
+.banner.exploring { background: var(--info-bg); color: var(--text-primary); }
+.banner .link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; text-decoration: underline; padding: 0; }
+.notice { font-size: 12px; color: var(--text-secondary); margin: -4px 0 10px; min-height: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 6px 0 12px; }
+.card { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--surface-1); min-width: 0; }
+.card .title { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 8px; }
+.metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; }
+.metric .k { font-size: 12px; color: var(--text-secondary); }
+.metric .v { font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.metric .s { font-size: 11px; color: var(--text-muted); }
+.summary { font-size: 14px; margin: 4px 0 10px; }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 1px 8px; }
+.badge.alert { background: var(--alert-bg); color: var(--critical); }
+.badge.calm { background: var(--surface-2); color: var(--text-secondary); }
+/* what if */
+.sliders { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px 20px; margin: 8px 0 14px; }
+.slider { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; align-items: center; font-size: 13px; }
+.slider label { color: var(--text-secondary); }
+.slider input { grid-column: 1 / 3; width: 100%; }
+.slider .was { grid-column: 1 / 3; font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; }
+.slider .was button { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
+.bar { position: relative; height: 12px; background: var(--surface-2); border-radius: 6px; margin: 6px 0 4px; }
+.bar .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; }
+.bar .cut { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--text-primary); }
+.reasons { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--text-secondary); }
+.reasons li { margin: 2px 0; }
+/* streaming feed and toasts */
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--text-muted); display: inline-block; }
+.dot.on { background: var(--good); } .dot.wait { background: var(--s-m1); }
+.feed { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 520px; overflow-y: auto; }
+.feeditem { border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; display: grid;
+  grid-template-columns: 90px minmax(0, 1fr) minmax(0, 1fr); gap: 4px 14px; align-items: start; font-size: 13px; }
+.feeditem.hasalert { border-color: var(--critical); }
+.feeditem .m { font-weight: 650; font-variant-numeric: tabular-nums; }
+.feeditem .m small { display: block; font-weight: 400; font-size: 11px; color: var(--text-muted); }
+@media (max-width: 640px) { .feeditem { grid-template-columns: minmax(0, 1fr); } }
+.counters { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+.counters b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.howto { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text-secondary); }
+#toasts { position: fixed; top: 16px; right: 16px; width: min(380px, calc(100vw - 32px)); display: flex; flex-direction: column;
+  gap: 8px; z-index: 50; pointer-events: none; }
+.toast { pointer-events: auto; background: var(--surface-1); border: 1px solid var(--critical); border-left: 6px solid var(--critical);
+  border-radius: 10px; padding: 10px 12px; box-shadow: 0 8px 24px rgba(0,0,0,.18); font-size: 13px; animation: pop .18s ease-out; }
+.toast .h { font-weight: 650; color: var(--critical); display: flex; justify-content: space-between; gap: 8px; }
+.toast .h button { background: none; border: 0; color: var(--text-muted); cursor: pointer; font-size: 16px; line-height: 1; padding: 0; }
+.toast .b { color: var(--text-secondary); margin-top: 2px; }
+@keyframes pop { from { transform: translateY(-6px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div id="toasts" aria-live="polite" aria-atomic="false"></div>
+<main>
+<header>
+  <h1>FoodShield: wheat price-stress early warning (Ukraine)</h1>
+  <p>Does adding weather, production and trade signals warn of a ≥10% real farm-gate price rise within 3 months earlier or better than watching prices alone? Batch processing in Apache Spark; a local Kafka replay into Spark Structured Streaming shows the alerting path.</p>
+  <div class="meta" id="meta"></div>
+</header>
+<nav class="tabs" role="tablist" aria-label="Dashboard sections">
+  <button role="tab" id="t-overview" aria-controls="tab-overview" data-tab="overview">Overview</button>
+  <button role="tab" id="t-explorer" aria-controls="tab-explorer" data-tab="explorer">Explorer</button>
+  <button role="tab" id="t-whatif" aria-controls="tab-whatif" data-tab="whatif">What if?</button>
+  <button role="tab" id="t-streaming" aria-controls="tab-streaming" data-tab="streaming">Streaming</button>
+  <button role="tab" id="t-scale" aria-controls="tab-scale" data-tab="scale">Scale</button>
+</nav>
+
+<div role="tabpanel" id="tab-overview" aria-labelledby="t-overview">
+<div class="tiles" id="tiles"></div>
+<section>
+  <h2>Price history, stress months and alerts</h2>
+  <p class="lede">Real (CPI-deflated) farm-gate wheat price. Shaded months had a ≥10% rise within the next 3 months. Ticks show alerts from price-only M0 and the full M4 model: out-of-sample backtest 2014–2020, then the one-time test 2021–2022.</p>
+  <div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Real price (LCU/t, Dec 2000)</span><span><i class="key-band"></i>Stress ahead</span><span><i class="key-dot" style="background:var(--series-1)"></i>M0 alert</span><span><i class="key-dot" style="background:var(--series-2)"></i>M4 alert</span></div>
+  <div class="chart" id="timeline"></div>
+  <details><summary>Table</summary><div class="scroll" id="timeline-table"></div></details>
+</section>
+<section>
+  <h2>M0–M4: backtest and test disagree</h2>
+  <p class="lede">F1 with 90% bootstrap intervals. On 2014–2020 every added signal made warnings worse than price-only M0; on 2021–2022 M4 beat M0 beyond noise. Eleven stress episodes in total are too few to settle it. The price + season control raised no alerts in 2021–2022, so its test F1 is 0.</p>
+  <div class="legend"><span><i class="key-dot" style="background:var(--series-1)"></i>Backtest 2014–2020 (81 months, 8 episodes)</span><span><i class="key-dot" style="background:var(--series-2)"></i>Test 2021–2022 (22 months, 3 episodes)</span></div>
+  <div class="chart" id="f1"></div>
+  <details><summary>Table</summary><div class="scroll" id="f1-table"></div></details>
+</section>
+<section>
+  <h2>Episodes and lead time</h2>
+  <p class="lede">Each stress episode, whether M0 and M4 warned before it, and how many months ahead.</p>
+  <div class="scroll" id="episodes"></div>
+</section>
+</div>
+
+<div role="tabpanel" id="tab-explorer" aria-labelledby="t-explorer" hidden>
+<section>
+  <h2>Explorer: change the settings, see the results</h2>
+  <p class="lede">Results are recalculated in your browser from the saved month-by-month model scores. Nothing is retrained. The default settings show exactly the reported results.</p>
+  <div class="controls" id="ex-controls"></div>
+  <div class="notice" id="ex-notice" aria-live="polite"></div>
+  <div id="ex-banner"></div>
+  <p class="summary" id="ex-summary"></p>
+  <div class="cards" id="ex-cards"></div>
+  <h3>Price, stress months and alerts</h3>
+  <div class="legend" id="ex-legend1"></div>
+  <div class="chart" id="ex-chart1"></div>
+  <h3>Model scores and the alert line</h3>
+  <p class="lede">A month is an alert when its score is on or above the alert line. With reported cutoffs, each model has its own line, chosen on earlier data (one per backtest year).</p>
+  <div class="legend" id="ex-legend2"></div>
+  <div class="chart" id="ex-chart2"></div>
+  <h3>Episodes</h3>
+  <div class="scroll" id="ex-episodes"></div>
+  <details><summary>Month-by-month table</summary><div class="scroll" id="ex-table"></div></details>
+</section>
+</div>
+
+<div role="tabpanel" id="tab-whatif" aria-labelledby="t-whatif" hidden>
+<section>
+  <h2>What if? Nudge one month's inputs</h2>
+  <p class="lede">Pick a month, then move the sliders. The scores come from the models frozen for the one-time test (trained on 2011–2017, alert lines chosen on 2018–2020). Inputs you don't move keep that month's real values. This shows how the models react; it is not a forecast, and the scores are rankings, not calibrated probabilities.</p>
+  <div class="controls" id="wi-controls"></div>
+  <div class="sliders" id="wi-sliders"></div>
+  <div id="wi-banner"></div>
+  <div class="cards" id="wi-cards"></div>
+  <h3>All stages for this month</h3>
+  <div class="scroll" id="wi-table"></div>
+</section>
+</div>
+
+<div role="tabpanel" id="tab-streaming" aria-labelledby="t-streaming" hidden>
+<section>
+  <h2>Live run</h2>
+  <p class="lede">Follows a replay while it runs: each month appears when Spark scores it, and stress alerts pop up on screen, on any tab (by default from January 2022, the paced part of the demo).</p>
+  <div id="live-panel"></div>
+</section>
+<section>
+  <h2>Replay a saved run</h2>
+  <p class="lede">Plays back the alert log of a run recorded on the team laptop, month by month. Latency is the time from a month's last input reaching Kafka to its alert being written.</p>
+  <div class="controls" id="rp-controls"></div>
+  <div class="counters" id="rp-counters"></div>
+  <div class="feed" id="rp-feed" aria-live="off"></div>
+</section>
+<section>
+  <h2>All streaming runs (Week 6 and Week 7)</h2>
+  <p class="lede">1,864,486 records (daily weather for 232 grid cells, monthly price, annual production and trade) replayed in availability order through Kafka 4.4.0 into Spark Structured Streaming. Targets: ≥100 events/s sustained, ≥250 events/s burst, p95 alert latency ≤10 s.</p>
+  <div class="scroll" id="streaming"></div>
+</section>
+</div>
+
+<div role="tabpanel" id="tab-scale" aria-labelledby="t-scale" hidden>
+<section>
+  <h2>Batch scaling (Week 7)</h2>
+  <p class="lede" id="scaling-lede">Fixed pipeline: daily cell weather → monthly per cell → wheat-weighted national series, with both outputs written as Parquet. Larger workloads are labelled synthetic copies of the real data (benchmark only). Median of 3 timed runs after a warm-up, 2 cores.</p>
+  <div class="controls" id="sc-controls"></div>
+  <div class="cards" id="sc-cards"></div>
+  <div class="grid2">
+    <div><div class="legend"><span><i class="key-line" style="background:var(--series-1)"></i>Runtime (median)</span><span><i class="key-dash"></i>Linear from 1×</span></div><div class="chart" id="scaling-runtime"></div></div>
+    <div><div class="legend"><span><i class="key-line" style="background:var(--series-2)"></i>Throughput</span></div><div class="chart" id="scaling-throughput"></div></div>
+  </div>
+  <details><summary>Table: all scaling runs, including cores, shuffle partitions and memory</summary><div class="scroll" id="scaling-table"></div></details>
+</section>
+<section>
+  <h2>Data at real size (D9)</h2>
+  <p class="lede">The full FAOSTAT archives (all countries and items) read into Spark and stored as year-partitioned Parquet; the same query on CSV and on Parquet. <span id="d9-basis"></span></p>
+  <div class="legend"><span><i class="key-dot" style="background:var(--series-2)"></i>CSV</span><span><i class="key-dot" style="background:var(--series-1)"></i>Parquet</span></div>
+  <div class="chart" id="d9"></div>
+  <details><summary>Table</summary><div class="scroll" id="d9-table"></div></details>
+</section>
+</div>
+
+<p class="note">Sources: FAOSTAT (CC BY 4.0), State Statistics Service of Ukraine, NASA POWER, geoBoundaries. Synthetic data appears only in the labelled scaling benchmark. Repository: <code>feature/workinprogress_v2</code>; details in <code>docs/</code>.</p>
+</main>
+<script id="data" type="application/json">__DATA__</script>
+<script>
+"use strict";
+const D = JSON.parse(document.getElementById("data").textContent);
+const NS = "http://www.w3.org/2000/svg";
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+// Round half to even, as Python does, so numbers match the documents (0.625 -> 0.62).
+const roundEven = (x, d) => { const v = x * 10 ** d; if (Math.abs(v - Math.floor(v) - 0.5) < 1e-9) { const fl = Math.floor(v); return (fl % 2 === 0 ? fl : fl + 1) / 10 ** d; } return Number(x.toFixed(d)); };
+const fmt = (x, d = 2) => (x === null || x === undefined || Number.isNaN(x)) ? "—" : roundEven(Number(x), d).toLocaleString("en-US", {maximumFractionDigits: d, minimumFractionDigits: 0});
+const fmtFixed = (x, d = 2) => (x === null || x === undefined || Number.isNaN(x)) ? "—" : roundEven(Number(x), d).toFixed(d);
+const pct = (x, d = 0) => x === null || x === undefined ? "—" : fmt(x * 100, d) + "%";
+function el(tag, attrs = {}, parent) { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (parent) parent.appendChild(e); return e; }
+function h(tag, text, parent, cls) { const e = document.createElement(tag); if (text !== undefined && text !== null) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
+function table(container, headers, rows) {
+  const t = h("table"); const tr = h("tr", null, h("thead", null, t)); headers.forEach(x => h("th", x, tr));
+  const tb = h("tbody", null, t); rows.forEach(r => { const row = h("tr", null, tb); r.forEach(c => { const td = h("td", null, row); if (c instanceof Node) td.appendChild(c); else td.textContent = c; }); });
+  container.appendChild(t);
+}
+function tooltip(chart) { const t = h("div", null, chart, "tip"); return {
+  show(x, y, title, rows) { t.replaceChildren(); h("div", title, t, "t"); rows.forEach(([color, value, label]) => { const r = h("div", null, t, "r");
+    if (color) { const k = h("i", null, r, "key-line"); k.style.background = color; } h("b", value, r); if (label) h("i", label, r); });
+    const w = chart.clientWidth; t.style.left = Math.min(Math.max(x + 12, 0), w - 190) + "px"; t.style.top = Math.max(y - 10, 0) + "px"; t.style.opacity = 1; },
+  hide() { t.style.opacity = 0; } }; }
+function frame(id, height, margin) {
+  const box = typeof id === "string" ? document.getElementById(id) : id; box.replaceChildren(); const W = Math.max(box.clientWidth, 320);
+  const svg = el("svg", {viewBox: `0 0 ${W} ${height}`, role: "img"}, box);
+  return {box, svg, W, H: height, m: margin, iw: W - margin.l - margin.r, ih: height - margin.t - margin.b};
+}
+function niceTicks(max, n = 4) { const raw = max / n, mag = 10 ** Math.floor(Math.log10(raw)); const step = [1, 2, 2.5, 5, 10].map(s => s * mag).find(s => s >= raw);
+  const top = Math.ceil(max / step - 1e-9) * step; const ticks = []; for (let v = 0; v <= top + 1e-9; v += step) ticks.push(+v.toFixed(10)); return {top, ticks, step}; }
+const mnum = k => (+k.slice(0, 4)) * 12 + (+k.slice(5, 7)) - 1;
+const mkey = n => Math.floor(n / 12) + "-" + String(n % 12 + 1).padStart(2, "0");
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const monthName = k => MONTHS[+k.slice(5, 7) - 1] + " " + k.slice(0, 4);
+function badge(isAlert, parent) { const b = h("span", isAlert ? "▲ Alert" : "– No alert", parent, "badge " + (isAlert ? "alert" : "calm")); return b; }
+function seg(parent, options, value, onChange, label) {
+  const g = h("div", null, parent, "seg"); g.setAttribute("role", "group"); if (label) g.setAttribute("aria-label", label);
+  options.forEach(([v, text]) => { const b = h("button", text, g); b.type = "button"; b.setAttribute("aria-pressed", String(v === value));
+    b.addEventListener("click", () => { g.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", "true"); onChange(v); }); });
+  return { set(v) { [...g.querySelectorAll("button")].forEach((b, i) => b.setAttribute("aria-pressed", String(options[i][0] === v))); } };
+}
+function control(parent, label) { const c = h("div", null, parent, "control"); const l = h("span", label, c); const row = h("div", null, c, "row"); return {c, l, row}; }
+
+// ---------- stages, inputs and reasons in plain words
+const STAGES = ["M0", "M0+season", "M1", "M2", "M3", "M4"];
+const STAGE_NAME = {"M0": "M0 price only", "M0+season": "Price + season (control)", "M1": "M1 + weather", "M2": "M2 + production", "M3": "M3 + trade", "M4": "M4 + interaction"};
+const STAGE_COLOR = {"M0": "--s-m0", "M0+season": "--s-season", "M1": "--s-m1", "M2": "--s-m2", "M3": "--s-m3", "M4": "--s-m4"};
+const INPUT_NAME = {
+  price_real_mom_change: "price change last month", price_real_anomaly_z_12m: "price vs its 12-month normal",
+  precipitation_sum_mm_clim_z: "rainfall vs normal for the month", t2m_max_mean_c_clim_z: "daytime temperature vs normal",
+  t2m_min_mean_c_clim_z: "night temperature vs normal", production_t_yoy_sym_change: "production change",
+  yield_kg_ha_yoy_sym_change: "yield change", area_harvested_ha_yoy_sym_change: "harvested area change",
+  import_quantity_t_yoy_sym_change: "import volume change", export_quantity_t_yoy_sym_change: "export volume change",
+  import_value_1000_usd_yoy_sym_change: "import value change", export_value_1000_usd_yoy_sym_change: "export value change",
+  m4_price_precip_clim_interaction: "price × rainfall together", month_sin: "time of year", month_cos: "time of year", month_season: "time of year"};
+const STAGE_SHORT = {"M0": "M0", "M0+season": "Price+season", "M1": "M1", "M2": "M2", "M3": "M3", "M4": "M4"};
+const symToPct = s => 100 * 2 * s / (2 - s), pctToSym = p => 2 * (p / 100) / (2 + p / 100);
+function valueText(f, v) {
+  if (v === undefined || v === null) return "";
+  if (f === "price_real_mom_change") return (v >= 0 ? "+" : "") + fmt(v * 100, 1) + "%";
+  if (f.endsWith("_yoy_sym_change")) return (v >= 0 ? "+" : "") + fmt(symToPct(v), 0) + "%";
+  if (f.endsWith("_z_12m") || f.endsWith("_clim_z")) return (v >= 0 ? "+" : "") + fmt(v, 1) + " SD";
+  return fmt(v, 2);
+}
+function parseReasons(codes) { return (codes || "").split(" ").filter(Boolean).map(c => { const i = c.lastIndexOf(":"); return {f: c.slice(0, i), c: parseFloat(c.slice(i + 1))}; }); }
+function reasonList(parent, reasons, values) {
+  const ul = h("ul", null, parent, "reasons");
+  reasons.forEach(r => { const v = values ? valueText(r.f, values[r.f]) : "";
+    h("li", (r.c >= 0 ? "↑ raised by " : "↓ lowered by ") + (INPUT_NAME[r.f] || r.f) + (v ? " (" + v + ")" : ""), ul); });
+  return ul;
+}
+
+// ---------- toasts and sound (used by the live view and the replay)
+let audio = null;
+const ensureAudio = () => { try { if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)(); if (audio.state === "suspended") audio.resume(); } catch (e) { audio = null; } };
+document.addEventListener("pointerdown", ensureAudio, {once: false}); document.addEventListener("keydown", ensureAudio, {once: false});
+const prefs = {sound: true, popups: true, popFrom: "2022-01"};
+try { const s = JSON.parse(localStorage.getItem("fs-alert-prefs") || "{}"); Object.assign(prefs, s); } catch (e) { /* storage unavailable */ }
+const savePrefs = () => { try { localStorage.setItem("fs-alert-prefs", JSON.stringify(prefs)); } catch (e) { /* ignore */ } };
+function beep() {
+  if (!prefs.sound || !audio || audio.state !== "running") return;
+  const t = audio.currentTime; [0, 0.18].forEach((dt, i) => { const o = audio.createOscillator(), g = audio.createGain();
+    o.frequency.value = i ? 660 : 880; g.gain.setValueAtTime(0.0001, t + dt); g.gain.exponentialRampToValueAtTime(0.15, t + dt + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dt + 0.15); o.connect(g).connect(audio.destination); o.start(t + dt); o.stop(t + dt + 0.16); });
+}
+function toast(title, body) {
+  if (!prefs.popups) return;
+  const box = document.getElementById("toasts"); const t = h("div", null, box, "toast"); t.setAttribute("role", "status");
+  const head = h("div", null, t, "h"); h("span", title, head); const x = h("button", "×", head); x.setAttribute("aria-label", "Dismiss");
+  x.addEventListener("click", () => t.remove()); body.forEach(line => h("div", line, t, "b"));
+  while (box.children.length > 4) box.firstChild.remove();
+  setTimeout(() => t.remove(), 9000);
+}
+// One pop-up per batch of new alerts: a single month in full, several months summarised.
+function announce(items, source) {
+  const alerted = items.filter(it => Object.values(it.stages).some(a => a.alert));
+  if (!alerted.length) return;
+  if (alerted.length === 1) { const it = alerted[0];
+    const which = Object.entries(it.stages).filter(([, a]) => a.alert);
+    // The pop-up names the input that pushed the score up most (the reason for an alert).
+    const lines = which.map(([s, a]) => { const up = a.reasons.filter(r => r.c > 0).sort((p, q) => q.c - p.c)[0];
+      return s + ": score " + fmtFixed(a.score) + " ≥ alert line " + fmtFixed(a.cutoff) + (up ? " · mainly " + (INPUT_NAME[up.f] || up.f) : ""); });
+    const lat = which.map(([, a]) => a.latency).filter(v => v !== null && v !== undefined);
+    if (lat.length) lines.push("Raised " + fmtFixed(Math.max(...lat), 1) + " s after the month's last input" + (source ? " · " + source : ""));
+    toast("Stress alert: " + monthName(it.month), lines);
+  } else {
+    toast(alerted.length + " stress alerts", [monthName(alerted[0].month) + " to " + monthName(alerted[alerted.length - 1].month) + (source ? " · " + source : "")]);
+  }
+  beep();
+}
+// Month card shared by the live view and the replay.
+function feedItem(it) {
+  const anyAlert = Object.values(it.stages).some(a => a.alert);
+  const d = h("div", null, null, "feeditem" + (anyAlert ? " hasalert" : ""));
+  const m = h("div", monthName(it.month), d, "m");
+  const lat = Object.values(it.stages).map(a => a.latency).filter(v => v !== null && v !== undefined);
+  h("small", lat.length ? fmtFixed(Math.max(...lat), 1) + " s after inputs" : "", m);
+  ["M0", "M4"].forEach(s => { const a = it.stages[s]; const c = h("div", null, d);
+    if (!a) { h("span", s + ": not scored", c, "note"); return; }
+    const top = h("div", null, c); h("b", s + " ", top); badge(a.alert, top);
+    h("div", "score " + fmtFixed(a.score) + " · alert line " + fmtFixed(a.cutoff), c, "note");
+    reasonList(c, a.reasons.slice(0, 2), a.features); });
+  return d;
+}
+
+// ---------- tabs and shareable state (kept in the address after #)
+const rendered = {};
+const RENDER = {overview: renderOverview, explorer: renderExplorer, whatif: renderWhatIf, streaming: renderStreaming, scale: renderScale};
+const hashParams = () => new URLSearchParams(location.hash.slice(1));
+function setHash(updates) { const p = hashParams(); Object.entries(updates).forEach(([k, v]) => v === null || v === undefined ? p.delete(k) : p.set(k, v)); history.replaceState(null, "", "#" + p.toString()); }
+function showTab(id) {
+  if (!RENDER[id]) id = "overview";
+  document.querySelectorAll(".tabs button").forEach(b => { const on = b.dataset.tab === id; b.setAttribute("aria-selected", String(on)); b.tabIndex = on ? 0 : -1; });
+  document.querySelectorAll('[role="tabpanel"]').forEach(p => { p.hidden = p.id !== "tab-" + id; });
+  if (!rendered[id]) { rendered[id] = true; RENDER[id](); }
+  setHash({tab: id});
+}
+document.querySelectorAll(".tabs button").forEach((b, i, all) => {
+  b.addEventListener("click", () => showTab(b.dataset.tab));
+  b.addEventListener("keydown", ev => { if (ev.key === "ArrowRight" || ev.key === "ArrowLeft") { const n = all[(i + (ev.key === "ArrowRight" ? 1 : all.length - 1)) % all.length]; n.focus(); showTab(n.dataset.tab); } });
+});
+document.getElementById("meta").textContent = "Built from committed results · branch feature/workinprogress_v2 · defaults on every tab show the reported results";
+
+// =================================================================== Overview
+function renderOverview() {
+  (function tiles() {
+    const box = document.getElementById("tiles");
+    const m0 = D.headline.find(x => x.stage === "M0"), m4 = D.headline.find(x => x.stage === "M4");
+    const best = D.streaming.find(s => s.run.endsWith("full_max"));
+    const paced = D.streaming.filter(s => s.run.startsWith("laptop") && (s.rate === 100 || s.rate === 250));
+    const items = [
+      [m4 ? fmt(m4.test_f1) + " vs " + fmt(m0.test_f1) : "—", "Test F1, M4 vs M0", "2021–2022, opened once"],
+      [m0 ? fmt(m0.backtest_f1) + " vs " + fmt(m4.backtest_f1) : "—", "Backtest F1, M0 vs M4", "2014–2020, 81 months"],
+      [D.d9 ? (Object.values(D.d9.domains).reduce((a, b) => a + b.rows, 0) / 1e6).toFixed(1) + "M" : "—", "FAOSTAT rows in Spark", "full archives, all countries"],
+      [best ? fmt(best.achieved, 0) + "/s" : "—", "Replay throughput", "full speed, " + (best ? best.machine : "")],
+      [paced.length ? fmt(Math.max(...paced.map(s => s.p95)), 1) + " s" : "—", "Alert latency p95", "at 100 and 250 events/s; target ≤ 10 s"],
+    ];
+    if (D.scaling) { const size = D.scaling.configs.filter(c => c.series === "size"); const big = size.reduce((a, b) => a.factor > b.factor ? a : b);
+      items.push([(big.rows / 1e6).toFixed(0) + "M rows", "Largest batch run", fmt(big.median_s, 1) + " s, " + fmt(big.rows_per_s_median / 1e6, 1) + "M rows/s"]); }
+    items.forEach(([v, k, s]) => { const t = h("div", null, box, "tile"); h("div", v, t, "v"); h("div", k, t, "k"); h("div", s, t, "s"); });
+  })();
+
+  (function timeline() {
+    const data = D.timeline; const f = frame("timeline", 300, {l: 52, r: 12, t: 10, b: 62});
+    const n = data.length, x = i => f.m.l + (i + 0.5) * f.iw / n;
+    const ys = data.map(d => d.price); const lo = Math.floor(Math.min(...ys) / 50) * 50, hi = Math.ceil(Math.max(...ys) / 50) * 50;
+    const priceH = f.ih - 34, y = v => f.m.t + priceH - (v - lo) / (hi - lo) * priceH;
+    data.forEach((d, i) => { if (d.label === 1) el("rect", {x: x(i) - f.iw / n / 2, y: f.m.t, width: f.iw / n, height: priceH, fill: css("--band")}, f.svg); });
+    for (let v = lo; v <= hi; v += 50) { el("line", {x1: f.m.l, x2: f.W - f.m.r, y1: y(v), y2: y(v), class: "gridline"}, f.svg);
+      el("text", {x: f.m.l - 6, y: y(v) + 4, "text-anchor": "end"}, f.svg).textContent = v; }
+    data.forEach((d, i) => { if (d.month.endsWith("-01") && (+d.month.slice(0, 4)) % 2 === 0) el("text", {x: x(i), y: f.H - 40, "text-anchor": "middle"}, f.svg).textContent = d.month.slice(0, 4); });
+    [["2014-01", "backtest →"], ["2021-01", "test →"]].forEach(([m, t]) => { const i = data.findIndex(d => d.month === m);
+      el("line", {x1: x(i) - f.iw / n / 2, x2: x(i) - f.iw / n / 2, y1: f.m.t, y2: f.H - 46, stroke: css("--text-muted"), "stroke-dasharray": "3 3"}, f.svg);
+      el("text", {x: x(i) - f.iw / n / 2 + 4, y: f.m.t + 10}, f.svg).textContent = t; });
+    el("path", {d: data.map((d, i) => (i ? "L" : "M") + x(i) + " " + y(d.price)).join(""), fill: "none", stroke: css("--series-1"), "stroke-width": 2}, f.svg);
+    const rowY = {m0: f.H - 30, m4: f.H - 16};
+    [["m0", "M0", "--series-1"], ["m4", "M4", "--series-2"]].forEach(([k, name, c]) => {
+      el("text", {x: f.m.l - 6, y: rowY[k] + 4, "text-anchor": "end"}, f.svg).textContent = name;
+      data.forEach((d, i) => { if (d[k] && d[k].alert) el("circle", {cx: x(i), cy: rowY[k], r: 3.2, fill: css(c)}, f.svg); }); });
+    const tip = tooltip(f.box), hair = el("line", {y1: f.m.t, y2: f.H - 10, stroke: css("--text-muted"), opacity: 0}, f.svg);
+    const hit = el("rect", {x: f.m.l, y: 0, width: f.iw, height: f.H, fill: "transparent"}, f.svg);
+    const alertText = a => a ? (a.alert ? "alert" : "no alert") + " (" + a.window + ", score " + a.score.toFixed(2) + ")" : "not scored";
+    hit.addEventListener("pointermove", ev => { const r = f.svg.getBoundingClientRect(); const px = (ev.clientX - r.left) * f.W / r.width;
+      const i = Math.min(n - 1, Math.max(0, Math.floor((px - f.m.l) / (f.iw / n)))); const d = data[i];
+      hair.setAttribute("x1", x(i)); hair.setAttribute("x2", x(i)); hair.setAttribute("opacity", 0.6);
+      tip.show(ev.clientX - r.left, ev.clientY - r.top, d.month, [[css("--series-1"), fmt(d.price, 1), "real price"],
+        [null, d.label === 1 ? "yes" : d.label === 0 ? "no" : "unknown", "stress ahead"],
+        [css("--series-1"), alertText(d.m0), "M0"], [css("--series-2"), alertText(d.m4), "M4"]]); });
+    hit.addEventListener("pointerleave", () => { tip.hide(); hair.setAttribute("opacity", 0); });
+    table(document.getElementById("timeline-table"), ["Month", "Real price", "Stress ahead", "M0", "M4"],
+      data.map(d => [d.month, fmt(d.price, 1), d.label === null ? "—" : d.label ? "yes" : "no", d.m0 ? (d.m0.alert ? "alert" : "–") : "", d.m4 ? (d.m4.alert ? "alert" : "–") : ""]));
+  })();
+
+  (function f1() {
+    const rows = D.headline; const f = frame("f1", 60 + rows.length * 44, {l: 170, r: 16, t: 8, b: 30});
+    const x = v => f.m.l + v * f.iw, bandH = f.ih / rows.length;
+    for (let v = 0; v <= 1.0001; v += 0.2) { el("line", {x1: x(v), x2: x(v), y1: f.m.t, y2: f.H - f.m.b, class: "gridline"}, f.svg);
+      el("text", {x: x(v), y: f.H - 12, "text-anchor": "middle"}, f.svg).textContent = v.toFixed(1); }
+    const tip = tooltip(f.box);
+    rows.forEach((r, i) => { const cy = f.m.t + bandH * (i + 0.5);
+      el("text", {x: f.m.l - 10, y: cy + 4, "text-anchor": "end", style: "fill:var(--text-secondary)"}, f.svg).textContent = r.label;
+      [["backtest", -7, "--series-1"], ["test", 7, "--series-2"]].forEach(([k, off, c]) => {
+        const [lo, hi] = r[k + "_f1_ci"], yy = cy + off;
+        el("line", {x1: x(lo), x2: x(hi), y1: yy, y2: yy, stroke: css(c), "stroke-width": 2, "stroke-linecap": "round", opacity: 0.55}, f.svg);
+        el("circle", {cx: x(r[k + "_f1"]), cy: yy, r: 5, fill: css(c), stroke: css("--surface-1"), "stroke-width": 2}, f.svg);
+        if (k === "test" && r.test_f1 === 0 && hi === 0) el("text", {x: x(0) + 10, y: yy + 4}, f.svg).textContent = "no alerts in 2021–2022";
+        const hit = el("rect", {x: x(Math.max(0, lo)) - 8, y: yy - 9, width: Math.max(x(hi) - x(lo), 0) + 16, height: 18, fill: "transparent", tabindex: 0}, f.svg);
+        const show = ev => { const b = f.svg.getBoundingClientRect(); tip.show((ev.clientX || b.left + x(r[k + "_f1"]) * b.width / f.W) - b.left, (ev.clientY || b.top + yy * b.height / f.H) - b.top, r.label + " · " + k,
+          [[css(c), fmt(r[k + "_f1"]), "F1"], [null, fmt(lo) + " to " + fmt(hi), "90% interval"], [null, r[k + "_f1_minus_m0_ci"].map(v => fmt(v)).join(" to "), "F1 − M0 interval"],
+           [null, fmt(r[k + "_false_alarm_rate"]), "false-alarm rate"], [null, r[k + "_episodes"], "episodes caught"]]); };
+        hit.addEventListener("pointermove", show); hit.addEventListener("focus", show);
+        hit.addEventListener("pointerleave", () => tip.hide()); hit.addEventListener("blur", () => tip.hide()); }); });
+    table(document.getElementById("f1-table"), ["Stage", "Backtest F1 (90%)", "F1 − M0", "False alarms", "Episodes", "Test F1 (90%)", "F1 − M0", "False alarms", "Episodes"],
+      rows.map(r => [r.label, fmt(r.backtest_f1) + " (" + r.backtest_f1_ci.map(v => fmt(v)).join("–") + ")", r.backtest_f1_minus_m0_ci.map(v => fmt(v)).join(" to "),
+        fmt(r.backtest_false_alarm_rate), r.backtest_episodes, fmt(r.test_f1) + " (" + r.test_f1_ci.map(v => fmt(v)).join("–") + ")",
+        r.test_f1_minus_m0_ci.map(v => fmt(v)).join(" to "), fmt(r.test_false_alarm_rate), r.test_episodes]));
+  })();
+
+  (function episodes() {
+    const by = {}; D.episodes.forEach(e => { const k = e.window + "|" + (e.first_stress_month || e.episode_start); (by[k] = by[k] || {window: e.window, month: e.first_stress_month || e.episode_start, start: e.episode_start, end: e.episode_end})[e.stage] = e; });
+    const cell = e => e ? (e.detected === "True" ? e.lead_time_months + " mo ahead" : "missed") : "—";
+    table(document.getElementById("episodes"), ["Window", "Episode (stress months ahead)", "First stress month", "M0", "M4"],
+      Object.values(by).sort((a, b) => a.month < b.month ? -1 : 1).map(e => [e.window, e.start + (e.end !== e.start ? " to " + e.end : ""), e.month, cell(e.M0), cell(e.M4)]));
+  })();
+}
+
+// =================================================================== Explorer
+const LABELS = {r10h3: "10% rise within 3 months", r5h3: "5% rise within 3 months", r15h3: "15% rise within 3 months",
+                r10h1: "10% rise within 1 month", r10h6: "10% rise within 6 months"};
+const EX_DEFAULT = {a: "M0", b: "M4", period: "test", label: "r10h3", lag: "2", cut: null};
+const PRICES = D.explorer.prices;
+function confusionOf(labels, alerts) {
+  let tp = 0, fp = 0, fn = 0, tn = 0; labels.forEach((y, i) => { const a = alerts[i]; if (a && y === 1) tp++; else if (a) fp++; else if (y === 1) fn++; else tn++; });
+  const precision = tp + fp ? tp / (tp + fp) : null, recall = tp + fn ? tp / (tp + fn) : null;
+  const f1 = precision !== null && recall !== null && precision + recall ? 2 * precision * recall / (precision + recall) : (tp + fn ? 0 : null);
+  return {tp, fp, fn, tn, precision, recall, f1, fpr: fp + tn ? fp / (fp + tn) : null};
+}
+function firstStress(o, hz, rise) { for (let k = 1; k <= hz; k++) { const key = mkey(mnum(o) + k); if (PRICES[key] !== undefined && PRICES[key] / PRICES[o] - 1 >= rise / 100) return key; } return null; }
+function episodesOf(origins, labels, alerts, hz, rise) {
+  const pairs = origins.map((o, i) => [o, labels[i], alerts[i]]).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+  const runs = []; let prev = null;
+  pairs.forEach(([o, y]) => { if (y !== 1) { prev = null; return; } if (prev !== null && mnum(o) === mnum(prev) + 1) runs[runs.length - 1].push(o); else runs.push([o]); prev = o; });
+  const alerted = new Set(pairs.filter(p => p[2]).map(p => p[0]));
+  return runs.map(run => { const stress = run.map(o => firstStress(o, hz, rise)).filter(Boolean).sort(); const fs = stress[0] || null;
+    const hits = run.filter(o => alerted.has(o)); return {start: run[0], end: run[run.length - 1], first_stress: fs, detected: hits.length > 0,
+      first_alert: hits[0] || null, lead: hits.length && fs ? mnum(fs) - mnum(hits[0]) : null}; });
+}
+function evaluateStage(key, stage, cut) {
+  const set = D.explorer.settings[key]; const rows = set.stages[stage];
+  const origins = rows.map(r => r[0]), labels = rows.map(r => r[1]);
+  const alerts = rows.map(r => cut === null ? r[4] : (r[2] >= cut ? 1 : 0));
+  const c = confusionOf(labels, alerts); const eps = episodesOf(origins, labels, alerts, set.horizon, set.rise);
+  const leads = eps.filter(e => e.detected && e.lead !== null).map(e => e.lead);
+  return {...c, rows, alerts, episodes: eps, detected: eps.filter(e => e.detected).length, n_episodes: eps.length,
+          mean_lead: leads.length ? leads.reduce((a, b) => a + b, 0) / leads.length : null, leads, set};
+}
+window.FS = {evaluateStage, settings: () => Object.keys(D.explorer.settings)};  // used by the automated check
+
+function renderExplorer() {
+  const p = hashParams(); const st = {...EX_DEFAULT};
+  ["a", "b", "period", "label", "lag"].forEach(k => { if (p.get("x" + k)) st[k] = p.get("x" + k); });
+  if (p.get("xcut")) { const v = parseFloat(p.get("xcut")); st.cut = Number.isFinite(v) ? v : null; }
+  if (!STAGES.includes(st.a)) st.a = EX_DEFAULT.a; if (!STAGES.includes(st.b)) st.b = EX_DEFAULT.b;
+  const box = document.getElementById("ex-controls"); let segPeriod, segLag, segCut, slider, readout, notice = document.getElementById("ex-notice");
+  const stageSelect = (parent, key) => { const s = h("select", null, parent); s.setAttribute("aria-label", key === "a" ? "First model" : "Second model");
+    STAGES.forEach(x => { const o = h("option", STAGE_NAME[x], s); o.value = x; }); s.value = st[key]; s.addEventListener("change", () => { st[key] = s.value; update(); }); return s; };
+  const c1 = control(box, "Compare"); const selA = stageSelect(c1.row, "a"); h("span", "vs", c1.row); const selB = stageSelect(c1.row, "b");
+  const c2 = control(box, "Period"); segPeriod = seg(c2.row, [["backtest", "Backtest 2014–2020"], ["test", "Test 2021–2022"]], st.period, v => { st.period = v; update(); }, "Period");
+  const c3 = control(box, "Stress means"); const selL = h("select", null, c3.row); selL.setAttribute("aria-label", "Stress definition");
+  Object.entries(LABELS).forEach(([k, t]) => { const o = h("option", t, selL); o.value = k; }); selL.value = st.label; selL.addEventListener("change", () => { st.label = selL.value; update(); });
+  const c4 = control(box, "Annual data delay"); segLag = seg(c4.row, [["2", "2 years"], ["3", "3 years"]], st.lag, v => { st.lag = v; update(); }, "Annual data delay");
+  const c5 = control(box, "Alert line"); segCut = seg(c5.row, [["reported", "Reported"], ["custom", "My cutoff"]], st.cut === null ? "reported" : "custom", v => {
+    st.cut = v === "reported" ? null : parseFloat(slider.value); update(); }, "Alert line");
+  slider = h("input", null, c5.row); slider.type = "range"; slider.min = "0.02"; slider.max = "0.8"; slider.step = "0.01";
+  slider.setAttribute("aria-label", "Alert cutoff: higher means fewer alerts");
+  readout = h("span", "", c5.row, "readout");
+  const hint = h("span", "← more alerts · fewer alerts →", c5.c, "note");
+  slider.addEventListener("input", () => { st.cut = parseFloat(slider.value); segCut.set("custom"); update(); });
+  const reset = h("button", "Reset to reported settings", box, "btn"); reset.type = "button";
+  reset.addEventListener("click", () => { Object.assign(st, EX_DEFAULT); selA.value = st.a; selB.value = st.b; selL.value = st.label; segPeriod.set(st.period); segLag.set(st.lag); segCut.set("reported"); update(); });
+  let noticeTimer = null;
+  const say = (t) => { notice.textContent = t; clearTimeout(noticeTimer); noticeTimer = setTimeout(() => { notice.textContent = ""; }, 7000); };
+
+  function update() {
+    // Combinations that were never run fall back to the nearest one that was, with a note.
+    if (st.label !== "r10h3" && st.period === "test") { st.period = "backtest"; segPeriod.set("backtest"); say("Other stress definitions were tested on the backtest only (the test was opened once, for the main definition), so the period switched to the backtest."); }
+    if (st.label !== "r10h3" && st.lag === "3") { st.lag = "2"; segLag.set("2"); say("The 3-year delay was run with the main stress definition only, so the delay switched back to 2 years."); }
+    const key = st.period + "|" + st.label + "|" + st.lag;
+    if (!D.explorer.settings[key]) { say("That combination was not run."); return; }
+    const set = D.explorer.settings[key];
+    if (st.cut === null) { const cuts = [...new Set(set.stages[st.a].map(r => r[3]))].sort((p, q) => p - q); slider.value = String(cuts[Math.floor(cuts.length / 2)]); readout.textContent = "reported"; }
+    else { slider.value = String(st.cut); readout.textContent = fmtFixed(st.cut); }
+    setHash({xa: st.a === EX_DEFAULT.a ? null : st.a, xb: st.b === EX_DEFAULT.b ? null : st.b, xperiod: st.period === EX_DEFAULT.period ? null : st.period,
+             xlabel: st.label === EX_DEFAULT.label ? null : st.label, xlag: st.lag === EX_DEFAULT.lag ? null : st.lag, xcut: st.cut === null ? null : fmtFixed(st.cut)});
+    const primary = st.label === "r10h3" && st.lag === "2";
+    const exploring = st.cut !== null || !primary;
+    const banner = document.getElementById("ex-banner"); banner.replaceChildren();
+    const bn = h("div", null, banner, "banner " + (exploring ? "exploring" : "reported"));
+    let text;
+    if (st.cut !== null) text = "Exploring: your own alert line, not a reported result." + (st.period === "test" ? " The reported test used alert lines chosen on 2018–2020 before the test was opened; a line picked while looking at the test is not a fair test." : "");
+    else if (!primary) text = "Reported robustness check, not the headline result: " + (st.label !== "r10h3" ? "stress defined as a " + LABELS[st.label] + "." : "annual statistics usable only three years after their data year.");
+    else if (st.period === "test") text = "Reported result: the one-time test, 2021–2022, with every setting fixed before it was opened.";
+    else text = "Reported result: the 2014–2020 backtest. Each year is scored by models trained on earlier years only.";
+    h("span", text + " ", bn);
+    if (exploring) { const r = h("button", "Reset to reported settings", bn, "link"); r.type = "button"; r.addEventListener("click", () => reset.click()); }
+    const A = evaluateStage(key, st.a, st.cut), B = evaluateStage(key, st.b, st.cut);
+    const RA = st.cut === null ? null : evaluateStage(key, st.a, null), RB = st.cut === null ? null : evaluateStage(key, st.b, null);
+    const desc = (s, r) => STAGE_NAME[s] + " warned of " + r.detected + " of " + r.n_episodes + " episodes with " + r.fp + " false alarm" + (r.fp === 1 ? "" : "s");
+    document.getElementById("ex-summary").textContent = "With these settings, " + desc(st.a, A) + (st.b !== st.a ? "; " + desc(st.b, B) + "." : ".");
+    const cards = document.getElementById("ex-cards"); cards.replaceChildren();
+    [[st.a, A, RA], [st.b, B, RB]].filter((x, i) => i === 0 || st.b !== st.a).forEach(([s, r, rep]) => {
+      const c = h("div", null, cards, "card"); const t = h("div", null, c, "title"); const k = h("i", null, t, "key-dot"); k.style.background = css(STAGE_COLOR[s]); h("span", STAGE_NAME[s], t);
+      const g = h("div", null, c, "metrics");
+      const metric = (label, value, sub) => { const m = h("div", null, g, "metric"); h("div", label, m, "k"); h("div", value, m, "v"); if (sub) h("div", sub, m, "s"); };
+      const was = (v) => rep ? "reported: " + v : null;
+      metric("Episodes warned", r.detected + "/" + r.n_episodes, was(rep && rep.detected + "/" + rep.n_episodes));
+      metric("False alarms", r.fp + " of " + (r.fp + r.tn), (r.fp + r.tn ? pct(r.fpr) + " of calm months" : "") + (rep ? " · reported " + rep.fp : ""));
+      metric("Average warning", r.mean_lead === null ? "—" : fmt(r.mean_lead, 1) + " mo", r.mean_lead === null ? "nothing caught" : "ahead of the stress month" + (rep && rep.mean_lead !== null ? " · reported " + fmt(rep.mean_lead, 1) : ""));
+      metric("F1", fmtFixed(r.f1), "precision " + fmtFixed(r.precision) + " · recall " + fmtFixed(r.recall) + (rep ? " · reported " + fmtFixed(rep.f1) : ""));
+    });
+    drawExplorer(st, A, B);
+  }
+  update();
+}
+function drawExplorer(st, A, B) {
+  const pair = st.b === st.a ? [[st.a, A]] : [[st.a, A], [st.b, B]];
+  const rows = A.rows, n = rows.length;
+  // Legends: identity is never colour alone (row labels in the chart, names in the legend).
+  const lg1 = document.getElementById("ex-legend1"); lg1.replaceChildren();
+  const addKey = (parent, cls, color, text) => { const s = h("span", null, parent); const k = h("i", null, s, cls); if (color) k.style.background = color; s.appendChild(document.createTextNode(text)); };
+  addKey(lg1, "key-line", css("--text-secondary"), "Real price (LCU/t, Dec 2000)"); addKey(lg1, "key-band", null, "Stress ahead (" + LABELS[st.label] + ")");
+  pair.forEach(([s]) => addKey(lg1, "key-dot", css(STAGE_COLOR[s]), STAGE_NAME[s] + " alert"));
+  const lg2 = document.getElementById("ex-legend2"); lg2.replaceChildren();
+  pair.forEach(([s]) => addKey(lg2, "key-line", css(STAGE_COLOR[s]), STAGE_NAME[s] + " score"));
+  const dash = h("span", null, lg2); h("i", null, dash, "key-dash"); dash.appendChild(document.createTextNode(st.cut === null ? "Alert line (reported, per model)" : "Alert line (your cutoff)"));
+
+  const f = frame("ex-chart1", 250, {l: 120, r: 12, t: 10, b: 52 + pair.length * 14});
+  const x = i => f.m.l + (i + 0.5) * f.iw / n;
+  const ps = rows.map(r => PRICES[r[0]]); const lo = Math.floor(Math.min(...ps) / 50) * 50, hi = Math.ceil(Math.max(...ps) / 50) * 50;
+  const priceH = f.ih, y = v => f.m.t + priceH - (v - lo) / (hi - lo) * priceH;
+  rows.forEach((r, i) => { if (r[1] === 1) el("rect", {x: x(i) - f.iw / n / 2, y: f.m.t, width: f.iw / n, height: priceH, fill: css("--band")}, f.svg); });
+  for (let v = lo; v <= hi; v += 50) { el("line", {x1: f.m.l, x2: f.W - f.m.r, y1: y(v), y2: y(v), class: "gridline"}, f.svg); el("text", {x: f.m.l - 6, y: y(v) + 4, "text-anchor": "end"}, f.svg).textContent = v; }
+  const yearTick = (svgF, yy) => rows.forEach((r, i) => { if (r[0].endsWith("-01") || i === 0) el("text", {x: x(i), y: yy, "text-anchor": i === 0 ? "start" : "middle"}, svgF.svg).textContent = r[0].slice(0, 4); });
+  yearTick(f, f.m.t + priceH + 14);
+  el("path", {d: rows.map((r, i) => (i ? "L" : "M") + x(i) + " " + y(PRICES[r[0]])).join(""), fill: "none", stroke: css("--text-secondary"), "stroke-width": 2}, f.svg);
+  pair.forEach(([s, R], j) => { const yy = f.m.t + priceH + 30 + j * 14;
+    el("text", {x: f.m.l - 6, y: yy + 4, "text-anchor": "end"}, f.svg).textContent = STAGE_SHORT[s] + " alerts";
+    R.alerts.forEach((a, i) => { if (a) el("circle", {cx: x(i), cy: yy, r: 4, fill: css(STAGE_COLOR[s]), stroke: css("--surface-1"), "stroke-width": 1.5}, f.svg); }); });
+
+  const g = frame("ex-chart2", 230, {l: 120, r: 12, t: 10, b: 28});
+  const nt = niceTicks(Math.min(1, Math.max(0.3, ...pair.flatMap(([, R]) => R.rows.map(r => r[2])), ...(st.cut !== null ? [st.cut] : [])) * 1.05));
+  const smax = nt.top, ys = v => g.m.t + g.ih - v / smax * g.ih;
+  nt.ticks.forEach(v => { el("line", {x1: g.m.l, x2: g.W - g.m.r, y1: ys(v), y2: ys(v), class: "gridline"}, g.svg); el("text", {x: g.m.l - 6, y: ys(v) + 4, "text-anchor": "end"}, g.svg).textContent = fmtFixed(v); });
+  el("text", {x: 14, y: g.m.t + g.ih / 2, transform: `rotate(-90 14 ${g.m.t + g.ih / 2})`, "text-anchor": "middle"}, g.svg).textContent = "model score";
+  yearTick(g, g.H - 8);
+  rows.forEach((r, i) => { if (r[1] === 1) el("rect", {x: x(i) - g.iw / n / 2, y: g.m.t, width: g.iw / n, height: g.ih, fill: css("--band"), opacity: 0.6}, g.svg); });
+  if (st.cut !== null) { el("line", {x1: g.m.l, x2: g.W - g.m.r, y1: ys(st.cut), y2: ys(st.cut), stroke: css("--text-muted"), "stroke-width": 1.5, "stroke-dasharray": "5 4"}, g.svg);
+    el("text", {x: g.W - g.m.r, y: ys(st.cut) - 5, "text-anchor": "end"}, g.svg).textContent = "your alert line " + fmtFixed(st.cut); }
+  pair.forEach(([s, R]) => { const c = css(STAGE_COLOR[s]);
+    if (st.cut === null) el("path", {d: R.rows.map((r, i) => (i ? "L" : "M") + (x(i) - g.iw / n / 2) + " " + ys(r[3]) + " L" + (x(i) + g.iw / n / 2) + " " + ys(r[3])).join(" "), fill: "none", stroke: c, "stroke-width": 1.5, "stroke-dasharray": "5 4", opacity: 0.8}, g.svg);
+    el("path", {d: R.rows.map((r, i) => (i ? "L" : "M") + x(i) + " " + ys(r[2])).join(""), fill: "none", stroke: c, "stroke-width": 2}, g.svg);
+    R.rows.forEach((r, i) => { if (R.alerts[i]) el("circle", {cx: x(i), cy: ys(r[2]), r: 4, fill: c, stroke: css("--surface-1"), "stroke-width": 1.5}, g.svg); }); });
+  [f, g].forEach(F => { const tip = tooltip(F.box), hair = el("line", {y1: F.m.t, y2: F.H - 10, stroke: css("--text-muted"), opacity: 0}, F.svg);
+    const hit = el("rect", {x: F.m.l, y: 0, width: F.iw, height: F.H, fill: "transparent"}, F.svg);
+    hit.addEventListener("pointermove", ev => { const b = F.svg.getBoundingClientRect(); const px = (ev.clientX - b.left) * F.W / b.width;
+      const i = Math.min(n - 1, Math.max(0, Math.floor((px - F.m.l) / (F.iw / n)))); const r = rows[i];
+      hair.setAttribute("x1", x(i)); hair.setAttribute("x2", x(i)); hair.setAttribute("opacity", 0.6);
+      tip.show(ev.clientX - b.left, ev.clientY - b.top, monthName(r[0]), [[css("--text-secondary"), fmt(PRICES[r[0]], 1), "real price"], [null, r[1] ? "yes" : "no", "stress ahead"],
+        ...pair.map(([s, R]) => [css(STAGE_COLOR[s]), fmtFixed(R.rows[i][2]) + (R.alerts[i] ? " ▲ alert" : " no alert"), s + " (line " + fmtFixed(st.cut === null ? R.rows[i][3] : st.cut) + ")"])]); });
+    hit.addEventListener("pointerleave", () => { tip.hide(); hair.setAttribute("opacity", 0); }); });
+
+  const ep = document.getElementById("ex-episodes"); ep.replaceChildren();
+  const cell = e => e.detected ? (e.lead + " mo ahead (first alert " + e.first_alert + ")") : "missed";
+  table(ep, ["Episode (stress months ahead)", "First stress month", ...pair.map(([s]) => STAGE_NAME[s])],
+    A.episodes.map((e, i) => [e.start + (e.end !== e.start ? " to " + e.end : ""), e.first_stress || "—", ...pair.map(([, R]) => cell(R.episodes[i]))]));
+  const tb = document.getElementById("ex-table"); tb.replaceChildren();
+  table(tb, ["Month", "Real price", "Stress ahead", ...pair.flatMap(([s]) => [s + " score", s + " line", s + " alert"])],
+    rows.map((r, i) => [r[0], fmt(PRICES[r[0]], 1), r[1] ? "yes" : "no", ...pair.flatMap(([, R]) => [fmtFixed(R.rows[i][2], 3), fmtFixed(st.cut === null ? R.rows[i][3] : st.cut, 3), R.alerts[i] ? "alert" : "–"])]));
+}
+
+// =================================================================== What if?
+const WI_INPUTS = [
+  {f: "price_real_mom_change", label: "Price change last month", min: -20, max: 20, step: 0.5, unit: "%", to: v => v / 100, from: x => x * 100, d: 1},
+  {f: "price_real_anomaly_z_12m", label: "Price vs its 12-month normal", min: -3, max: 3, step: 0.1, unit: " SD", to: v => v, from: x => x, d: 1},
+  {f: "precipitation_sum_mm_clim_z", label: "Rainfall vs normal for the month", min: -3, max: 3, step: 0.1, unit: " SD", to: v => v, from: x => x, d: 1},
+  {f: "production_t_yoy_sym_change", label: "Production change (latest annual data)", min: -50, max: 50, step: 1, unit: "%", to: pctToSym, from: symToPct, d: 0},
+  {f: "import_quantity_t_yoy_sym_change", label: "Import volume change (latest annual data)", min: -90, max: 400, step: 5, unit: "%", to: pctToSym, from: symToPct, d: 0},
+];
+function scoreModel(model, x) {
+  const contrib = Object.entries(model.coefficients).map(([f, c]) => ({f, c: c * x[f]}));
+  const eta = model.intercept + contrib.reduce((a, b) => a + b.c, 0);
+  const score = 1 / (1 + Math.exp(-eta));
+  // Calendar month enters as two terms (sine and cosine); report them together as "time of year".
+  const merged = contrib.filter(r => r.f !== "month_sin" && r.f !== "month_cos");
+  const season = contrib.filter(r => r.f === "month_sin" || r.f === "month_cos");
+  if (season.length) merged.push({f: "month_season", c: season.reduce((a, b) => a + b.c, 0)});
+  return {score, cutoff: model.cutoff, alert: score >= model.cutoff, reasons: merged.sort((a, b) => Math.abs(b.c) - Math.abs(a.c)).slice(0, 3)};
+}
+function renderWhatIf() {
+  const W = D.whatif; const box = document.getElementById("wi-controls");
+  if (!W) { box.textContent = "Model inputs not exported yet: run scripts/export_week8_dashboard_features.py, then rebuild."; return; }
+  const months = Object.keys(W.features).sort();
+  const st = {month: hashParams().get("wmonth") && W.features[hashParams().get("wmonth")] ? hashParams().get("wmonth") : (W.features["2022-01"] ? "2022-01" : months[months.length - 1]), over: {}};
+  const c1 = control(box, "Month"); const sel = h("select", null, c1.row); sel.setAttribute("aria-label", "Month");
+  months.slice().reverse().forEach(m => { const o = h("option", monthName(m) + (m >= "2021-01" ? " (test)" : m >= "2018-01" ? " (validation)" : " (training)"), sel); o.value = m; });
+  sel.value = st.month; sel.addEventListener("change", () => { st.month = sel.value; st.over = {}; build(); });
+  const reset = h("button", "Reset to this month's values", box, "btn"); reset.type = "button"; reset.addEventListener("click", () => { st.over = {}; build(); });
+  const sliders = document.getElementById("wi-sliders");
+  function inputs() { const x = {...W.features[st.month], ...st.over};
+    x.m4_price_precip_clim_interaction = x.price_real_anomaly_z_12m * x.precipitation_sum_mm_clim_z; return x; }
+  function build() {
+    sliders.replaceChildren(); setHash({wmonth: st.month});
+    WI_INPUTS.forEach(spec => { const actual = W.features[st.month][spec.f]; const s = h("div", null, sliders, "slider");
+      const id = "wi-" + spec.f; const l = h("label", spec.label, s); l.htmlFor = id; const out = h("span", "", s, "readout");
+      const r = h("input", null, s); r.type = "range"; r.id = id; r.min = spec.min; r.max = spec.max; r.step = spec.step;
+      const cur = () => st.over[spec.f] !== undefined ? st.over[spec.f] : actual;
+      const sync = () => { const v = spec.from(cur()); r.value = String(Math.min(spec.max, Math.max(spec.min, v))); out.textContent = (v >= 0 ? "+" : "") + fmt(v, spec.d) + spec.unit; };
+      const was = h("div", null, s, "was"); h("span", "this month: " + ((spec.from(actual) >= 0 ? "+" : "") + fmt(spec.from(actual), spec.d) + spec.unit), was);
+      const back = h("button", "reset", was); back.type = "button"; back.addEventListener("click", () => { delete st.over[spec.f]; sync(); draw(); });
+      r.addEventListener("input", () => { st.over[spec.f] = spec.to(parseFloat(r.value)); sync(); draw(); }); sync(); });
+    draw();
+  }
+  function draw() {
+    const x = inputs(); const changed = Object.keys(st.over).length > 0;
+    const bn = document.getElementById("wi-banner"); bn.replaceChildren();
+    const out = W.outcome[st.month];
+    const b = h("div", null, bn, "banner " + (changed ? "exploring" : "reported"));
+    h("span", (changed ? "Changed inputs: scores below are hypothetical. " : "This month's real inputs: scores match the reported model scores. ") +
+      "What happened next: " + (out === 1 ? "the real price rose ≥10% within 3 months." : out === 0 ? "no ≥10% rise within 3 months." : "not known yet."), b);
+    const cards = document.getElementById("wi-cards"); cards.replaceChildren();
+    ["M0", "M4"].forEach(s => { const r = scoreModel(W.models[s], x); const base = scoreModel(W.models[s], W.features[st.month]);
+      const c = h("div", null, cards, "card"); const t = h("div", null, c, "title"); const k = h("i", null, t, "key-dot"); k.style.background = css(STAGE_COLOR[s]); h("span", STAGE_NAME[s], t); badge(r.alert, t);
+      h("div", "Score " + fmtFixed(r.score) + " · alert line " + fmtFixed(r.cutoff) + (changed ? " · with real inputs " + fmtFixed(base.score) : ""), c, "note");
+      const bar = h("div", null, c, "bar"); bar.setAttribute("role", "img"); bar.setAttribute("aria-label", "Score " + fmtFixed(r.score) + ", alert line " + fmtFixed(r.cutoff));
+      const fill = h("div", null, bar, "fill"); fill.style.width = (r.score * 100) + "%"; fill.style.background = css(STAGE_COLOR[s]);
+      const cut = h("div", null, bar, "cut"); cut.style.left = "calc(" + (r.cutoff * 100) + "% - 1px)";
+      h("div", "Biggest influences this month:", c, "note"); reasonList(c, r.reasons, x); });
+    const tb = document.getElementById("wi-table"); tb.replaceChildren();
+    table(tb, ["Stage", "Score", "Alert line", "Result", "Biggest influence"], STAGES.map(s => { const r = scoreModel(W.models[s], x); const span = document.createElement("span"); badge(r.alert, span);
+      return [STAGE_NAME[s], fmtFixed(r.score), fmtFixed(r.cutoff), span, (r.reasons[0].c >= 0 ? "↑ " : "↓ ") + (INPUT_NAME[r.reasons[0].f] || r.reasons[0].f)]; }));
+  }
+  build();
+}
+
+// =================================================================== Streaming: live view
+const live = {served: location.protocol.startsWith("http"), state: "off", run: null, started: null, seen: new Set(), months: {}, status: null, error: null, last: null};
+function liveMonths() { return Object.values(live.months).sort((a, b) => a.month < b.month ? 1 : -1); }
+function ingestLive(payload) {
+  if (!payload.run) { live.state = "wait"; live.run = null; live.message = payload.message; return []; }
+  if (payload.run !== live.run || payload.run_started !== live.started) { live.run = payload.run; live.started = payload.run_started; live.seen = new Set(); live.months = {}; }
+  live.state = payload.finished ? "done" : "on"; live.status = payload.status; live.workRoot = payload.work_root;
+  const fresh = {};
+  payload.alerts.forEach(a => { const id = a.model_stage + "|" + a.observation_month; if (live.seen.has(id)) return; live.seen.add(id);
+    const it = live.months[a.observation_month] = live.months[a.observation_month] || {month: a.observation_month, stages: {}};
+    it.stages[a.model_stage] = {score: a.score, cutoff: a.cutoff, alert: !!a.alert, latency: a.latency_s, reasons: (a.reason_codes || []).map(c => parseReasons(c)[0]), features: a.features};
+    fresh[a.observation_month] = it; });
+  return Object.values(fresh).sort((a, b) => a.month < b.month ? -1 : 1);
+}
+async function pollLive() {
+  try {
+    const r = await fetch("live?t=" + Date.now(), {cache: "no-store"}); if (!r.ok) throw new Error("HTTP " + r.status);
+    const fresh = ingestLive(await r.json()); live.error = null; live.last = new Date();
+    // Pop-ups for the paced demo window by default, so the fast warm-up years do not flood the screen.
+    const pop = fresh.filter(it => !prefs.popFrom || it.month >= prefs.popFrom);
+    if (pop.length && live.primed) announce(pop, "live: " + live.run);
+    live.primed = true;  // alerts already on disk when the page opens are listed, not popped up
+  } catch (e) { live.error = String(e.message || e); live.state = "error"; }
+  if (rendered.streaming) drawLive();
+}
+if (live.served) { pollLive(); setInterval(pollLive, 1000); }
+// The controls are built once; each poll only updates the status line, the counters and the feed.
+const liveUI = {};
+function buildLive() {
+  const box = document.getElementById("live-panel"); box.replaceChildren();
+  if (!live.served) {
+    const d = h("div", null, box, "howto");
+    h("div", "The live view needs the small local server that comes with the project. In the project folder, either double-click RUN_DEMO_LIVE.bat (starts the server and the demo together) or run:", d);
+    h("code", "py -3.12 scripts\\serve_dashboard.py --work-root C:\\fs6", h("p", null, d));
+    h("div", "It opens this page at http://127.0.0.1:8765 and follows whichever replay is running in C:\\fs6. This copy is opened as a file, so it shows saved results only.", d);
+    return;
+  }
+  const top = h("div", null, box, "controls");
+  const s = h("span", null, top, "status"); liveUI.dot = h("i", null, s, "dot"); liveUI.text = h("span", "Connecting…", s);
+  const chk = (label, key) => { const l = h("label", null, top); l.style.display = "inline-flex"; l.style.gap = "6px"; l.style.alignItems = "center"; l.style.fontSize = "13px";
+    const i = h("input", null, l); i.type = "checkbox"; i.checked = prefs[key]; i.addEventListener("change", () => { prefs[key] = i.checked; savePrefs(); ensureAudio(); drawLive(); }); l.appendChild(document.createTextNode(label)); };
+  chk("Pop-ups", "popups"); chk("Sound", "sound");
+  const pf = h("label", "for ", top); pf.style.fontSize = "13px"; const ps = h("select", null, pf); ps.setAttribute("aria-label", "Pop-ups for which months");
+  [["2022-01", "alerts from Jan 2022 (demo window)"], ["", "every alert"]].forEach(([v, t]) => { const o = h("option", t, ps); o.value = v; }); ps.value = prefs.popFrom || "";
+  ps.addEventListener("change", () => { prefs.popFrom = ps.value; savePrefs(); });
+  const test = h("button", "Test pop-up", top, "btn"); test.type = "button";
+  test.addEventListener("click", () => { ensureAudio(); setTimeout(() => announce([{month: "2022-03", stages: {M4: {score: 0.41, cutoff: 0.19, alert: true, latency: 2.1, reasons: [{f: "price_real_mom_change", c: 0.5}]}}}], "test only"), 60); });
+  liveUI.soundNote = h("span", "", top, "note");
+  liveUI.counters = h("div", null, box, "counters"); liveUI.where = h("div", "", box, "note");
+  liveUI.feed = h("div", null, box, "feed"); liveUI.feedKey = null;
+}
+function drawLive() {
+  if (!live.served || !liveUI.text) return;
+  liveUI.dot.className = "dot " + (live.state === "on" ? "on" : live.state === "wait" ? "wait" : "");
+  liveUI.text.textContent = live.state === "on" ? "Connected: run “" + live.run + "” is running" : live.state === "done" ? "Run “" + live.run + "” finished" :
+    live.state === "wait" ? (live.message || "Waiting for a run to start") : live.state === "error" ? "Server not reachable (" + live.error + "). Is serve_dashboard.py still running?" : "Connecting…";
+  liveUI.soundNote.textContent = prefs.sound && (!audio || audio.state !== "running") ? "Click anywhere on the page once to allow sound." : "";
+  const items = liveMonths(), st = live.status || {};
+  const alertsN = items.reduce((a, it) => a + Object.values(it.stages).filter(x => x.alert).length, 0);
+  const latest = items.length ? Object.values(items[0].stages).map(a => a.latency).find(v => v !== null && v !== undefined) : undefined;
+  liveUI.counters.replaceChildren();
+  [["Records processed", st.rows !== undefined ? fmt(st.rows, 0) : "—"], ["Months scored", fmt(items.length, 0)], ["Alerts raised", fmt(alertsN, 0)],
+   ["Latest latency", latest !== undefined ? fmtFixed(latest, 1) + " s" : "—"], ["Restarts", st.restarts !== undefined ? st.restarts : "—"]]
+    .forEach(([k, v]) => { const s2 = h("span", k + ": ", liveUI.counters); h("b", v, s2); });
+  liveUI.where.textContent = live.workRoot ? "Reading " + live.workRoot + (live.last ? " · updated " + live.last.toLocaleTimeString() : "") : "";
+  const key = live.run + "|" + live.started + "|" + live.seen.size;
+  if (key !== liveUI.feedKey) { liveUI.feedKey = key; liveUI.feed.replaceChildren();
+    items.slice(0, 36).forEach(it => liveUI.feed.appendChild(feedItem(it)));
+    if (!items.length) h("div", "Months appear here as Spark scores them.", liveUI.feed, "note"); }
+}
+
+// =================================================================== Streaming: replay a saved run
+function renderStreaming() {
+  buildLive(); drawLive();
+  const runs = D.replay; const box = document.getElementById("rp-controls");
+  if (!runs.length) { box.textContent = "No saved laptop runs found."; }
+  else {
+    const st = {run: runs[0].id, speed: 3, i: 0, timer: null};
+    const c1 = control(box, "Run"); const sel = h("select", null, c1.row); sel.setAttribute("aria-label", "Saved run");
+    runs.forEach(r => { const o = h("option", r.label + " (" + r.machine + ")", sel); o.value = r.id; });
+    const c2 = control(box, "Speed"); seg(c2.row, [[1, "1 month/s"], [3, "3 months/s"], [10, "10 months/s"]], st.speed, v => { st.speed = v; if (st.timer) { stop(); play(); } }, "Playback speed");
+    const c3 = control(box, ""); const playB = h("button", "▶ Play", c3.row, "btn primary"); playB.type = "button"; const resetB = h("button", "Reset", c3.row, "btn"); resetB.type = "button";
+    const feed = document.getElementById("rp-feed"), counters = document.getElementById("rp-counters");
+    const months = () => { const run = runs.find(r => r.id === st.run); const by = {};
+      run.alerts.forEach(([m, s, score, cutoff, alert, latency, reasons]) => { (by[m] = by[m] || {month: m, stages: {}}).stages[s] = {score, cutoff, alert: !!alert, latency, reasons: parseReasons(reasons)}; });
+      return {run, list: Object.values(by).sort((a, b) => a.month < b.month ? -1 : 1)}; };
+    function count() { const {run, list} = months(); counters.replaceChildren(); const shown = list.slice(0, st.i);
+      const win = shown.filter(it => !run.measure_from || it.month >= run.measure_from);
+      const lat = win.flatMap(it => Object.values(it.stages).map(a => a.latency)).filter(v => v !== null).sort((a, b) => a - b);
+      const p95 = lat.length ? lat[Math.min(lat.length - 1, Math.ceil(0.95 * lat.length) - 1)] : null;
+      [["Months played", st.i + " of " + list.length], ["Alerts", fmt(shown.reduce((a, it) => a + Object.values(it.stages).filter(x => x.alert).length, 0), 0)],
+       ["Latency p95 so far" + (run.measure_from ? " (from " + monthName(run.measure_from) + ")" : ""), p95 === null ? "—" : fmtFixed(p95, 1) + " s (target ≤ 10 s)"],
+       ["Whole run", "p95 " + fmtFixed(run.p95, 1) + " s · checks " + (run.checks ? "✓ all passed" : "✗ failed") + (run.restarts ? " · " + run.restarts + " restart" : "")]]
+        .forEach(([k, v]) => { const s = h("span", k + ": ", counters); h("b", v, s); }); }
+    function step() { const {run, list} = months(); if (st.i >= list.length) { stop(); playB.textContent = "▶ Play again"; return; }
+      const it = list[st.i++]; feed.prepend(feedItem(it)); while (feed.children.length > 40) feed.lastChild.remove();
+      if (!run.measure_from || it.month >= run.measure_from) announce([it], "replay: " + run.label); count(); }
+    function play() { ensureAudio(); const {list} = months(); if (st.i >= list.length) { st.i = 0; feed.replaceChildren(); }
+      st.timer = setInterval(step, 1000 / st.speed); playB.textContent = "❚❚ Pause"; }
+    function stop() { clearInterval(st.timer); st.timer = null; playB.textContent = "▶ Play"; }
+    playB.addEventListener("click", () => st.timer ? stop() : play());
+    resetB.addEventListener("click", () => { stop(); st.i = 0; feed.replaceChildren(); count(); });
+    sel.addEventListener("change", () => { stop(); st.run = sel.value; st.i = 0; feed.replaceChildren(); count(); });
+    h("div", "Pop-ups during playback are shown for the measured window only (from the paced part of the run), so the fast warm-up does not flood the screen.", c3.c, "note");
+    count();
+  }
+  const ok = v => { const s = document.createElement("span"); s.textContent = v ? "✓ all passed" : "✗ failed"; s.className = v ? "ok" : "bad"; return s; };
+  table(document.getElementById("streaming"), ["Run", "Machine", "Partitions", "Trigger", "Offered rate", "Messages", "Achieved", "Consumer", "Latency p50 / p95", "Restarts", "Checks"],
+    D.streaming.map(s => [s.run, s.machine, s.partitions, s.trigger + " s", s.rate === "max" ? "max" : fmt(s.rate, 0) + "/s", fmt(s.messages, 0), fmt(s.achieved, 1) + "/s", s.consumer ? fmt(s.consumer, 1) + "/s" : "—",
+      fmtFixed(s.p50, 1) + " / " + fmtFixed(s.p95, 1) + " s", s.restarts, ok(s.checks)]));
+}
+
+// =================================================================== Scale
+function renderScale() {
+  if (!D.scaling) { document.getElementById("scaling-lede").textContent += " Not run yet."; }
+  else {
+    const size = D.scaling.configs.filter(c => c.series === "size").sort((a, b) => a.factor - b.factor);
+    const st = {factor: size[size.length - 1].factor};
+    const box = document.getElementById("sc-controls"); const c1 = control(box, "Workload size");
+    seg(c1.row, size.map(s => [s.factor, s.factor + "×"]), st.factor, v => { st.factor = v; cards(); charts(); }, "Workload size");
+    h("span", "1× is the real grid weather (1.86M daily rows); larger sizes are labelled synthetic copies.", c1.c, "note");
+    function cards() { const s = size.find(x => x.factor === st.factor), base = size[0]; const box2 = document.getElementById("sc-cards"); box2.replaceChildren();
+      [["Daily weather rows", fmt(s.rows / 1e6, 1) + "M", s.factor + "× the real data"], ["Median runtime", fmt(s.median_s, 1) + " s", "range " + fmt(s.min_s, 1) + "–" + fmt(s.max_s, 1) + " s over 3 runs"],
+       ["Throughput", fmt(s.rows_per_s_median / 1e6, 2) + "M rows/s", "2 cores, 8 shuffle partitions"],
+       (() => { const i = size.indexOf(s); if (!i) return ["Step from the previous size", "—", "smallest size: mostly Spark start-up and fixed costs"];
+          const prev = size[i - 1]; return ["Step from " + prev.factor + "×", fmt(s.rows / prev.rows, 1) + "× data → " + fmt(s.median_s / prev.median_s, 1) + "× time",
+            s.median_s / prev.median_s > 0.8 * s.rows / prev.rows ? "close to proportional: fixed costs no longer dominate" : "less than proportional: fixed costs still dominate"]; })()]
+        .forEach(([k, v, sub]) => { const c = h("div", null, box2, "card"); h("div", k, c, "note"); const vv = h("div", v, c); vv.style.fontSize = "22px"; vv.style.fontWeight = "650"; h("div", sub, c, "note"); }); }
+    const logChart = (id, yKey, yLabel, color, ref, yLog) => {
+      const f = frame(id, 260, {l: 56, r: 16, t: 10, b: 40}); const xs = size.map(s => s.rows / 1e6), ys = size.map(yKey);
+      const lx0 = Math.log10(Math.min(...xs) / 1.5), lx1 = Math.log10(Math.max(...xs) * 1.5); const x = v => f.m.l + (Math.log10(v) - lx0) / (lx1 - lx0) * f.iw;
+      const all = [...ys, ...(ref ? ref : [])]; const nt = niceTicks(Math.max(...all) * 1.05); const ymax = yLog ? Math.max(...all) * 1.6 : nt.top, ymin = yLog ? Math.min(...all) / 1.6 : 0;
+      const y = yLog ? v => f.m.t + f.ih - (Math.log10(v) - Math.log10(ymin)) / (Math.log10(ymax) - Math.log10(ymin)) * f.ih : v => f.m.t + f.ih - v / ymax * f.ih;
+      const ticks = yLog ? [1, 2, 5, 10, 20, 50, 100, 200, 500].filter(v => v >= ymin && v <= ymax) : nt.ticks;
+      ticks.forEach(v => { el("line", {x1: f.m.l, x2: f.W - f.m.r, y1: y(v), y2: y(v), class: "gridline"}, f.svg);
+        el("text", {x: f.m.l - 6, y: y(v) + 4, "text-anchor": "end"}, f.svg).textContent = fmt(v, v < 10 ? 1 : 0); });
+      el("text", {x: 12, y: f.m.t + f.ih / 2, transform: `rotate(-90 12 ${f.m.t + f.ih / 2})`, "text-anchor": "middle"}, f.svg).textContent = yLabel;
+      size.forEach((s, i) => el("text", {x: x(xs[i]), y: f.H - 22, "text-anchor": "middle"}, f.svg).textContent = fmt(xs[i], 1) + "M");
+      el("text", {x: f.m.l + f.iw / 2, y: f.H - 4, "text-anchor": "middle"}, f.svg).textContent = "daily weather rows (log scale)";
+      if (ref) el("path", {d: ref.map((v, i) => (i ? "L" : "M") + x(xs[i]) + " " + y(Math.min(v, ymax))).join(""), fill: "none", stroke: css("--text-muted"), "stroke-dasharray": "4 4", "stroke-width": 1.5}, f.svg);
+      el("path", {d: ys.map((v, i) => (i ? "L" : "M") + x(xs[i]) + " " + y(v)).join(""), fill: "none", stroke: css(color), "stroke-width": 2}, f.svg);
+      const tip = tooltip(f.box);
+      size.forEach((s, i) => { const sel = s.factor === st.factor;
+        if (sel) el("circle", {cx: x(xs[i]), cy: y(ys[i]), r: 9, fill: "none", stroke: css(color), "stroke-width": 2}, f.svg);
+        el("circle", {cx: x(xs[i]), cy: y(ys[i]), r: 4.5, fill: css(color), stroke: css("--surface-1"), "stroke-width": 2}, f.svg);
+        const hit = el("circle", {cx: x(xs[i]), cy: y(ys[i]), r: 14, fill: "transparent", tabindex: 0}, f.svg);
+        const show = ev => { const b = f.svg.getBoundingClientRect(); tip.show((ev.clientX || b.left) - b.left, (ev.clientY || b.top) - b.top, s.factor + "× (" + fmt(s.rows, 0) + " rows)",
+          [[css("--series-1"), fmt(s.median_s, 2) + " s", "median runtime"], [css("--series-2"), fmt(s.rows_per_s_median / 1e6, 2) + "M rows/s", "throughput"], [null, fmt(s.min_s, 2) + "–" + fmt(s.max_s, 2) + " s", "range of repeats"]]); };
+        hit.addEventListener("pointermove", show); hit.addEventListener("focus", show); hit.addEventListener("pointerleave", () => tip.hide()); hit.addEventListener("blur", () => tip.hide()); });
+    };
+    function charts() {
+      logChart("scaling-runtime", s => s.median_s, "seconds (log scale)", "--series-1", size.map(s => size[0].median_s * s.factor / size[0].factor), true);
+      logChart("scaling-throughput", s => s.rows_per_s_median / 1e6, "million rows / s", "--series-2", null);
+    }
+    cards(); charts();
+    table(document.getElementById("scaling-table"), ["Series", "Workload", "Cores", "Shuffle partitions", "Driver memory", "Median s", "Min–max s", "Rows/s", "Shuffle MB", "Spill MB", "Output check"],
+      D.scaling.configs.filter(c => c.series !== "faostat_query").map(c => [c.series, c.factor + "× (" + fmt(c.rows / 1e6, 1) + "M)", c.master, c.shuffle_partitions, c.driver_memory,
+        fmt(c.median_s, 2), fmt(c.min_s, 2) + "–" + fmt(c.max_s, 2), fmt(c.rows_per_s_median, 0), fmt(c.shuffle_write_mb, 1), fmt(c.spilled_mb, 1), c.rows_ok && c.series0_matches_d9b ? "✓" : "—"]));
+  }
+  (function d9() {
+    if (!D.d9) return; const names = {QCL: "Production", TCL: "Trade", PP: "Prices"};
+    document.getElementById("d9-basis").textContent = "Timing basis: " + D.d9.basis + ".";
+    const rows = Object.entries(D.d9.domains); const f = frame("d9", 220, {l: 96, r: 60, t: 8, b: 28});
+    const max = Math.max(...rows.map(([, v]) => v.query_csv_s)) * 1.1; const x = v => f.m.l + v / max * f.iw; const band = f.ih / rows.length;
+    const tip = tooltip(f.box);
+    rows.forEach(([k, v], i) => { const y0 = f.m.t + i * band;
+      el("text", {x: f.m.l - 8, y: y0 + band / 2 + 4, "text-anchor": "end", style: "fill:var(--text-secondary)"}, f.svg).textContent = names[k];
+      [["query_csv_s", "--series-2", "CSV", 0], ["query_parquet_s", "--series-1", "Parquet", 1]].forEach(([key, c, label, j]) => {
+        const y = y0 + 8 + j * (band / 2 - 4), w = Math.max(x(v[key]) - f.m.l, 2);
+        el("rect", {x: f.m.l, y, width: w, height: band / 2 - 10, rx: 3, fill: css(c)}, f.svg);
+        el("text", {x: f.m.l + w + 6, y: y + (band / 2 - 10) / 2 + 4}, f.svg).textContent = fmt(v[key], 2) + " s";
+        const hit = el("rect", {x: f.m.l, y: y - 2, width: Math.max(w, 30) + 40, height: band / 2 - 6, fill: "transparent", tabindex: 0}, f.svg);
+        const show = ev => { const b = f.svg.getBoundingClientRect(); tip.show((ev.clientX || b.left) - b.left, (ev.clientY || b.top) - b.top, names[k] + " · " + label,
+          [[css(c), fmt(v[key], 2) + " s", "same query"], [null, fmt(v.rows / 1e6, 1) + "M", "rows"]]); };
+        hit.addEventListener("pointermove", show); hit.addEventListener("focus", show); hit.addEventListener("pointerleave", () => tip.hide()); hit.addEventListener("blur", () => tip.hide()); }); });
+    table(document.getElementById("d9-table"), ["Domain", "Rows", "CSV query s", "Parquet query s", "Speed-up"],
+      rows.map(([k, v]) => [names[k], fmt(v.rows, 0), fmt(v.query_csv_s, 2), fmt(v.query_parquet_s, 2), fmt(v.query_csv_s / v.query_parquet_s, 1) + "×"]));
+  })();
+}
+
+showTab(hashParams().get("tab") || "overview");
+</script>
+</body>
+</html>

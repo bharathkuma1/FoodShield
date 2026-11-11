@@ -1,0 +1,39 @@
+{
+  "pipeline": "d9b_grid_weather",
+  "generated_utc": "2026-11-07T09:10:42.826443+00:00",
+  "cells": 232,
+  "daily_rows": 1864120,
+  "cell_months": 61248,
+  "months": 264,
+  "timings": {
+    "read_and_count_daily_seconds": 2.77,
+    "aggregate_seconds": 8.32
+  },
+  "comparison": {
+    "precipitation_sum_mm": {
+      "months": 264,
+      "correlation_with_24_point_series": 0.9988,
+      "correlation_after_removing_calendar_month_means": 0.9986,
+      "mean_absolute_difference": 0.817,
+      "mean_24_point": 46.815,
+      "mean_grid": 47.166
+    },
+    "t2m_max_mean_c": {
+      "months": 264,
+      "correlation_with_24_point_series": 1.0,
+      "correlation_after_removing_calendar_month_means": 0.9998,
+      "mean_absolute_difference": 0.164,
+      "mean_24_point": 14.239,
+      "mean_grid": 14.078
+    },
+    "t2m_min_mean_c": {
+      "months": 264,
+      "correlation_with_24_point_series": 1.0,
+      "correlation_after_removing_calendar_month_means": 0.9998,
+      "mean_absolute_difference": 0.138,
+      "mean_24_point": 4.518,
+      "mean_grid": 4.655
+    }
+  },
+  "output": "nasa_power_grid_wheat_weighted_monthly.csv"
+}

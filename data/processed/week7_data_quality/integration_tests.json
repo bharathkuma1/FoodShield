@@ -1,0 +1,10 @@
+{
+ "run_utc": "2026-11-07",
+ "command": "python -m unittest tests.test_integration -v",
+ "result": "OK",
+ "tests": 2,
+ "seconds": 48.3,
+ "as_of_test": "features at the moment each of 156 months closes == features after all 1,864,486 records (exact)",
+ "streaming_equals_batch": "all 13 corrected features from the streaming monitor == Spark batch pipeline features, every month (tolerance 1e-9)",
+ "machine": "Claude workspace, Linux, 2 cores"
+}

@@ -1,0 +1,208 @@
+{
+  "generated_utc": "2026-11-07T15:29:07.450890+00:00",
+  "sources": {
+    "price_real_monthly": {
+      "file": "data/processed/week4_ukraine_wheat_farmgate_realprice_candidate.csv",
+      "first": "2010-01",
+      "last": "2023-01",
+      "count": 157,
+      "unique": 157,
+      "missing_values": 0,
+      "producer_price_flags": {
+        "A": 157
+      },
+      "cpi_release": [
+        "14.10.2026"
+      ]
+    },
+    "weather_24_point_monthly": {
+      "file": "data/processed/week4_ukraine_weather_wheat_area_weighted_monthly.csv",
+      "first": "2001-01",
+      "last": "2022-12",
+      "count": 264,
+      "unique": 264,
+      "missing_values": 0,
+      "months_with_weight_covered_below_1": []
+    },
+    "weather_grid_daily": {
+      "rows": 1864120,
+      "cells": 232,
+      "blank_values": {
+        "prectotcorr_mm": 0,
+        "t2m_max_c": 0,
+        "t2m_min_c": 0
+      }
+    },
+    "faostat_qcl_extract": {
+      "rows": 99,
+      "years": [
+        1992,
+        2024
+      ],
+      "flags_since_2005": {
+        "A": 60
+      },
+      "missing_values": 0
+    },
+    "faostat_tcl_extract": {
+      "rows": 132,
+      "years": [
+        1992,
+        2024
+      ],
+      "flags_since_2005": {
+        "A": 80
+      },
+      "missing_values": 0
+    },
+    "sssu_wheat_area_by_oblast": {
+      "rows": 175,
+      "oblasts": 25,
+      "years": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021
+      ],
+      "obs_flags": {
+        "(none)": 175
+      }
+    }
+  },
+  "feature_missing_months": {
+    "price_real_mom_change": {
+      "count": 1,
+      "first": [
+        "2010-01"
+      ],
+      "last": [
+        "2010-01"
+      ]
+    },
+    "price_real_anomaly_z_12m": {
+      "count": 12,
+      "first": [
+        "2010-01",
+        "2010-02",
+        "2010-03"
+      ],
+      "last": [
+        "2010-10",
+        "2010-11",
+        "2010-12"
+      ]
+    },
+    "precipitation_sum_mm_clim_z": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "t2m_max_mean_c_clim_z": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "t2m_min_mean_c_clim_z": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "production_t_yoy_sym_change": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "yield_kg_ha_yoy_sym_change": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "area_harvested_ha_yoy_sym_change": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "import_quantity_t_yoy_sym_change": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "export_quantity_t_yoy_sym_change": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "import_value_1000_usd_yoy_sym_change": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "export_value_1000_usd_yoy_sym_change": {
+      "count": 0,
+      "first": [],
+      "last": []
+    },
+    "m4_price_precip_clim_interaction": {
+      "count": 12,
+      "first": [
+        "2010-01",
+        "2010-02",
+        "2010-03"
+      ],
+      "last": [
+        "2010-10",
+        "2010-11",
+        "2010-12"
+      ]
+    }
+  },
+  "ablation_support": {
+    "common_origins": 117,
+    "first": "2011-01",
+    "last": "2020-09",
+    "splits": {
+      "train 2011-2017 (purged)": {
+        "origins": 81,
+        "stress_months": 23
+      },
+      "validation 2018-2020 (purged)": {
+        "origins": 33,
+        "stress_months": 10
+      },
+      "backtest 2014-2020": {
+        "origins": 81,
+        "stress_months": 24
+      }
+    },
+    "stress_months_by_year": {
+      "2011": 3,
+      "2012": 3,
+      "2013": 3,
+      "2014": 6,
+      "2015": 5,
+      "2016": 3,
+      "2018": 2,
+      "2019": 2,
+      "2020": 6
+    }
+  },
+  "checks": {
+    "annual_values_available_two_years_after_data_year": true,
+    "backtest_labels_end_by_2020_12": true,
+    "common_origin_count_matches_week5": true,
+    "integration_tests": {
+      "run_utc": "2026-11-07",
+      "command": "python -m unittest tests.test_integration -v",
+      "result": "OK",
+      "tests": 2,
+      "seconds": 48.3,
+      "as_of_test": "features at the moment each of 156 months closes == features after all 1,864,486 records (exact)",
+      "streaming_equals_batch": "all 13 corrected features from the streaming monitor == Spark batch pipeline features, every month (tolerance 1e-9)",
+      "machine": "Claude workspace, Linux, 2 cores"
+    }
+  },
+  "feature_completeness_file": "feature_completeness_by_year.csv"
+}

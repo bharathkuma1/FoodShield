@@ -1,0 +1,363 @@
+{
+  "pipeline": "week4_m0_rolling_origin_backtest",
+  "generated_utc": "2026-11-06T17:45:31.447546+00:00",
+  "status": "Real-data evidence on pre-test origins only; target, split and model settings remain review needed.",
+  "config": "configs/week4_v2.local.json",
+  "origin_set": "M4_features_complete",
+  "target": {
+    "label_rule_id": "realrise_10pct_futuremax_3m",
+    "forecast_horizon_months": 3,
+    "minimum_real_price_rise_pct": 10,
+    "review_needed": true
+  },
+  "holdout_guard": "Labels require the full outcome window to end by 2020-12; no 2021-2022 outcome is used.",
+  "design": "Expanding window. Train on origins whose outcome window ends by December of the year before the test year; choose the alert cutoff by F1 on the training origins; score the test-year origins once.",
+  "estimator": "Spark MLlib binomial LogisticRegression, standardization on, L2 regParam 0.1, maxIter 100 (same as M0).",
+  "folds": [
+    {
+      "test_year": 2014,
+      "train_origins": 30,
+      "train_positives": 4,
+      "train_window": [
+        "2011-02",
+        "2013-09"
+      ],
+      "test_window": [
+        "2014-02",
+        "2014-12"
+      ],
+      "coefficients": {
+        "price_real_mom_change": 0.13137962549653462,
+        "price_real_anomaly_z_12m": -0.23686162551500112
+      },
+      "intercept": -1.7829860416208851,
+      "alert_cutoff_from_training": 0.17392854906081368,
+      "test": {
+        "threshold": 0.17392854906081368,
+        "n": 11,
+        "positives": 5,
+        "alerts": 0,
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 5,
+        "true_negative": 6,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "false_positive_rate": 0.0
+      },
+      "test_auc": 0.8
+    },
+    {
+      "test_year": 2015,
+      "train_origins": 41,
+      "train_positives": 9,
+      "train_window": [
+        "2011-02",
+        "2014-09"
+      ],
+      "test_window": [
+        "2015-02",
+        "2015-12"
+      ],
+      "coefficients": {
+        "price_real_mom_change": 3.3732228168765137,
+        "price_real_anomaly_z_12m": -0.38249018237283683
+      },
+      "intercept": -1.1360676330955894,
+      "alert_cutoff_from_training": 0.2270569596936225,
+      "test": {
+        "threshold": 0.2270569596936225,
+        "n": 11,
+        "positives": 4,
+        "alerts": 7,
+        "true_positive": 4,
+        "false_positive": 3,
+        "false_negative": 0,
+        "true_negative": 4,
+        "precision": 0.5714285714285714,
+        "recall": 1.0,
+        "f1": 0.7272727272727273,
+        "false_positive_rate": 0.42857142857142855
+      },
+      "test_auc": 0.75
+    },
+    {
+      "test_year": 2016,
+      "skipped": "no eligible origins in this year"
+    },
+    {
+      "test_year": 2017,
+      "train_origins": 55,
+      "train_positives": 16,
+      "train_window": [
+        "2011-02",
+        "2015-12"
+      ],
+      "test_window": [
+        "2017-02",
+        "2017-12"
+      ],
+      "coefficients": {
+        "price_real_mom_change": 5.2555670400667625,
+        "price_real_anomaly_z_12m": -0.43402480820693595
+      },
+      "intercept": -0.7734005823757876,
+      "alert_cutoff_from_training": 0.2867423797238293,
+      "test": {
+        "threshold": 0.2867423797238293,
+        "n": 11,
+        "positives": 0,
+        "alerts": 6,
+        "true_positive": 0,
+        "false_positive": 6,
+        "false_negative": 0,
+        "true_negative": 5,
+        "precision": 0.0,
+        "recall": null,
+        "f1": null,
+        "false_positive_rate": 0.5454545454545454
+      },
+      "test_auc": null
+    },
+    {
+      "test_year": 2018,
+      "train_origins": 63,
+      "train_positives": 16,
+      "train_window": [
+        "2011-02",
+        "2017-09"
+      ],
+      "test_window": [
+        "2018-02",
+        "2018-12"
+      ],
+      "coefficients": {
+        "price_real_mom_change": 5.565184999384087,
+        "price_real_anomaly_z_12m": -0.4191352787986042
+      },
+      "intercept": -0.9670098966695647,
+      "alert_cutoff_from_training": 0.2473469344345519,
+      "test": {
+        "threshold": 0.2473469344345519,
+        "n": 11,
+        "positives": 2,
+        "alerts": 2,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0,
+        "true_negative": 9,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "false_positive_rate": 0.0
+      },
+      "test_auc": 1.0
+    },
+    {
+      "test_year": 2019,
+      "train_origins": 74,
+      "train_positives": 17,
+      "train_window": [
+        "2011-02",
+        "2018-09"
+      ],
+      "test_window": [
+        "2019-02",
+        "2019-12"
+      ],
+      "coefficients": {
+        "price_real_mom_change": 4.403209976659986,
+        "price_real_anomaly_z_12m": -0.42385942331393794
+      },
+      "intercept": -1.0980691370171216,
+      "alert_cutoff_from_training": 0.22703880163489176,
+      "test": {
+        "threshold": 0.22703880163489176,
+        "n": 11,
+        "positives": 2,
+        "alerts": 9,
+        "true_positive": 2,
+        "false_positive": 7,
+        "false_negative": 0,
+        "true_negative": 2,
+        "precision": 0.2222222222222222,
+        "recall": 1.0,
+        "f1": 0.3636363636363636,
+        "false_positive_rate": 0.7777777777777778
+      },
+      "test_auc": 0.3333333333333333
+    },
+    {
+      "test_year": 2020,
+      "train_origins": 85,
+      "train_positives": 18,
+      "train_window": [
+        "2011-02",
+        "2019-09"
+      ],
+      "test_window": [
+        "2020-02",
+        "2020-09"
+      ],
+      "coefficients": {
+        "price_real_mom_change": 4.112378009920116,
+        "price_real_anomaly_z_12m": -0.29966011108286733
+      },
+      "intercept": -1.2538304173576797,
+      "alert_cutoff_from_training": 0.20399226573818385,
+      "test": {
+        "threshold": 0.20399226573818385,
+        "n": 8,
+        "positives": 5,
+        "alerts": 2,
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 3,
+        "true_negative": 3,
+        "precision": 1.0,
+        "recall": 0.4,
+        "f1": 0.5714285714285715,
+        "false_positive_rate": 0.0
+      },
+      "test_auc": 0.9333333333333333
+    }
+  ],
+  "pooled_out_of_sample": {
+    "threshold": "per-fold cutoff chosen on that fold's training origins",
+    "n": 63,
+    "positives": 18,
+    "alerts": 26,
+    "true_positive": 10,
+    "false_positive": 16,
+    "false_negative": 8,
+    "true_negative": 29,
+    "precision": 0.38461538461538464,
+    "recall": 0.5555555555555556,
+    "f1": 0.4545454545454546,
+    "false_positive_rate": 0.35555555555555557,
+    "origins": 63,
+    "test_years": [
+      2014,
+      2015,
+      2017,
+      2018,
+      2019,
+      2020
+    ],
+    "mean_fold_auc": 0.7633333333333334,
+    "folds_with_auc": 5,
+    "pooled_score_auc_not_comparable": 0.49135802469135803,
+    "auc_note": "Use mean_fold_auc. Each fold has its own refitted model, so raw scores are not on a common scale across folds and the pooled-score AUC understates within-year ranking."
+  },
+  "baselines_on_same_origins": {
+    "always_alert": {
+      "threshold": 0.5,
+      "n": 63,
+      "positives": 18,
+      "alerts": 63,
+      "true_positive": 18,
+      "false_positive": 45,
+      "false_negative": 0,
+      "true_negative": 0,
+      "precision": 0.2857142857142857,
+      "recall": 1.0,
+      "f1": 0.4444444444444445,
+      "false_positive_rate": 1.0
+    },
+    "momentum_rule_alert_if_real_price_rose_last_month": {
+      "threshold": 0.5,
+      "n": 63,
+      "positives": 18,
+      "alerts": 32,
+      "true_positive": 11,
+      "false_positive": 21,
+      "false_negative": 7,
+      "true_negative": 24,
+      "precision": 0.34375,
+      "recall": 0.6111111111111112,
+      "f1": 0.44000000000000006,
+      "false_positive_rate": 0.4666666666666667
+    }
+  },
+  "episodes": [
+    {
+      "episode_start": "2014-02",
+      "episode_end": "2014-03",
+      "positive_origins": 2,
+      "first_stress_month": "2014-04",
+      "detected": false,
+      "first_alert": null,
+      "lead_time_months": null
+    },
+    {
+      "episode_start": "2014-10",
+      "episode_end": "2014-12",
+      "positive_origins": 3,
+      "first_stress_month": "2015-01",
+      "detected": false,
+      "first_alert": null,
+      "lead_time_months": null
+    },
+    {
+      "episode_start": "2015-09",
+      "episode_end": "2015-12",
+      "positive_origins": 4,
+      "first_stress_month": "2015-12",
+      "detected": true,
+      "first_alert": "2015-09",
+      "lead_time_months": 3
+    },
+    {
+      "episode_start": "2018-07",
+      "episode_end": "2018-07",
+      "positive_origins": 1,
+      "first_stress_month": "2018-08",
+      "detected": true,
+      "first_alert": "2018-07",
+      "lead_time_months": 1
+    },
+    {
+      "episode_start": "2018-12",
+      "episode_end": "2018-12",
+      "positive_origins": 1,
+      "first_stress_month": "2019-02",
+      "detected": true,
+      "first_alert": "2018-12",
+      "lead_time_months": 2
+    },
+    {
+      "episode_start": "2019-11",
+      "episode_end": "2019-12",
+      "positive_origins": 2,
+      "first_stress_month": "2020-02",
+      "detected": true,
+      "first_alert": "2019-11",
+      "lead_time_months": 3
+    },
+    {
+      "episode_start": "2020-02",
+      "episode_end": "2020-03",
+      "positive_origins": 2,
+      "first_stress_month": "2020-04",
+      "detected": true,
+      "first_alert": "2020-02",
+      "lead_time_months": 2
+    },
+    {
+      "episode_start": "2020-07",
+      "episode_end": "2020-09",
+      "positive_origins": 3,
+      "first_stress_month": "2020-09",
+      "detected": true,
+      "first_alert": "2020-08",
+      "lead_time_months": 1
+    }
+  ],
+  "episodes_detected": "6 of 8",
+  "limits": [
+    "Small sample: each fold has at most 11 origins and some test years have no or few stress months.",
+    "The alert cutoff is chosen on training origins, so it is not tuned to the test year.",
+    "Outcome uses the same FAOSTAT price series as the M0 inputs, strictly after each origin."
+  ]
+}

@@ -1,6 +1,8 @@
 # FoodShield team responsibilities across eight weeks
 
-**Status snapshot:** Week 4 handoff.
+**Status snapshot:** percentages as of the Week 4 snapshot; Week 4 and 5 status text updated after the Week 5 test. Owners should review the V2 evidence and set the Week 4 and 5 percentages together.
+
+**Working mode from Week 6 (D14):** Claude does the work of all four workstreams in one shared place, and the whole team reviews it together. The owners below remain responsible for reviewing and accepting their workstream.
 
 **Allocation status:** The current owner mapping for all eight weeks is the agreed working default. As directed by the project lead, update it when a change is explicitly called out. This agreement covers workstream ownership; the progress percentages below separately track documented deliverables.
 
@@ -28,10 +30,10 @@ Percentages indicate the workstream evidence currently present in this repositor
 | 1 | 100% | 100% | 100% | 100% | Feasibility handoffs documented. |
 | 2 | 100% | 100% | 100% | 100% | Local ETL outputs and owner deliverables documented. |
 | 3 | 100% | 100% | 100% | 100% | Spark feature build, real Week 2 monthly/as-of integration, coverage profile, and hand-reviewed synthetic lag/anomaly plus real annual-availability examples are documented. Local rights-bound data remains ignored; shared teammate review is pending. See `WEEK3_TASK_ASSIGNMENTS.md` and `WEEK3_FEATURES.md`. |
-| 4 | 80% | 95% | 55% | 65% | In progress; selected-source Spark features and M0 training/validation calibration run successfully. The target and candidate split are working choices marked review needed; final-test labels remain untouched. Overall Week 4 progress: **74%** (mean, rounded). |
-| 5 | 0% | 0% | 0% | 0% | Planned; depends on Week 3 features and Week 4 protocol. |
-| 6 | 0% | 0% | 0% | 0% | Planned; depends on processed event contract. |
-| 7 | 0% | 0% | 0% | 0% | Planned; depends on model and replay outputs. |
+| 4 | 80% | 95% | 55% | 65% | Week 4 snapshot (mean **74%**). **Update (V2):** the target, horizon, split, M0 baseline, weighted weather, annual lag and test rule were confirmed as D1–D9, and a rolling-origin backtest was added (`WEEK4_REVIEW_V2.md`). Most of the "Remaining" items below are now covered; owners to confirm and update the percentages. |
+| 5 | — | — | — | — | Implementation and pre-test evidence present on `feature/workinprogress_v2` (`WEEK5_ABLATION.md`); owners to review their stage (M1 Jyoti, M2 Abhijith, M3/M4 Naman, M0 reference Bharath) before percentages are set. Real test opened once, in Week 5 (`FINAL_TEST_RESULTS.md`). |
+| 6 | — | — | — | — | Built by Claude for all four workstreams (D14): replay records (Bharath), the Structured Streaming input and state path (Abhijith), alert fields and reason codes (Jyoti), and the Kafka topics and replay run (Naman). Checked in the workspace and on the team laptop (every check passed). See `WEEK6_STREAMING.md`. Owners review at the joint review. |
+| 7 | — | — | — | — | Built by Claude for all four workstreams (D14): M0–M4 metrics and lead time (Bharath), data quality and as-of checks (Abhijith), batch scaling series (Jyoti), streaming throughput and latency series (Naman). See `WEEK7_*.md`; owners review at the joint review. |
 | 8 | 0% | 0% | 0% | 0% | Planned; depends on reviewed results and reproducible demo. |
 
 ### Week 4 percentage basis

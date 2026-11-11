@@ -1,6 +1,8 @@
 # Week 4 evaluation protocol: open draft
 
-**Status:** The project lead selected the 3-month/10% real-price-rise rule as the current working choice; mark it **review needed** and revise if team review warrants. The candidate chronological split and M0 alert-threshold method also remain review items. A bounded Spark selected-source feature build and training/validation M0 calibration now run successfully. Final-test labels and scores remain untouched.
+> **Update (after the Week 5 test):** the "review needed" choices below were confirmed unchanged as D1–D4, with D5–D9 added (`DECISIONS.md`, `WEEK4_REVIEW_V2.md`). The M1–M4 protocol was frozen and the real 2021–2022 test was opened once (`WEEK5_ABLATION.md`, `FINAL_TEST_RESULTS.md`). The text below is kept as the Week 4 record.
+
+**Status (Week 4, before the review):** The project lead selected the 3-month/10% real-price-rise rule as the current working choice; mark it **review needed** and revise if team review warrants. The candidate chronological split and M0 alert-threshold method also remain review items. A bounded Spark selected-source feature build and training/validation M0 calibration now run successfully. Final-test labels and scores remain untouched.
 
 ## What timeframe is currently available?
 
@@ -106,6 +108,17 @@ The run produced no final-test labels or predictions. The working target, candid
 The experiment runner takes the selected price file, Week 2 country/commodity source configuration, annual-signal availability lag, eligibility and label files, model settings, target ID, and chronological split from configuration. Price currency, unit, source, element code, and deflator metadata are configured too. This makes the analysis pipeline reusable for one selected country–commodity series at a time. It does **not** mean changing a country or commodity code alone is sufficient: the replacement needs matching, quality-profiled producer-price and CPI-adjusted monthly data, compatible weather/production/trade inputs and identifiers, an eligibility table and labels, and a justified time split. The current config and evidence remain Ukraine wheat; the project’s approved wheat analysis scope is unchanged.
 
 Project-wide candidate feature groups and the data model are documented in [`ARCHITECTURE.md`](ARCHITECTURE.md). The selected price source and deflator are FAOSTAT producer prices and SSSU CPI. The current target, horizon, alert-threshold procedure, and date split are working choices marked review needed. Do not claim final-test performance until the review is complete and the held-out period is evaluated once.
+
+## V2 additions (Week 4, review needed)
+
+`feature/workinprogress_v2` adds, without changing any working choice above:
+
+- a rolling-origin backtest of M0 on real 2014–2020 origins (63 out-of-sample months, 8 episodes; F1 0.45, mean per-year AUC 0.76; barely above always-alert and momentum baselines on common origins);
+- a wheat-area-weighted 24-oblast weather series for M1–M4 (`configs/week4_v2.local.json`), with eligibility counts and the M0 result unchanged;
+- FAO release-date evidence on the annual availability lag;
+- a synthetic, demo-only 2021–2022 showcase.
+
+Evidence and the decisions to confirm (D1–D8) are in [`WEEK4_REVIEW_V2.md`](WEEK4_REVIEW_V2.md). The real 2021–2022 test labels remain unopened.
 
 ## Current implementation status and next item
 

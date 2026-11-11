@@ -1,0 +1,144 @@
+{
+  "pipeline": "week6_kafka_spark_streaming_replay",
+  "run": "laptop_paced_100",
+  "generated_utc": "2026-11-09T18:09:02.941997+00:00",
+  "settings": {
+    "rate_events_per_s": 100.0,
+    "measure_from": "2022-01-01",
+    "until": null,
+    "replay_from": "2011-01-01",
+    "duplicate_fraction": 0.0,
+    "kill_consumer_after_batches": 0,
+    "trigger_seconds": 1,
+    "max_offsets_per_trigger": 200000,
+    "dedupe_watermark": "45 days",
+    "topics": {
+      "observations": {
+        "name": "foodshield.observations",
+        "partitions": 3
+      },
+      "alerts": {
+        "name": "foodshield.alerts",
+        "partitions": 1
+      }
+    },
+    "spark": {
+      "kafka_jars_dir": "Kafka",
+      "master": "local[2]",
+      "driver_memory": "1g",
+      "shuffle_partitions": 4
+    }
+  },
+  "machine": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "cpu_count": 16,
+    "python": "3.12.7",
+    "pyspark": "4.3.0",
+    "java": "openjdk version \"21.0.13\" 2026-10-20 LTS",
+    "kafka": "kafka_2.13-4.4.0"
+  },
+  "producer": {
+    "messages_sent": 1017324,
+    "unique_records": {
+      "annual": 91,
+      "price_monthly": 145,
+      "weather_daily": 1017088
+    },
+    "unique_total": 1017324,
+    "duplicates_sent": 0,
+    "seconds": 994.853,
+    "overall_events_per_s": 1022.6,
+    "offered_rate_events_per_s": 100.0,
+    "measured_window": {
+      "first_send_epoch": 1794246872.4367988,
+      "first_available_at": "2022-01-01T00:00:00Z",
+      "messages": 84939,
+      "seconds": 849.382,
+      "achieved_events_per_s": 100.0,
+      "last_send_epoch": 1794247721.81833,
+      "consumer_processed_rows": 108058,
+      "consumer_events_per_s": 126.8,
+      "max_consumer_lag_records": 9986,
+      "max_consumer_lag_seconds_at_rate": 99.9
+    }
+  },
+  "consumer": {
+    "batches": 626,
+    "kafka_input_rows": 1017324,
+    "processed_rows": {
+      "weather_daily": 1017088,
+      "price_monthly": 145,
+      "annual": 91
+    },
+    "processed_total": 1017324,
+    "restarts": [],
+    "redelivered_batches_skipped": 0,
+    "months_evaluated": 144,
+    "monitor_counters": {
+      "weather_rows": 1017088,
+      "price_rows": 145,
+      "annual_rows": 91,
+      "day_overlaps": 0
+    }
+  },
+  "alerts": {
+    "unique": 217,
+    "reference": 217,
+    "alerts_raised": 142,
+    "max_abs_score_difference_vs_reference": 1.1102230246251565e-16,
+    "kafka_alert_topic": {
+      "messages": 217,
+      "unique_alert_ids": 217
+    }
+  },
+  "weather_max_abs_difference_vs_d9b_batch": 4.962280169706901e-05,
+  "frozen_test_cross_check_2021_01_to_2022_10": {
+    "M0": {
+      "test_months": 22,
+      "compared": 22,
+      "max_abs_score_difference": 3.3306690738754696e-16,
+      "alerts_agree": 22
+    },
+    "M4": {
+      "test_months": 22,
+      "compared": 22,
+      "max_abs_score_difference": 0.013093147454102227,
+      "alerts_agree": 21
+    }
+  },
+  "measured_window": {
+    "first_send_epoch": 1794246872.4367988,
+    "first_available_at": "2022-01-01T00:00:00Z",
+    "messages": 84939,
+    "seconds": 849.382,
+    "achieved_events_per_s": 100.0,
+    "last_send_epoch": 1794247721.81833,
+    "consumer_processed_rows": 108058,
+    "consumer_events_per_s": 126.8,
+    "max_consumer_lag_records": 9986,
+    "max_consumer_lag_seconds_at_rate": 99.9
+  },
+  "alert_latency": {
+    "months": 13,
+    "p50_s": 2.398984909057617,
+    "p95_s": 2.9185768604278564,
+    "max_s": 2.972796678543091
+  },
+  "targets": {
+    "sustained_events_per_s": 100,
+    "burst_events_per_s": 250,
+    "alert_latency_p95_s": 10
+  },
+  "checks": {
+    "every_unique_record_processed_once": true,
+    "duplicates_removed": true,
+    "streamed_alerts_equal_offline_reference": true,
+    "streamed_weather_equals_d9b_batch_within_csv_rounding": true,
+    "m0_scores_equal_frozen_test": true,
+    "kafka_alert_topic_has_every_alert": true,
+    "offered_rate_achieved": true,
+    "alert_latency_p95_within_target": true
+  },
+  "all_checks_passed": true,
+  "note": "Engineering demonstration (D12). Alerts for 2011-2020 are in-sample for the frozen models; the replay adds no test evidence."
+}

@@ -1,0 +1,1876 @@
+{
+ "purpose": "D9-B: NASA POWER native-grid cells (MERRA-2, 0.5 x 0.625 degrees) whose centre lies inside one of the 24 wheat oblasts. Each oblast's SSSU wheat-area weight (2015-2020 share) is split equally across its cells.",
+ "grid": "MERRA-2 native grid used by NASA POWER: cell centres at latitude -90 + 0.5*i and longitude -180 + 0.625*j",
+ "boundaries": "geoBoundaries gbOpen UKR ADM1, SHA-256 b2f9f4ad2e9be5888523219c0bb46a24332ead16b46305409098048fd361a2d6",
+ "weights_source": "configs/week4_weather_oblasts.json + data/raw/sssu_ukraine_wheat_harvested_area_by_oblast_2026-11.csv",
+ "assumption": "Wheat is spread evenly across cells within an oblast (no sub-oblast crop map is used).",
+ "nasa_power": {
+  "parameters": [
+   "PRECTOTCORR",
+   "T2M_MAX",
+   "T2M_MIN"
+  ],
+  "community": "AG",
+  "start": "2001-01-01",
+  "end": "2022-12-31",
+  "time_standard": "UTC"
+ },
+ "cells": [
+  {
+   "cell_id": "r271_c334",
+   "latitude": 45.5,
+   "longitude": 28.75,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r271_c335",
+   "latitude": 45.5,
+   "longitude": 29.375,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r271_c336",
+   "latitude": 45.5,
+   "longitude": 30.0,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r272_c335",
+   "latitude": 46.0,
+   "longitude": 29.375,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r272_c336",
+   "latitude": 46.0,
+   "longitude": 30.0,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r272_c337",
+   "latitude": 46.0,
+   "longitude": 30.625,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r272_c339",
+   "latitude": 46.0,
+   "longitude": 31.875,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r272_c340",
+   "latitude": 46.0,
+   "longitude": 32.5,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r272_c341",
+   "latitude": 46.0,
+   "longitude": 33.125,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r272_c344",
+   "latitude": 46.0,
+   "longitude": 35.0,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r273_c336",
+   "latitude": 46.5,
+   "longitude": 30.0,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r273_c337",
+   "latitude": 46.5,
+   "longitude": 30.625,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r273_c338",
+   "latitude": 46.5,
+   "longitude": 31.25,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r273_c339",
+   "latitude": 46.5,
+   "longitude": 31.875,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r273_c340",
+   "latitude": 46.5,
+   "longitude": 32.5,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r273_c341",
+   "latitude": 46.5,
+   "longitude": 33.125,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r273_c342",
+   "latitude": 46.5,
+   "longitude": 33.75,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r273_c343",
+   "latitude": 46.5,
+   "longitude": 34.375,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r273_c344",
+   "latitude": 46.5,
+   "longitude": 35.0,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r273_c345",
+   "latitude": 46.5,
+   "longitude": 35.625,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r273_c346",
+   "latitude": 46.5,
+   "longitude": 36.25,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r273_c347",
+   "latitude": 46.5,
+   "longitude": 36.875,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r274_c336",
+   "latitude": 47.0,
+   "longitude": 30.0,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r274_c337",
+   "latitude": 47.0,
+   "longitude": 30.625,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r274_c338",
+   "latitude": 47.0,
+   "longitude": 31.25,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r274_c339",
+   "latitude": 47.0,
+   "longitude": 31.875,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r274_c340",
+   "latitude": 47.0,
+   "longitude": 32.5,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r274_c341",
+   "latitude": 47.0,
+   "longitude": 33.125,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r274_c342",
+   "latitude": 47.0,
+   "longitude": 33.75,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r274_c343",
+   "latitude": 47.0,
+   "longitude": 34.375,
+   "katottg": "UA65000000000030969",
+   "oblast": "Khersonska",
+   "weight": 0.00588867
+  },
+  {
+   "cell_id": "r274_c344",
+   "latitude": 47.0,
+   "longitude": 35.0,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r274_c345",
+   "latitude": 47.0,
+   "longitude": 35.625,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r274_c346",
+   "latitude": 47.0,
+   "longitude": 36.25,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r274_c347",
+   "latitude": 47.0,
+   "longitude": 36.875,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r274_c348",
+   "latitude": 47.0,
+   "longitude": 37.5,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r274_c349",
+   "latitude": 47.0,
+   "longitude": 38.125,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r275_c335",
+   "latitude": 47.5,
+   "longitude": 29.375,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r275_c336",
+   "latitude": 47.5,
+   "longitude": 30.0,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r275_c337",
+   "latitude": 47.5,
+   "longitude": 30.625,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r275_c338",
+   "latitude": 47.5,
+   "longitude": 31.25,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r275_c339",
+   "latitude": 47.5,
+   "longitude": 31.875,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r275_c340",
+   "latitude": 47.5,
+   "longitude": 32.5,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r275_c341",
+   "latitude": 47.5,
+   "longitude": 33.125,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r275_c342",
+   "latitude": 47.5,
+   "longitude": 33.75,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r275_c343",
+   "latitude": 47.5,
+   "longitude": 34.375,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r275_c344",
+   "latitude": 47.5,
+   "longitude": 35.0,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r275_c345",
+   "latitude": 47.5,
+   "longitude": 35.625,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r275_c346",
+   "latitude": 47.5,
+   "longitude": 36.25,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r275_c347",
+   "latitude": 47.5,
+   "longitude": 36.875,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r275_c348",
+   "latitude": 47.5,
+   "longitude": 37.5,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r275_c349",
+   "latitude": 47.5,
+   "longitude": 38.125,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r276_c326",
+   "latitude": 48.0,
+   "longitude": 23.75,
+   "katottg": "UA21000000000011690",
+   "oblast": "Zakarpatska",
+   "weight": 0.00088477
+  },
+  {
+   "cell_id": "r276_c327",
+   "latitude": 48.0,
+   "longitude": 24.375,
+   "katottg": "UA21000000000011690",
+   "oblast": "Zakarpatska",
+   "weight": 0.00088477
+  },
+  {
+   "cell_id": "r276_c328",
+   "latitude": 48.0,
+   "longitude": 25.0,
+   "katottg": "UA73000000000044923",
+   "oblast": "Chernivetska",
+   "weight": 0.00132817
+  },
+  {
+   "cell_id": "r276_c329",
+   "latitude": 48.0,
+   "longitude": 25.625,
+   "katottg": "UA73000000000044923",
+   "oblast": "Chernivetska",
+   "weight": 0.00132817
+  },
+  {
+   "cell_id": "r276_c335",
+   "latitude": 48.0,
+   "longitude": 29.375,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r276_c336",
+   "latitude": 48.0,
+   "longitude": 30.0,
+   "katottg": "UA51000000000030770",
+   "oblast": "Odeska",
+   "weight": 0.00599766
+  },
+  {
+   "cell_id": "r276_c337",
+   "latitude": 48.0,
+   "longitude": 30.625,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r276_c338",
+   "latitude": 48.0,
+   "longitude": 31.25,
+   "katottg": "UA48000000000039575",
+   "oblast": "Mykolaivska",
+   "weight": 0.00630804
+  },
+  {
+   "cell_id": "r276_c339",
+   "latitude": 48.0,
+   "longitude": 31.875,
+   "katottg": "UA35000000000016081",
+   "oblast": "Kirovohradska",
+   "weight": 0.00566326
+  },
+  {
+   "cell_id": "r276_c340",
+   "latitude": 48.0,
+   "longitude": 32.5,
+   "katottg": "UA35000000000016081",
+   "oblast": "Kirovohradska",
+   "weight": 0.00566326
+  },
+  {
+   "cell_id": "r276_c341",
+   "latitude": 48.0,
+   "longitude": 33.125,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r276_c342",
+   "latitude": 48.0,
+   "longitude": 33.75,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r276_c343",
+   "latitude": 48.0,
+   "longitude": 34.375,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r276_c344",
+   "latitude": 48.0,
+   "longitude": 35.0,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r276_c345",
+   "latitude": 48.0,
+   "longitude": 35.625,
+   "katottg": "UA23000000000064947",
+   "oblast": "Zaporizka",
+   "weight": 0.00639536
+  },
+  {
+   "cell_id": "r276_c346",
+   "latitude": 48.0,
+   "longitude": 36.25,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r276_c347",
+   "latitude": 48.0,
+   "longitude": 36.875,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r276_c348",
+   "latitude": 48.0,
+   "longitude": 37.5,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r276_c349",
+   "latitude": 48.0,
+   "longitude": 38.125,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r276_c350",
+   "latitude": 48.0,
+   "longitude": 38.75,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r276_c351",
+   "latitude": 48.0,
+   "longitude": 39.375,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r277_c324",
+   "latitude": 48.5,
+   "longitude": 22.5,
+   "katottg": "UA21000000000011690",
+   "oblast": "Zakarpatska",
+   "weight": 0.00088477
+  },
+  {
+   "cell_id": "r277_c325",
+   "latitude": 48.5,
+   "longitude": 23.125,
+   "katottg": "UA21000000000011690",
+   "oblast": "Zakarpatska",
+   "weight": 0.00088477
+  },
+  {
+   "cell_id": "r277_c326",
+   "latitude": 48.5,
+   "longitude": 23.75,
+   "katottg": "UA21000000000011690",
+   "oblast": "Zakarpatska",
+   "weight": 0.00088477
+  },
+  {
+   "cell_id": "r277_c327",
+   "latitude": 48.5,
+   "longitude": 24.375,
+   "katottg": "UA26000000000069363",
+   "oblast": "Ivano-Frankivska",
+   "weight": 0.00195097
+  },
+  {
+   "cell_id": "r277_c328",
+   "latitude": 48.5,
+   "longitude": 25.0,
+   "katottg": "UA26000000000069363",
+   "oblast": "Ivano-Frankivska",
+   "weight": 0.00195097
+  },
+  {
+   "cell_id": "r277_c329",
+   "latitude": 48.5,
+   "longitude": 25.625,
+   "katottg": "UA73000000000044923",
+   "oblast": "Chernivetska",
+   "weight": 0.00132817
+  },
+  {
+   "cell_id": "r277_c330",
+   "latitude": 48.5,
+   "longitude": 26.25,
+   "katottg": "UA73000000000044923",
+   "oblast": "Chernivetska",
+   "weight": 0.00132817
+  },
+  {
+   "cell_id": "r277_c331",
+   "latitude": 48.5,
+   "longitude": 26.875,
+   "katottg": "UA73000000000044923",
+   "oblast": "Chernivetska",
+   "weight": 0.00132817
+  },
+  {
+   "cell_id": "r277_c332",
+   "latitude": 48.5,
+   "longitude": 27.5,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r277_c333",
+   "latitude": 48.5,
+   "longitude": 28.125,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r277_c334",
+   "latitude": 48.5,
+   "longitude": 28.75,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r277_c335",
+   "latitude": 48.5,
+   "longitude": 29.375,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r277_c336",
+   "latitude": 48.5,
+   "longitude": 30.0,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r277_c337",
+   "latitude": 48.5,
+   "longitude": 30.625,
+   "katottg": "UA35000000000016081",
+   "oblast": "Kirovohradska",
+   "weight": 0.00566326
+  },
+  {
+   "cell_id": "r277_c338",
+   "latitude": 48.5,
+   "longitude": 31.25,
+   "katottg": "UA35000000000016081",
+   "oblast": "Kirovohradska",
+   "weight": 0.00566326
+  },
+  {
+   "cell_id": "r277_c339",
+   "latitude": 48.5,
+   "longitude": 31.875,
+   "katottg": "UA35000000000016081",
+   "oblast": "Kirovohradska",
+   "weight": 0.00566326
+  },
+  {
+   "cell_id": "r277_c340",
+   "latitude": 48.5,
+   "longitude": 32.5,
+   "katottg": "UA35000000000016081",
+   "oblast": "Kirovohradska",
+   "weight": 0.00566326
+  },
+  {
+   "cell_id": "r277_c341",
+   "latitude": 48.5,
+   "longitude": 33.125,
+   "katottg": "UA35000000000016081",
+   "oblast": "Kirovohradska",
+   "weight": 0.00566326
+  },
+  {
+   "cell_id": "r277_c342",
+   "latitude": 48.5,
+   "longitude": 33.75,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r277_c343",
+   "latitude": 48.5,
+   "longitude": 34.375,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r277_c344",
+   "latitude": 48.5,
+   "longitude": 35.0,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r277_c345",
+   "latitude": 48.5,
+   "longitude": 35.625,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r277_c346",
+   "latitude": 48.5,
+   "longitude": 36.25,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r277_c347",
+   "latitude": 48.5,
+   "longitude": 36.875,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r277_c348",
+   "latitude": 48.5,
+   "longitude": 37.5,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r277_c349",
+   "latitude": 48.5,
+   "longitude": 38.125,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r277_c350",
+   "latitude": 48.5,
+   "longitude": 38.75,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r277_c351",
+   "latitude": 48.5,
+   "longitude": 39.375,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r278_c325",
+   "latitude": 49.0,
+   "longitude": 23.125,
+   "katottg": "UA46000000000026241",
+   "oblast": "Lvivska",
+   "weight": 0.00327806
+  },
+  {
+   "cell_id": "r278_c326",
+   "latitude": 49.0,
+   "longitude": 23.75,
+   "katottg": "UA26000000000069363",
+   "oblast": "Ivano-Frankivska",
+   "weight": 0.00195097
+  },
+  {
+   "cell_id": "r278_c327",
+   "latitude": 49.0,
+   "longitude": 24.375,
+   "katottg": "UA26000000000069363",
+   "oblast": "Ivano-Frankivska",
+   "weight": 0.00195097
+  },
+  {
+   "cell_id": "r278_c328",
+   "latitude": 49.0,
+   "longitude": 25.0,
+   "katottg": "UA26000000000069363",
+   "oblast": "Ivano-Frankivska",
+   "weight": 0.00195097
+  },
+  {
+   "cell_id": "r278_c329",
+   "latitude": 49.0,
+   "longitude": 25.625,
+   "katottg": "UA61000000000060328",
+   "oblast": "Ternopilska",
+   "weight": 0.00805069
+  },
+  {
+   "cell_id": "r278_c330",
+   "latitude": 49.0,
+   "longitude": 26.25,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r278_c331",
+   "latitude": 49.0,
+   "longitude": 26.875,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r278_c332",
+   "latitude": 49.0,
+   "longitude": 27.5,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r278_c333",
+   "latitude": 49.0,
+   "longitude": 28.125,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r278_c334",
+   "latitude": 49.0,
+   "longitude": 28.75,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r278_c335",
+   "latitude": 49.0,
+   "longitude": 29.375,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r278_c336",
+   "latitude": 49.0,
+   "longitude": 30.0,
+   "katottg": "UA71000000000010357",
+   "oblast": "Cherkaska",
+   "weight": 0.00401579
+  },
+  {
+   "cell_id": "r278_c337",
+   "latitude": 49.0,
+   "longitude": 30.625,
+   "katottg": "UA71000000000010357",
+   "oblast": "Cherkaska",
+   "weight": 0.00401579
+  },
+  {
+   "cell_id": "r278_c338",
+   "latitude": 49.0,
+   "longitude": 31.25,
+   "katottg": "UA71000000000010357",
+   "oblast": "Cherkaska",
+   "weight": 0.00401579
+  },
+  {
+   "cell_id": "r278_c339",
+   "latitude": 49.0,
+   "longitude": 31.875,
+   "katottg": "UA71000000000010357",
+   "oblast": "Cherkaska",
+   "weight": 0.00401579
+  },
+  {
+   "cell_id": "r278_c340",
+   "latitude": 49.0,
+   "longitude": 32.5,
+   "katottg": "UA71000000000010357",
+   "oblast": "Cherkaska",
+   "weight": 0.00401579
+  },
+  {
+   "cell_id": "r278_c341",
+   "latitude": 49.0,
+   "longitude": 33.125,
+   "katottg": "UA35000000000016081",
+   "oblast": "Kirovohradska",
+   "weight": 0.00566326
+  },
+  {
+   "cell_id": "r278_c342",
+   "latitude": 49.0,
+   "longitude": 33.75,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r278_c343",
+   "latitude": 49.0,
+   "longitude": 34.375,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r278_c344",
+   "latitude": 49.0,
+   "longitude": 35.0,
+   "katottg": "UA12000000000090473",
+   "oblast": "Dnipropetrovska",
+   "weight": 0.00647797
+  },
+  {
+   "cell_id": "r278_c345",
+   "latitude": 49.0,
+   "longitude": 35.625,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r278_c346",
+   "latitude": 49.0,
+   "longitude": 36.25,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r278_c347",
+   "latitude": 49.0,
+   "longitude": 36.875,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r278_c348",
+   "latitude": 49.0,
+   "longitude": 37.5,
+   "katottg": "UA14000000000091971",
+   "oblast": "Donetska",
+   "weight": 0.00427391
+  },
+  {
+   "cell_id": "r278_c349",
+   "latitude": 49.0,
+   "longitude": 38.125,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r278_c350",
+   "latitude": 49.0,
+   "longitude": 38.75,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r278_c351",
+   "latitude": 49.0,
+   "longitude": 39.375,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r279_c325",
+   "latitude": 49.5,
+   "longitude": 23.125,
+   "katottg": "UA46000000000026241",
+   "oblast": "Lvivska",
+   "weight": 0.00327806
+  },
+  {
+   "cell_id": "r279_c326",
+   "latitude": 49.5,
+   "longitude": 23.75,
+   "katottg": "UA46000000000026241",
+   "oblast": "Lvivska",
+   "weight": 0.00327806
+  },
+  {
+   "cell_id": "r279_c327",
+   "latitude": 49.5,
+   "longitude": 24.375,
+   "katottg": "UA46000000000026241",
+   "oblast": "Lvivska",
+   "weight": 0.00327806
+  },
+  {
+   "cell_id": "r279_c328",
+   "latitude": 49.5,
+   "longitude": 25.0,
+   "katottg": "UA61000000000060328",
+   "oblast": "Ternopilska",
+   "weight": 0.00805069
+  },
+  {
+   "cell_id": "r279_c329",
+   "latitude": 49.5,
+   "longitude": 25.625,
+   "katottg": "UA61000000000060328",
+   "oblast": "Ternopilska",
+   "weight": 0.00805069
+  },
+  {
+   "cell_id": "r279_c330",
+   "latitude": 49.5,
+   "longitude": 26.25,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r279_c331",
+   "latitude": 49.5,
+   "longitude": 26.875,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r279_c332",
+   "latitude": 49.5,
+   "longitude": 27.5,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r279_c333",
+   "latitude": 49.5,
+   "longitude": 28.125,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r279_c334",
+   "latitude": 49.5,
+   "longitude": 28.75,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r279_c335",
+   "latitude": 49.5,
+   "longitude": 29.375,
+   "katottg": "UA05000000000010236",
+   "oblast": "Vinnytska",
+   "weight": 0.00441449
+  },
+  {
+   "cell_id": "r279_c336",
+   "latitude": 49.5,
+   "longitude": 30.0,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r279_c337",
+   "latitude": 49.5,
+   "longitude": 30.625,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r279_c338",
+   "latitude": 49.5,
+   "longitude": 31.25,
+   "katottg": "UA71000000000010357",
+   "oblast": "Cherkaska",
+   "weight": 0.00401579
+  },
+  {
+   "cell_id": "r279_c339",
+   "latitude": 49.5,
+   "longitude": 31.875,
+   "katottg": "UA71000000000010357",
+   "oblast": "Cherkaska",
+   "weight": 0.00401579
+  },
+  {
+   "cell_id": "r279_c340",
+   "latitude": 49.5,
+   "longitude": 32.5,
+   "katottg": "UA71000000000010357",
+   "oblast": "Cherkaska",
+   "weight": 0.00401579
+  },
+  {
+   "cell_id": "r279_c341",
+   "latitude": 49.5,
+   "longitude": 33.125,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r279_c342",
+   "latitude": 49.5,
+   "longitude": 33.75,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r279_c343",
+   "latitude": 49.5,
+   "longitude": 34.375,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r279_c344",
+   "latitude": 49.5,
+   "longitude": 35.0,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r279_c345",
+   "latitude": 49.5,
+   "longitude": 35.625,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r279_c346",
+   "latitude": 49.5,
+   "longitude": 36.25,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r279_c347",
+   "latitude": 49.5,
+   "longitude": 36.875,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r279_c348",
+   "latitude": 49.5,
+   "longitude": 37.5,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r279_c349",
+   "latitude": 49.5,
+   "longitude": 38.125,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r279_c350",
+   "latitude": 49.5,
+   "longitude": 38.75,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r279_c351",
+   "latitude": 49.5,
+   "longitude": 39.375,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r279_c352",
+   "latitude": 49.5,
+   "longitude": 40.0,
+   "katottg": "UA44000000000018893",
+   "oblast": "Luhanska",
+   "weight": 0.0038576
+  },
+  {
+   "cell_id": "r280_c326",
+   "latitude": 50.0,
+   "longitude": 23.75,
+   "katottg": "UA46000000000026241",
+   "oblast": "Lvivska",
+   "weight": 0.00327806
+  },
+  {
+   "cell_id": "r280_c327",
+   "latitude": 50.0,
+   "longitude": 24.375,
+   "katottg": "UA46000000000026241",
+   "oblast": "Lvivska",
+   "weight": 0.00327806
+  },
+  {
+   "cell_id": "r280_c328",
+   "latitude": 50.0,
+   "longitude": 25.0,
+   "katottg": "UA46000000000026241",
+   "oblast": "Lvivska",
+   "weight": 0.00327806
+  },
+  {
+   "cell_id": "r280_c329",
+   "latitude": 50.0,
+   "longitude": 25.625,
+   "katottg": "UA61000000000060328",
+   "oblast": "Ternopilska",
+   "weight": 0.00805069
+  },
+  {
+   "cell_id": "r280_c330",
+   "latitude": 50.0,
+   "longitude": 26.25,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r280_c331",
+   "latitude": 50.0,
+   "longitude": 26.875,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r280_c332",
+   "latitude": 50.0,
+   "longitude": 27.5,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r280_c333",
+   "latitude": 50.0,
+   "longitude": 28.125,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r280_c334",
+   "latitude": 50.0,
+   "longitude": 28.75,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r280_c335",
+   "latitude": 50.0,
+   "longitude": 29.375,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r280_c336",
+   "latitude": 50.0,
+   "longitude": 30.0,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r280_c337",
+   "latitude": 50.0,
+   "longitude": 30.625,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r280_c338",
+   "latitude": 50.0,
+   "longitude": 31.25,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r280_c339",
+   "latitude": 50.0,
+   "longitude": 31.875,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r280_c340",
+   "latitude": 50.0,
+   "longitude": 32.5,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r280_c341",
+   "latitude": 50.0,
+   "longitude": 33.125,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r280_c342",
+   "latitude": 50.0,
+   "longitude": 33.75,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r280_c343",
+   "latitude": 50.0,
+   "longitude": 34.375,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r280_c344",
+   "latitude": 50.0,
+   "longitude": 35.0,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r280_c345",
+   "latitude": 50.0,
+   "longitude": 35.625,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r280_c346",
+   "latitude": 50.0,
+   "longitude": 36.25,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r280_c347",
+   "latitude": 50.0,
+   "longitude": 36.875,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r280_c348",
+   "latitude": 50.0,
+   "longitude": 37.5,
+   "katottg": "UA63000000000041885",
+   "oblast": "Kharkivska",
+   "weight": 0.00658563
+  },
+  {
+   "cell_id": "r281_c327",
+   "latitude": 50.5,
+   "longitude": 24.375,
+   "katottg": "UA46000000000026241",
+   "oblast": "Lvivska",
+   "weight": 0.00327806
+  },
+  {
+   "cell_id": "r281_c328",
+   "latitude": 50.5,
+   "longitude": 25.0,
+   "katottg": "UA07000000000024379",
+   "oblast": "Volynska",
+   "weight": 0.00344747
+  },
+  {
+   "cell_id": "r281_c329",
+   "latitude": 50.5,
+   "longitude": 25.625,
+   "katottg": "UA56000000000066151",
+   "oblast": "Rivnenska",
+   "weight": 0.0020243
+  },
+  {
+   "cell_id": "r281_c330",
+   "latitude": 50.5,
+   "longitude": 26.25,
+   "katottg": "UA56000000000066151",
+   "oblast": "Rivnenska",
+   "weight": 0.0020243
+  },
+  {
+   "cell_id": "r281_c331",
+   "latitude": 50.5,
+   "longitude": 26.875,
+   "katottg": "UA68000000000099709",
+   "oblast": "Khmelnytska",
+   "weight": 0.00391984
+  },
+  {
+   "cell_id": "r281_c332",
+   "latitude": 50.5,
+   "longitude": 27.5,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r281_c333",
+   "latitude": 50.5,
+   "longitude": 28.125,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r281_c334",
+   "latitude": 50.5,
+   "longitude": 28.75,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r281_c335",
+   "latitude": 50.5,
+   "longitude": 29.375,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r281_c336",
+   "latitude": 50.5,
+   "longitude": 30.0,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r281_c338",
+   "latitude": 50.5,
+   "longitude": 31.25,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r281_c339",
+   "latitude": 50.5,
+   "longitude": 31.875,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r281_c340",
+   "latitude": 50.5,
+   "longitude": 32.5,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r281_c341",
+   "latitude": 50.5,
+   "longitude": 33.125,
+   "katottg": "UA53000000000028050",
+   "oblast": "Poltavska",
+   "weight": 0.00378294
+  },
+  {
+   "cell_id": "r281_c342",
+   "latitude": 50.5,
+   "longitude": 33.75,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  },
+  {
+   "cell_id": "r281_c343",
+   "latitude": 50.5,
+   "longitude": 34.375,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  },
+  {
+   "cell_id": "r281_c344",
+   "latitude": 50.5,
+   "longitude": 35.0,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  },
+  {
+   "cell_id": "r282_c327",
+   "latitude": 51.0,
+   "longitude": 24.375,
+   "katottg": "UA07000000000024379",
+   "oblast": "Volynska",
+   "weight": 0.00344747
+  },
+  {
+   "cell_id": "r282_c328",
+   "latitude": 51.0,
+   "longitude": 25.0,
+   "katottg": "UA07000000000024379",
+   "oblast": "Volynska",
+   "weight": 0.00344747
+  },
+  {
+   "cell_id": "r282_c329",
+   "latitude": 51.0,
+   "longitude": 25.625,
+   "katottg": "UA07000000000024379",
+   "oblast": "Volynska",
+   "weight": 0.00344747
+  },
+  {
+   "cell_id": "r282_c330",
+   "latitude": 51.0,
+   "longitude": 26.25,
+   "katottg": "UA56000000000066151",
+   "oblast": "Rivnenska",
+   "weight": 0.0020243
+  },
+  {
+   "cell_id": "r282_c331",
+   "latitude": 51.0,
+   "longitude": 26.875,
+   "katottg": "UA56000000000066151",
+   "oblast": "Rivnenska",
+   "weight": 0.0020243
+  },
+  {
+   "cell_id": "r282_c332",
+   "latitude": 51.0,
+   "longitude": 27.5,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r282_c333",
+   "latitude": 51.0,
+   "longitude": 28.125,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r282_c334",
+   "latitude": 51.0,
+   "longitude": 28.75,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r282_c335",
+   "latitude": 51.0,
+   "longitude": 29.375,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r282_c336",
+   "latitude": 51.0,
+   "longitude": 30.0,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r282_c337",
+   "latitude": 51.0,
+   "longitude": 30.625,
+   "katottg": "UA32000000000030281",
+   "oblast": "Kyivska",
+   "weight": 0.00274567
+  },
+  {
+   "cell_id": "r282_c338",
+   "latitude": 51.0,
+   "longitude": 31.25,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r282_c339",
+   "latitude": 51.0,
+   "longitude": 31.875,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r282_c340",
+   "latitude": 51.0,
+   "longitude": 32.5,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r282_c341",
+   "latitude": 51.0,
+   "longitude": 33.125,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  },
+  {
+   "cell_id": "r282_c342",
+   "latitude": 51.0,
+   "longitude": 33.75,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  },
+  {
+   "cell_id": "r282_c343",
+   "latitude": 51.0,
+   "longitude": 34.375,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  },
+  {
+   "cell_id": "r282_c344",
+   "latitude": 51.0,
+   "longitude": 35.0,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  },
+  {
+   "cell_id": "r283_c326",
+   "latitude": 51.5,
+   "longitude": 23.75,
+   "katottg": "UA07000000000024379",
+   "oblast": "Volynska",
+   "weight": 0.00344747
+  },
+  {
+   "cell_id": "r283_c327",
+   "latitude": 51.5,
+   "longitude": 24.375,
+   "katottg": "UA07000000000024379",
+   "oblast": "Volynska",
+   "weight": 0.00344747
+  },
+  {
+   "cell_id": "r283_c328",
+   "latitude": 51.5,
+   "longitude": 25.0,
+   "katottg": "UA07000000000024379",
+   "oblast": "Volynska",
+   "weight": 0.00344747
+  },
+  {
+   "cell_id": "r283_c329",
+   "latitude": 51.5,
+   "longitude": 25.625,
+   "katottg": "UA56000000000066151",
+   "oblast": "Rivnenska",
+   "weight": 0.0020243
+  },
+  {
+   "cell_id": "r283_c330",
+   "latitude": 51.5,
+   "longitude": 26.25,
+   "katottg": "UA56000000000066151",
+   "oblast": "Rivnenska",
+   "weight": 0.0020243
+  },
+  {
+   "cell_id": "r283_c331",
+   "latitude": 51.5,
+   "longitude": 26.875,
+   "katottg": "UA56000000000066151",
+   "oblast": "Rivnenska",
+   "weight": 0.0020243
+  },
+  {
+   "cell_id": "r283_c332",
+   "latitude": 51.5,
+   "longitude": 27.5,
+   "katottg": "UA56000000000066151",
+   "oblast": "Rivnenska",
+   "weight": 0.0020243
+  },
+  {
+   "cell_id": "r283_c333",
+   "latitude": 51.5,
+   "longitude": 28.125,
+   "katottg": "UA18000000000041385",
+   "oblast": "Zhytomyrska",
+   "weight": 0.00173985
+  },
+  {
+   "cell_id": "r283_c337",
+   "latitude": 51.5,
+   "longitude": 30.625,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r283_c338",
+   "latitude": 51.5,
+   "longitude": 31.25,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r283_c339",
+   "latitude": 51.5,
+   "longitude": 31.875,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r283_c340",
+   "latitude": 51.5,
+   "longitude": 32.5,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r283_c341",
+   "latitude": 51.5,
+   "longitude": 33.125,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r283_c342",
+   "latitude": 51.5,
+   "longitude": 33.75,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  },
+  {
+   "cell_id": "r284_c338",
+   "latitude": 52.0,
+   "longitude": 31.25,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r284_c339",
+   "latitude": 52.0,
+   "longitude": 31.875,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r284_c340",
+   "latitude": 52.0,
+   "longitude": 32.5,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r284_c341",
+   "latitude": 52.0,
+   "longitude": 33.125,
+   "katottg": "UA74000000000025378",
+   "oblast": "Chernihivska",
+   "weight": 0.00220055
+  },
+  {
+   "cell_id": "r284_c342",
+   "latitude": 52.0,
+   "longitude": 33.75,
+   "katottg": "UA59000000000057109",
+   "oblast": "Sumska",
+   "weight": 0.00343991
+  }
+ ]
+}

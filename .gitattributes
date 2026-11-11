@@ -1,0 +1,6 @@
+# Files whose exact bytes are hashed (the frozen protocol, data snapshots) must not get
+# Windows line endings on checkout, or their SHA-256 no longer matches the record.
+configs/week5_frozen_protocol.json -text
+data/** -text
+# Windows batch files need CRLF.
+*.bat text eol=crlf

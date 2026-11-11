@@ -1,0 +1,44 @@
+{
+  "purpose": "Wheat-area-weighted NASA POWER weather for Ukraine: one point per wheat-producing oblast, weighted by SSSU wheat harvested area.",
+  "nasa_power": {
+    "parameters": ["PRECTOTCORR", "T2M_MAX", "T2M_MIN"],
+    "community": "AG",
+    "start": "2001-01-01",
+    "end": "2022-12-31",
+    "time_standard": "UTC"
+  },
+  "area_weights": {
+    "source_csv": "data/raw/sssu_ukraine_wheat_harvested_area_by_oblast_2026-11.csv",
+    "weight_years": [2015, 2016, 2017, 2018, 2019, 2020],
+    "rule": "Fixed weight per oblast = mean final-season wheat harvested area over weight_years divided by the sum across oblasts. Years end in 2020 so no test-period (2021-2022) information enters the weights."
+  },
+  "point_method": "Oblast polygon centroid from geoBoundaries gbOpen UKR ADM1 (SHA-256 b2f9f4ad2e9be5888523219c0bb46a24332ead16b46305409098048fd361a2d6); representative interior point where the centroid falls outside the polygon (Odesa). NASA POWER snaps each point to its native grid cell.",
+  "raw_output_dir": "data/raw/nasa_power_oblast_daily",
+  "monthly_output_csv": "data/processed/week4_ukraine_weather_wheat_area_weighted_monthly.csv",
+  "oblasts": [
+    {"katottg": "UA05000000000010236", "name": "Vinnytska", "latitude": 48.921, "longitude": 28.686, "point": "centroid"},
+    {"katottg": "UA07000000000024379", "name": "Volynska", "latitude": 51.191, "longitude": 24.871, "point": "centroid"},
+    {"katottg": "UA12000000000090473", "name": "Dnipropetrovska", "latitude": 48.301, "longitude": 34.844, "point": "centroid"},
+    {"katottg": "UA14000000000091971", "name": "Donetska", "latitude": 47.955, "longitude": 37.676, "point": "centroid"},
+    {"katottg": "UA18000000000041385", "name": "Zhytomyrska", "latitude": 50.64, "longitude": 28.476, "point": "centroid"},
+    {"katottg": "UA21000000000011690", "name": "Zakarpatska", "latitude": 48.404, "longitude": 23.276, "point": "centroid"},
+    {"katottg": "UA23000000000064947", "name": "Zaporizka", "latitude": 47.168, "longitude": 35.773, "point": "centroid"},
+    {"katottg": "UA26000000000069363", "name": "Ivano-Frankivska", "latitude": 48.701, "longitude": 24.619, "point": "centroid"},
+    {"katottg": "UA32000000000030281", "name": "Kyivska", "latitude": 50.299, "longitude": 30.456, "point": "centroid"},
+    {"katottg": "UA35000000000016081", "name": "Kirovohradska", "latitude": 48.472, "longitude": 32.082, "point": "centroid"},
+    {"katottg": "UA44000000000018893", "name": "Luhanska", "latitude": 48.986, "longitude": 39.018, "point": "centroid"},
+    {"katottg": "UA46000000000026241", "name": "Lvivska", "latitude": 49.717, "longitude": 23.917, "point": "centroid"},
+    {"katottg": "UA48000000000039575", "name": "Mykolaivska", "latitude": 47.394, "longitude": 31.766, "point": "centroid"},
+    {"katottg": "UA51000000000030770", "name": "Odeska", "latitude": 46.643, "longitude": 30.568, "point": "representative_point"},
+    {"katottg": "UA53000000000028050", "name": "Poltavska", "latitude": 49.733, "longitude": 33.778, "point": "centroid"},
+    {"katottg": "UA56000000000066151", "name": "Rivnenska", "latitude": 51.04, "longitude": 26.392, "point": "centroid"},
+    {"katottg": "UA59000000000057109", "name": "Sumska", "latitude": 51.106, "longitude": 34.124, "point": "centroid"},
+    {"katottg": "UA61000000000060328", "name": "Ternopilska", "latitude": 49.402, "longitude": 25.648, "point": "centroid"},
+    {"katottg": "UA63000000000041885", "name": "Kharkivska", "latitude": 49.615, "longitude": 36.505, "point": "centroid"},
+    {"katottg": "UA65000000000030969", "name": "Khersonska", "latitude": 46.55, "longitude": 33.465, "point": "centroid"},
+    {"katottg": "UA68000000000099709", "name": "Khmelnytska", "latitude": 49.508, "longitude": 26.93, "point": "centroid"},
+    {"katottg": "UA71000000000010357", "name": "Cherkaska", "latitude": 49.26, "longitude": 31.353, "point": "centroid"},
+    {"katottg": "UA73000000000044923", "name": "Chernivetska", "latitude": 48.268, "longitude": 25.977, "point": "centroid"},
+    {"katottg": "UA74000000000025378", "name": "Chernihivska", "latitude": 51.355, "longitude": 32.005, "point": "centroid"}
+  ]
+}
