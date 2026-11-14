@@ -1,4 +1,4 @@
-"""Week 7 batch scaling series (SCALABILITY_EXPERIMENT.md, D9-E).
+"""Week 7 batch scaling series (docs/6_SCALABILITY.md, D9-E).
 
 Fixed pipeline slice (the D9-B weather aggregation, unchanged logic):
 

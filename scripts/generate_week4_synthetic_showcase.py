@@ -12,7 +12,7 @@ a calendar-aligned half-year block bootstrap of 2011-2020 real-price returns,
 starting from the real December 2020 price. No 2021-2023 price is read.
 
 Every generated row is marked is_synthetic=true. Results are a demonstration,
-not FoodShield performance evidence (see docs/SYNTHETIC_DATA.md).
+not FoodShield performance evidence (see docs/2_DATA.md, section 2.6).
 
     python scripts/generate_week4_synthetic_showcase.py
 """

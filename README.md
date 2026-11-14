@@ -42,7 +42,7 @@ flowchart LR
 - **Reading:** the two disagree, and 11 stress episodes are too few to settle whether the extra signals help.
 - **Engineering:** Spark processes the full FAOSTAT archives (22.7 million rows) and scales to 186 million rows in 43 s on 2 cores. The streaming path meets its targets (100 and 250 events/s, 95% of alerts within 2.9 s and 3.1 s on a 16-core Windows laptop), processes every unique record once, and gives exactly the batch answers.
 
-Details: `docs/FINAL_TEST_RESULTS.md`, `docs/WEEK7_MODEL_EVALUATION.md`, `docs/WEEK7_SCALABILITY.md`.
+Details: `docs/4_MODELS_AND_RESULTS.md` (models and results), `docs/5_STREAMING.md` (streaming) and `docs/6_SCALABILITY.md` (scaling).
 
 ## Quick start
 
@@ -53,13 +53,13 @@ Details: `docs/FINAL_TEST_RESULTS.md`, `docs/WEEK7_MODEL_EVALUATION.md`, `docs/W
 ## Requirements
 
 - Python 3.11 or later and Java 17 or later, then `pip install -r requirements.txt` (PySpark 4.3.0, kafka-python 3.0.13).
-- **Windows:** Spark also needs the Hadoop 3.5.0 native files (`winutils.exe`, `hadoop.dll`) in a folder such as `C:\hadoop\bin`, with `HADOOP_HOME` pointing to it. See `docs/PREREQUISITES.md`.
-- **Streaming:** Apache Kafka 4.4.0 and the Spark–Kafka connector files in a `Kafka/` folder. See `docs/WEEK6_STREAMING.md`.
+- **Windows:** Spark also needs the Hadoop 3.5.0 native files (`winutils.exe`, `hadoop.dll`) in a folder such as `C:\hadoop\bin`, with `HADOOP_HOME` pointing to it. See `docs/3_ARCHITECTURE.md` (section 3.8).
+- **Streaming:** Apache Kafka 4.4.0 and the Spark–Kafka connector files in a `Kafka/` folder. See `docs/5_STREAMING.md` (section 5.6).
 - **One-click Windows setup:** `RUN_LAPTOP_STEPS.bat` checks Java, Hadoop and Python, installs the packages, runs the tests and the streaming runs, and rebuilds the results.
 
 ## Running the pipeline
 
-Run every command from the repository folder. Inputs that are not in Git can be downloaded again from the URLs, with the SHA-256 hashes, listed in `docs/DATA_SOURCE_REGISTER.md`. On Linux or macOS use `python3` and `/` in paths.
+Run every command from the repository folder. Inputs that are not in Git can be downloaded again from the URLs, with the SHA-256 hashes, listed in `docs/2_DATA.md` (section 2.5). On Linux or macOS use `python3` and `/` in paths.
 
 **1. Batch pipeline: ETL, features and models**
 
@@ -133,9 +133,21 @@ Live mode needs the page to be opened through `serve_dashboard.py` (or `RUN_DEMO
 | `scripts/` | One entry point per step (see above) |
 | `tests/` | `unittest` checks: fast unit tests plus slower integration tests on real inputs |
 | `data/raw/`, `data/processed/` | Inputs and outputs. Only small, documented files are in Git; large downloads stay local |
-| `docs/` | Design, data sources, method and results write-ups, figures, dashboard |
+| `docs/` | The numbered project documents below, figures, dashboard |
 
-More detail on the design: `docs/PROJECT_BRIEF.md` (scope), `docs/ARCHITECTURE.md` (pipeline and evaluation design), `docs/WEEK6_STREAMING.md` (streaming design).
+## Documentation
+
+| Document | Contents |
+|---|---|
+| `docs/1_PROJECT.md` | Objective and scope, the eight-week plan, course requirements, team and contributions |
+| `docs/2_DATA.md` | Sources and licences, source selection, historical events, download register, synthetic data, data-quality checks |
+| `docs/3_ARCHITECTURE.md` | Design, data layers, ETL and features, streaming contract, repository layout, software setup, data model |
+| `docs/4_MODELS_AND_RESULTS.md` | Stress label and split, M0–M4, the one-time test, model evaluation |
+| `docs/5_STREAMING.md` | Kafka replay: what runs, checks, laptop results, the live demo |
+| `docs/6_SCALABILITY.md` | Batch and streaming scaling series, data at full size |
+| `docs/7_DECISIONS.md` | Requirements and decisions D1–D15 |
+| `docs/8_PIPELINE_WALKTHROUGH.md` | Every processing step, from source files to alerts, with code and a worked example |
+| `docs/PROJECT_SUBMISSION.md` | Source text for the final report |
 
 ## Data and licences
 
@@ -146,7 +158,7 @@ More detail on the design: `docs/PROJECT_BRIEF.md` (scope), `docs/ARCHITECTURE.m
 | Daily weather | NASA POWER Daily API | Public API; acknowledge NASA POWER as the source |
 | Region centroids | geoBoundaries gbOpen (UKR ADM1) | Open boundary data; cite geoBoundaries |
 
-Sources and hashes: `docs/DATA_SOURCE_REGISTER.md`. Synthetic data appears only in labelled demos and scaling benchmarks (`docs/SYNTHETIC_DATA.md`).
+Sources and hashes: `docs/2_DATA.md` (section 2.5). Synthetic data appears only in labelled demos and scaling benchmarks (section 2.6).
 
 ## Team
 

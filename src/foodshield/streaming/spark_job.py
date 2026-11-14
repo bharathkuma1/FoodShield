@@ -54,7 +54,7 @@ def make_streaming_spark(root: Path, cfg: dict[str, Any]) -> SparkSession:
     if os.name == "nt":
         if not hadoop_home:
             sys.exit("On Windows, set HADOOP_HOME to the Hadoop 3.5.0 native files (winutils.exe, hadoop.dll); "
-                     "Spark needs them for streaming checkpoints. See docs/WEEK6_STREAMING.md.")
+                     "Spark needs them for streaming checkpoints. See docs/5_STREAMING.md.")
         os.environ["PATH"] = f"{Path(hadoop_home, 'bin')}{os.pathsep}{os.environ.get('PATH', '')}"
     temp_root = (root / cfg["work_root"]) / ".spark-tmp"
     temp_root.mkdir(parents=True, exist_ok=True)

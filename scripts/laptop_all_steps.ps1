@@ -10,7 +10,7 @@
 #   4 Hadoop 3.5.0 native files in C:\hadoop\bin (from Bharath; the script waits for them) and HADOOP_HOME
 #   5 Python packages and the test suite
 #   6 the four Week 6 streaming runs (scripts\week6_laptop.ps1, about 45-60 minutes)
-#   7 laptop results into docs\WEEK6_LAPTOP_RESULTS.md and the dashboard
+#   7 laptop results into docs\5_STREAMING_LAPTOP_RESULTS.md and the dashboard
 #   8 demo rehearsal: the slide-11 command, timed
 #   9 batch scaling series on the laptop (optional: only when logs\laptop_steps\RUN_BATCH_SERIES exists;
 #     about 30 minutes; needs about 12 GB free on C:)
@@ -174,7 +174,7 @@ else { [void](Run "06_week6_laptop" "powershell -NoProfile -ExecutionPolicy Bypa
 Say "Step 7/9: laptop results into the docs and the dashboard"
 $applied = Run "07_apply_laptop_results" "py -3.12 scripts\apply_laptop_results.py"
 if ($applied -eq 1) { Say "  a laptop run is missing; see logs\laptop_steps\06_week6_laptop.log" "Yellow"; [void]$problems.Add("a streaming run is missing") }
-elseif ($applied -eq 2) { Say "  a laptop run failed a check; see docs\WEEK6_LAPTOP_RESULTS.md" "Yellow"; [void]$problems.Add("a streaming run failed a check") }
+elseif ($applied -eq 2) { Say "  a laptop run failed a check; see docs\5_STREAMING_LAPTOP_RESULTS.md" "Yellow"; [void]$problems.Add("a streaming run failed a check") }
 
 # ---------------------------------------------------------------- 8
 Say "Step 8/9: demo rehearsal (the slide-11 command at 1,000 events/s)"

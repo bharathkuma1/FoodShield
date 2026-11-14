@@ -4,7 +4,7 @@
 **Course:** DA231o Data Engineering at Scale, Data-Flux
 **Document type:** Continuing project manuscript and reproducibility guide
 **Version:** 0.2 (evidence through Week 8; branch `feature/workinprogress_v2`)
-**Note (Week 8):** the submission text is now the final report draft, a shared Claude doc that condenses this manuscript to the 6–8 page format (`WEEK8_REPORT_AND_SLIDES_PLAN.md`). This file stays as the detailed running manuscript.
+**Note (Week 8):** the submission text is now the final report draft, a shared Claude doc that condenses this manuscript to the 6–8 page format ([`1_PROJECT.md`](1_PROJECT.md) §1.4). This file stays as the detailed running manuscript.
 
 ## Abstract
 
@@ -62,11 +62,11 @@ The three historical cases retained from the proposal are **event-study contexts
 
 ## 4. Data and source characterization
 
-The current source set follows the proposal's public-data direction. Raw source responses are retained separately from derived tables. Data-source retrieval URLs, filters, local relative paths, and provenance qualifications are maintained in [`DATA_SOURCE_REGISTER.md`](DATA_SOURCE_REGISTER.md).
+The current source set follows the proposal's public-data direction. Raw source responses are retained separately from derived tables. Data-source retrieval URLs, filters, local relative paths, and provenance qualifications are maintained in [`2_DATA.md`](2_DATA.md) §2.5.
 
 | Signal | Source and current pilot representation | Current evidence and constraints |
 |---|---|---|
-| Wheat price and primary outcome | FAOSTAT Ukraine Wheat Producer Price, monthly `Producer Price (LCU/tonne)` series; farm-gate producer level. | The FAOSTAT PP catalog states CC BY 4.0. The shared extract preserves official-value flags and source fields. Cite FAO and retain the distinction between producer and wholesale prices. Exact retrieval URL and filter are in [`DATA_SOURCE_REGISTER.md`](DATA_SOURCE_REGISTER.md); the [official normalized PP archive](https://bulks-faostat.fao.org/production/Prices_E_All_Data_(Normalized).zip) and [catalog record](https://data.fao.org/catalog/dataset/47c17894-8ca1-4bd0-ba4d-6078e919e9b1) are public. |
+| Wheat price and primary outcome | FAOSTAT Ukraine Wheat Producer Price, monthly `Producer Price (LCU/tonne)` series; farm-gate producer level. | The FAOSTAT PP catalog states CC BY 4.0. The shared extract preserves official-value flags and source fields. Cite FAO and retain the distinction between producer and wholesale prices. Exact retrieval URL and filter are in [`2_DATA.md`](2_DATA.md) §2.5; the [official normalized PP archive](https://bulks-faostat.fao.org/production/Prices_E_All_Data_(Normalized).zip) and [catalog record](https://data.fao.org/catalog/dataset/47c17894-8ca1-4bd0-ba4d-6078e919e9b1) are public. |
 | Real-price deflator | State Statistics Service of Ukraine (SSSU), all-items monthly CPI change, chained to an explicit index base for real-price analysis. | The API exposes source values and metadata in CSV. Cite SSSU; its metadata describes territorial coverage caveats. The [SSSU SDMX API documentation](https://stat.gov.ua/en/development-api/sdmx-api-v3) and exact request are recorded in the source register. |
 | FPMA comparator | FAO GIEWS Food Price Monitoring and Analysis (FPMA), Ukraine domestic wheat-grain price series. | Retained locally as a potential descriptive comparator only. Its metadata has a market-type and price-type discrepancy and identifies APK-Inform as source partner; FAO inclusion alone does not establish reuse rights. Do not redistribute its raw values or value-revealing outputs without permission. See the [FPMA partner profile](https://www.fao.org/giews/food-prices/data-partners/detail/en/c/237592/). |
 | Production | FAOSTAT Crops and Livestock Products (QCL), Ukraine wheat production, yield, and harvested-area measures where present. | Units, flags, and notes are retained. FAOSTAT reference years do not provide historical publication vintages. The provisional availability rule is a modeling proxy, not a verified release date. FAOSTAT offers official [data and bulk downloads](https://www.fao.org/faostat/). |
@@ -125,7 +125,7 @@ Occupied territories drop out of SSSU-based coverage from March 2022.
 
 The proposal's historical event periods provide external global event context; they are not country-level labels by themselves. The selected target type is future Ukraine farm-gate producer-price stress. At prediction month `t`, every model stage uses only features available by `t`; the stress label is calculated from price observations strictly after `t`, using a predeclared horizon and rule. The label uses the same FAOSTAT price source as M0 at a later time: it is temporally separated, not source-independent. M0–M4 use the same eligible origins, chronological partitions, and labels. Training fits the models and validation selects the alert threshold. Detection lead time measures how early a valid warning occurs before future price stress; processing/alert latency measures system runtime and is a separate streaming metric.
 
-The confirmed protocol (decisions D1–D11, `DECISIONS.md`):
+The confirmed protocol (decisions D1–D11, [`7_DECISIONS.md`](7_DECISIONS.md)):
 
 - **Label:** origin month `t` is positive if the maximum CPI-adjusted price in `t+1..t+3` is at least 10% above the price at `t`. Labels at 5% and 15%, and horizons of 1 and 6 months, are sensitivity checks.
 - **Split:** train 2011–2017, validate 2018–2020, test 2021–2022. Origins whose 3-month outcome window crosses a boundary are purged.
@@ -198,7 +198,7 @@ The 2022 stress months are a rebound: after the February 2022 invasion the real 
 
 The backtest has about four times more data than the test and points the other way. The defensible conclusion for this one-country pilot is that multi-signal models did not consistently beat price-only monitoring: they did worse on 2014–2020 and better on 2021–2022. Eleven episodes are too few to decide between those readings.
 
-Three further checks use only the backtest (`WEEK7_MODEL_EVALUATION.md`):
+Three further checks use only the backtest ([`4_MODELS_AND_RESULTS.md`](4_MODELS_AND_RESULTS.md) §4.7):
 
 - **Label choice.** The backtest finding holds for every label in D1/D2 (5% and 15% rises; 1- and 6-month horizons). No multi-signal stage beat M0 beyond noise under any of them.
 - **Probabilities.** The M0–M4 probabilities scored about the same as always predicting the 30% base rate (Brier 0.204–0.210 vs 0.209); only price + season improved on it (0.183).
@@ -206,7 +206,7 @@ Three further checks use only the backtest (`WEEK7_MODEL_EVALUATION.md`):
 
 ### 7.4 Data-engineering measurements
 
-D9 runs were single runs; the Week 7 batch series repeated each configuration three times after a warm-up (`WEEK7_SCALABILITY.md`). Both used a 2-core, 8 GB Linux workspace with Spark 4.3.0 in local mode.
+D9 runs were single runs; the Week 7 batch series repeated each configuration three times after a warm-up ([`6_SCALABILITY.md`](6_SCALABILITY.md) §6.2). Both used a 2-core, 8 GB Linux workspace with Spark 4.3.0 in local mode.
 
 - **Workload size (Week 7).** The fixed weather-aggregation pipeline, on labelled synthetic expansions of the real 1.86 million daily rows:
   - 1.9 million rows in 2.3 s, 18.6 million in 5.7 s, 55.9 million in 14.0 s, 186 million in 43.2 s;
@@ -235,7 +235,7 @@ In development runs on the same 2-core workspace:
 - the 100 and 250 events/s targets were held, with an alert p95 latency of 1.7–1.9 s against the 10 s target;
 - in the Week 7 series Spark kept up with every offered rate up to 4,000 events/s (p95 at or below 2.7 s). Latency was set mainly by the trigger interval, and the pure-Python producer, not Spark, was the limit on this 2-core machine.
 
-The reported laptop runs (Windows 11, 16 cores) passed every check: 6,610 events/s at full speed, and both targets met with alert p95 of 2.9 s at 100/s and 3.1 s at 250/s (`WEEK6_LAPTOP_RESULTS.md`).
+The reported laptop runs (Windows 11, 16 cores) passed every check: 6,610 events/s at full speed, and both targets met with alert p95 of 2.9 s at 100/s and 3.1 s at 250/s ([`5_STREAMING.md`](5_STREAMING.md) §5.4).
 
 ## 8. Evaluation plan and reporting criteria
 
@@ -259,7 +259,7 @@ The batch and feature workflows require:
 - on Windows only, Hadoop native files compatible with the PySpark-bundled Hadoop 3.5.0 client (`winutils.exe` and `hadoop.dll`) and `HADOOP_HOME` pointing to that Hadoop home;
 - local source inputs listed in the run configuration. The synthetic feature configuration supports pipeline development without restricted source data.
 
-Windows 11 is the currently documented host, not a team-wide operating-system requirement; other systems can run the same Python/Spark pipeline with OS-appropriate environment setup. No project-wide minimum RAM or drive letter has been established. The current maintainer's 8 GB host is an example only. Full setup notes and official download links are maintained in `PREREQUISITES.md`. The replay demonstration will additionally require a compatible local Apache Kafka broker and Spark's Kafka connector matching the Spark version. The Kafka runtime/version and connector invocation are not yet part of the demonstrated workflow. No cloud account or paid service is required by the project design.
+Windows 11 is the currently documented host, not a team-wide operating-system requirement; other systems can run the same Python/Spark pipeline with OS-appropriate environment setup. No project-wide minimum RAM or drive letter has been established. The current maintainer's 8 GB host is an example only. Full setup notes and official download links are maintained in [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md) §3.8. The replay demonstration additionally uses a local Apache Kafka 4.4.0 broker (KRaft, one broker) and Spark's Kafka connector for Spark 4.3.0 (D12). No cloud account or paid service is required by the project design.
 
 ### 9.2 Run the current batch pipeline
 
@@ -285,11 +285,11 @@ python scripts\run_d9a_faostat_bulk.py                                          
 python scripts\run_d9b_grid_weather.py                                              # needs the gridded weather CSV
 ```
 
-`WEEK5_ABLATION.md`, `FINAL_TEST_RESULTS.md` and `D9_SCALE.md` describe each run and its outputs.
+[`4_MODELS_AND_RESULTS.md`](4_MODELS_AND_RESULTS.md) (§4.4–4.6) and [`6_SCALABILITY.md`](6_SCALABILITY.md) (§6.4) describe each run and its outputs.
 
 ### 9.3 Data access and provenance
 
-Use [`DATA_SOURCE_REGISTER.md`](DATA_SOURCE_REGISTER.md) for source URLs, API request examples, retrieval paths, filters, and known provenance gaps. Only explicitly reviewed, attributed snapshots are shared in version control; restricted or otherwise unreviewed acquisitions remain local. Do not place API keys, CAPTCHA contents, cookies, or account credentials in the repository. For future refreshes, record the exact secret-free request, retrieval date, filters, file size/checksum, and source terms in the register.
+Use [`2_DATA.md`](2_DATA.md) §2.5 for source URLs, API request examples, retrieval paths, filters, and known provenance gaps. Only explicitly reviewed, attributed snapshots are shared in version control; restricted or otherwise unreviewed acquisitions remain local. Do not place API keys, CAPTCHA contents, cookies, or account credentials in the repository. For future refreshes, record the exact secret-free request, retrieval date, filters, file size/checksum, and source terms in the register.
 
 ## 10. Limitations and responsible interpretation
 

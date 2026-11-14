@@ -1,6 +1,6 @@
 # FoodShield development conventions
 
-Read `docs/PROJECT_BRIEF.md`, `docs/PLAN.md`, and `docs/DECISIONS.md` before changing project code or data contracts.
+Read `docs/1_PROJECT.md` and `docs/7_DECISIONS.md` before changing project code or data contracts.
 
 ## Scope and evidence
 
@@ -19,4 +19,4 @@ Read `docs/PROJECT_BRIEF.md`, `docs/PLAN.md`, and `docs/DECISIONS.md` before cha
 
 ## Project layout
 
-Follow the recommended source, configuration, data, and artifact layout in `docs/PROJECT_BRIEF.md`. Keep generated data and outputs separate from source code and documentation.
+Follow the source, configuration, data, and artifact layout in `docs/3_ARCHITECTURE.md` (section 3.7). Keep generated data and outputs separate from source code and documentation.

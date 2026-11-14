@@ -4,7 +4,7 @@ Reads results already produced and adds analyses that use only pre-test data:
 
 - headline: backtest 2014-2020 (Week 5) and the one-time 2021-2022 test, every stage,
   with 90% bootstrap intervals (test intervals recomputed from the saved monthly alerts
-  with the published method and checked against FINAL_TEST_RESULTS.md);
+  with the published method and checked against docs/4_MODELS_AND_RESULTS.md, section 4.6);
 - episodes: every stress episode, whether each stage caught it, and the lead time;
 - threshold trade-off: precision / recall / false-alarm rate across alert cutoffs on the
   pooled out-of-sample backtest scores (2014-2020 only);
@@ -91,7 +91,7 @@ def main() -> int:
     test_by_stage = {s: {m["origin"]: (m["label"], m["alert"]) for m in primary_test["stages"][s]["monthly"]} for s in STAGES}
     test_ci = bootstrap(test_by_stage)
     published = {"M4": [0.08, 0.31], "M0+season": [-0.62, -0.19], "M1": [-0.14, 0.18], "M2": [-0.14, 0.19], "M3": [-0.12, 0.18]}
-    # FINAL_TEST_RESULTS.md intervals were computed with the same method but outside a script; the
+    # The section 4.6 intervals were computed with the same method but outside a script; the
     # resampling order differs, so compare within a tolerance and record the largest difference.
     test_ci_max_diff = max(abs(a - b) for s, v in published.items() for a, b in zip(test_ci[s]["f1_minus_M0_90pct_interval"], v))
     test_ci_check = test_ci_max_diff <= 0.025

@@ -27,7 +27,7 @@ if (-not $env:JAVA_HOME) {
         Where-Object { Test-Path (Join-Path $_.FullName "bin\java.exe") } | Sort-Object Name -Descending | Select-Object -First 1
     if ($jdk) { $env:JAVA_HOME = $jdk.FullName }
 }
-if (-not $env:JAVA_HOME -or -not (Test-Path "$env:JAVA_HOME\bin\java.exe")) { Fail "Java 17+ not found. Install a JDK (see docs\WEEK6_STREAMING.md) or set JAVA_HOME." }
+if (-not $env:JAVA_HOME -or -not (Test-Path "$env:JAVA_HOME\bin\java.exe")) { Fail "Java 17+ not found. Install a JDK (see docs\5_STREAMING.md) or set JAVA_HOME." }
 $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
 if (-not $env:HADOOP_HOME -or -not (Test-Path "$env:HADOOP_HOME\bin\winutils.exe") -or -not (Test-Path "$env:HADOOP_HOME\bin\hadoop.dll")) {
     Fail "HADOOP_HOME must point to Hadoop 3.5.0 native files (bin\winutils.exe and bin\hadoop.dll)."

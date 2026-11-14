@@ -33,7 +33,7 @@ def java_executable() -> str:
             return str(candidate)
     found = shutil.which("java")
     if not found:
-        sys.exit("Java 17 or later is required for Kafka and Spark. Install it and set JAVA_HOME (see docs/WEEK6_STREAMING.md).")
+        sys.exit("Java 17 or later is required for Kafka and Spark. Install it and set JAVA_HOME (see docs/5_STREAMING.md).")
     return found
 
 
