@@ -70,7 +70,7 @@ The reported runs (D12) ran on the team laptop: Windows 11, 16 cores, Java 21, P
 
 Alert latency at the target rates was about one second higher than on the 2-core workspace, because each micro-batch took longer (626 against 968 micro-batches in the 849 s window at 100/s). Streamed M0 equalled the one-time test on all 22 months in every run.
 
-**Windows fixes found by the laptop run** (all in the code): the Python launcher arguments in `week6_laptop.ps1`; atomic writes that retry while another process briefly holds the file (`src/foodshield/streaming/winsafe.py`); one Kafka data folder per run; consumer and broker stopped as process trees; leftover Java processes of this project stopped before the runs.
+**Windows fixes found by the laptop run** (all in the code): the Python launcher arguments in `week6_laptop.ps1`; atomic writes that retry while another process briefly holds the file (`src/foodshield/streaming/winsafe.py`); one Kafka data folder per run; consumer and broker stopped as process trees; leftover Java processes of this project stopped before the runs. A later check on a second Windows machine added: Python, Java, Hadoop and the work folder found by `scripts\foodshield_env.ps1` instead of fixed paths; a private temp folder for the Kafka JVM (its socket could not open in the user temp folder); retried deletion of a previous run folder that the dashboard server still had open.
 
 ## 5.5 Development runs (workspace)
 
@@ -129,14 +129,14 @@ Streamed M4 agrees with the frozen test on 21 of 22 months (largest score differ
 powershell -ExecutionPolicy Bypass -File scripts\week6_laptop.ps1
 ```
 
-The script checks Java, `HADOOP_HOME` and the input files; installs `requirements.txt` with Python 3.12 (`pyspark==4.3.0`, `kafka-python==3.0.13`); and runs the four runs in §5.3, with Kafka data and Spark checkpoints in `C:\fs6`, a short path without spaces. It takes about 45–60 minutes in total. Each report lands in `data\processed\week6_streaming\laptop_<run>\week6_report.json`. `RUN_LAPTOP_STEPS.bat` runs this together with the setup checks and tests.
+The script checks Java, `HADOOP_HOME` and the input files; installs `requirements.txt` (`pyspark==4.3.0`, `kafka-python==3.0.13`) with the Python that `scripts\foodshield_env.ps1` finds; and runs the four runs in §5.3, with Kafka data and Spark checkpoints in the work folder, a short path without spaces (`FOODSHIELD_WORK_ROOT`, by default `fs6` on the system drive). How Python, Java, Hadoop and the work folder are found, and how to set each one, is in the README under "Machine settings". It takes about 45–60 minutes in total. Each report lands in `data\processed\week6_streaming\laptop_<run>\week6_report.json`. `RUN_LAPTOP_STEPS.bat` runs this together with the setup checks and tests.
 
 **After the runs:** `python scripts\apply_laptop_results.py`. It writes `laptop_summary.csv`/`.json`, [`5_STREAMING_LAPTOP_RESULTS.md`](5_STREAMING_LAPTOP_RESULTS.md) (laptop next to workspace runs, plus the text for the report's and the slides' laptop cells) and rebuilds the dashboard. It exits with 1 if a run is missing and 2 if a run failed a check.
 
 **Single run:**
 
 ```powershell
-py -3.12 scripts\run_week6_replay.py --name demo --work-root C:\fs6 --replay-from 2011-01-01 --measure-from 2022-01-01 --rate 250
+python scripts\run_week6_replay.py --name demo --work-root <work folder> --replay-from 2011-01-01 --measure-from 2022-01-01 --rate 250
 ```
 
 **Windows specifics handled by the code:**
@@ -151,7 +151,7 @@ py -3.12 scripts\run_week6_replay.py --name demo --work-root C:\fs6 --replay-fro
 **Command.** Double-click `RUN_DEMO_LIVE.bat` (it runs `scripts\demo_live.ps1`). It starts the dashboard server and opens the dashboard on its Streaming tab, then runs:
 
 ```powershell
-py -3.12 scripts\run_week6_replay.py --name demo --work-root C:\fs6 --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 1000
+python scripts\run_week6_replay.py --name demo --work-root <work folder> --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 1000
 ```
 
 The 250 events/s run takes about 8 minutes (the 2016–2021 fast-forward is about 100 s, and 2022 at 250/s is 340 s), so the demo sends 2022 at 1,000 events/s, four times the burst target. The laptop rehearsal took 3.0 minutes end to end.
@@ -162,7 +162,7 @@ The 250 events/s run takes about 8 minutes (the 2016–2021 fast-forward is abou
 
 | Time | On screen | Say |
 |---|---|---|
-| Before | Project folder open in File Explorer; sound on if you want the alert chime. The replay clears `C:\fs6\demo` itself. | — |
+| Before | Project folder open in File Explorer; sound on if you want the alert chime. The replay clears its `demo` run folder itself. | — |
 | 0:00 | Double-click `RUN_DEMO_LIVE.bat` | The dashboard opens on its Streaming tab. One command starts a local Kafka broker, creates the topics and launches the Spark Structured Streaming consumer. |
 | 0:30 | Producer output | Records go out in the order they would have become known: daily weather for 232 grid cells, monthly prices, annual statistics two years late. 2016–2021 goes fast so the features have history. |
 | ~1:45 | Paced window starts | All of 2022, about 85,000 records, at 1,000 events/s. Each month closes when all 232 cells and the price have arrived; the frozen M0 and M4 then score it. |
