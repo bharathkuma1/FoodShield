@@ -7,8 +7,10 @@ named with --name). The page polls /live once a second and pops up every new str
 Standard library only; listens on 127.0.0.1 (this computer) only. Read-only: it never
 writes to the run folders.
 
-    py -3.12 scripts\\serve_dashboard.py --work-root C:\\fs6            # Windows demo
+    python scripts/serve_dashboard.py --work-root <work folder>        # the folder the replay uses
     python scripts/serve_dashboard.py                                  # default work root
+
+On Windows, RUN_DEMO_LIVE.bat starts it with the right Python and work folder (scripts/foodshield_env.ps1).
 """
 
 from __future__ import annotations
@@ -84,17 +86,22 @@ class Handler(SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        if self.path.split("?", 1)[0] == "/favicon.ico":  # browsers ask for it; the page has none
+            self.send_response(204)
+            self.end_headers()
+            return
         super().do_GET()
 
     def log_message(self, fmt, *args):  # keep the console quiet: no line per poll
-        if "/live" not in (args[0] if args else ""):
+        # args[0] is the request line for normal logs but an HTTPStatus for errors, so compare as text.
+        if "/live" not in (str(args[0]) if args else ""):
             sys.stderr.write("%s - %s\n" % (self.address_string(), fmt % args))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--work-root", type=Path, default=None,
-                        help="Folder the replay uses (--work-root of run_week6_replay.py), e.g. C:\\fs6.")
+                        help="Folder the replay uses (--work-root of run_week6_replay.py).")
     parser.add_argument("--name", default=None, help="Follow this run only (default: the newest run in the work root).")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--no-browser", action="store_true", help="Do not open the page in the browser.")

@@ -53,9 +53,20 @@ Details: `docs/FINAL_TEST_RESULTS.md`, `docs/WEEK7_MODEL_EVALUATION.md`, `docs/W
 ## Requirements
 
 - Python 3.11 or later and Java 17 or later, then `pip install -r requirements.txt` (PySpark 4.3.0, kafka-python 3.0.13).
-- **Windows:** Spark also needs the Hadoop 3.5.0 native files (`winutils.exe`, `hadoop.dll`) in a folder such as `C:\hadoop\bin`, with `HADOOP_HOME` pointing to it. See `docs/PREREQUISITES.md`.
+- **Windows:** Spark also needs the Hadoop 3.5.0 native files (`winutils.exe`, `hadoop.dll`) in the `bin` folder of the directory that `HADOOP_HOME` points to. See `docs/PREREQUISITES.md`.
 - **Streaming:** Apache Kafka 4.4.0 and the Spark–Kafka connector files in a `Kafka/` folder. See `docs/WEEK6_STREAMING.md`.
 - **One-click Windows setup:** `RUN_LAPTOP_STEPS.bat` checks Java, Hadoop and Python, installs the packages, runs the tests and the streaming runs, and rebuilds the results.
+
+### Machine settings (Windows scripts)
+
+The `.bat` and `.ps1` scripts name no folder on any particular machine. `scripts\foodshield_env.ps1` finds what they need, and each item can be set explicitly with an environment variable:
+
+| Setting | Found automatically from | Set it explicitly with |
+|---|---|---|
+| Python 3.11+ | the project's `.venv`, then the `py` launcher, then `python` on `PATH` | `FOODSHIELD_PYTHON` (e.g. `py -3.12` or a path to `python.exe`) |
+| Java 17+ | `JAVA_HOME`, then `java` on `PATH`, then JDKs under `%ProgramFiles%` | `JAVA_HOME` |
+| Hadoop native files | `HADOOP_HOME` (this window, then user and machine settings) | `HADOOP_HOME` |
+| Work folder for Kafka data and Spark checkpoints (short, no spaces) | `fs6` on the system drive | `FOODSHIELD_WORK_ROOT` |
 
 ## Running the pipeline
 
@@ -84,9 +95,10 @@ python scripts\run_d9b_grid_weather.py                         # 232-cell gridde
 One command starts Kafka, creates the topics, runs the Spark consumer and the producer, checks the results and writes a report:
 
 ```powershell
-python scripts\run_week6_replay.py --name demo --work-root C:\fs6 --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 1000
+python scripts\run_week6_replay.py --name demo --work-root <work folder> --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 1000
 ```
 
+- `--work-root` is a short folder without spaces for Kafka data and Spark checkpoints (the Windows scripts use `FOODSHIELD_WORK_ROOT`, by default `fs6` on the system drive).
 - `--rate` sets events per second (`max` for full speed).
 - `--measure-from` sets where the paced, measured part starts.
 - The report is written to `data\processed\week6_streaming\<name>\week6_report.json`.
@@ -109,7 +121,7 @@ python scripts\plot_week7_streaming.py
 ```powershell
 python scripts\export_week8_dashboard_features.py              # once: monthly model inputs for the "What if?" tab (needs Spark)
 python scripts\build_week8_dashboard.py                        # rebuilds docs\dashboard\index.html from the saved results
-py -3.12 scripts\serve_dashboard.py --work-root C:\fs6          # the same page plus the live view of a running replay
+python scripts\serve_dashboard.py --work-root <work folder>     # the same page plus the live view of a running replay
 ```
 
 ## Using the dashboard

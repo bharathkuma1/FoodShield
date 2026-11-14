@@ -7,17 +7,19 @@
 #   1 tidy the downloads out of the project folder (the duplicate archive goes to the Recycle Bin)
 #   2 make the folder a Git repository from foodshield_v2.bundle
 #   3 Java 21 (installed with winget if no JDK 17+ is found; winget asks you to accept its terms)
-#   4 Hadoop 3.5.0 native files in C:\hadoop\bin (from Bharath; the script waits for them) and HADOOP_HOME
-#   5 Python packages and the test suite
+#   4 Hadoop 3.5.0 native files in HADOOP_HOME\bin (if HADOOP_HOME is not set yet: hadoop\bin on the
+#     system drive; from Bharath; the script waits for them), and HADOOP_HOME saved for future windows
+#   5 Python packages and the test suite (Python found as in scripts\foodshield_env.ps1)
 #   6 the four Week 6 streaming runs (scripts\week6_laptop.ps1, about 45-60 minutes)
 #   7 laptop results into docs\WEEK6_LAPTOP_RESULTS.md and the dashboard
 #   8 demo rehearsal: the slide-11 command, timed
 #   9 batch scaling series on the laptop (optional: only when logs\laptop_steps\RUN_BATCH_SERIES exists;
-#     about 30 minutes; needs about 12 GB free on C:)
+#     about 30 minutes; needs about 12 GB free on the work folder drive)
 #
 # Logs: logs\laptop_steps\ (status.txt plus one log per command).
 
 $ErrorActionPreference = "Continue"
+. (Join-Path $PSScriptRoot "foodshield_env.ps1")
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 $logDir = Join-Path $root "logs\laptop_steps"
@@ -26,7 +28,7 @@ $status = Join-Path $logDir "status.txt"
 $env:PYTHONUNBUFFERED = "1"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $env:PYTHONIOENCODING = "utf-8"
-$work = "C:\fs6"
+$work = Get-FsWorkRoot
 
 function Say($msg, $color = "Cyan") {
     $line = "{0:yyyy-MM-dd HH:mm:ss}  {1}" -f (Get-Date), $msg
@@ -95,7 +97,8 @@ if ((Test-Path -LiteralPath $mainFile) -and ((Get-Item -LiteralPath $mainFile).L
 
 # ---------------------------------------------------------------- 2
 Say "Step 2/9: Git repository from the bundle"
-if (-not (Get-Command git -ErrorAction SilentlyContinue) -and (Test-Path "C:\Program Files\Git\cmd\git.exe")) { $env:PATH = "C:\Program Files\Git\cmd;$env:PATH" }
+$gitCmd = Join-Path $env:ProgramFiles "Git\cmd"
+if (-not (Get-Command git -ErrorAction SilentlyContinue) -and (Test-Path (Join-Path $gitCmd "git.exe"))) { $env:PATH = "$gitCmd;$env:PATH" }
 if (Test-Path (Join-Path $root ".git")) { Say "  already a Git repository" }
 elseif (-not (Get-Command git -ErrorAction SilentlyContinue)) { Say "  Git not found; skipped (install Git for Windows and run this again)" "Yellow" }
 else {
@@ -108,27 +111,12 @@ else {
 
 # ---------------------------------------------------------------- 3
 Say "Step 3/9: Java"
-function Find-Jdk {
-    $candidates = @()
-    if ($env:JAVA_HOME) { $candidates += $env:JAVA_HOME }
-    $candidates += Get-ChildItem "C:\Program Files\Eclipse Adoptium", "C:\Program Files\Java", "C:\Program Files\Microsoft" -Directory -ErrorAction SilentlyContinue |
-        Sort-Object Name -Descending | ForEach-Object { $_.FullName }
-    foreach ($c in $candidates) {
-        if (-not $c) { continue }
-        $exe = Join-Path $c "bin\java.exe"
-        if (Test-Path $exe) {
-            $text = (& $exe -version 2>&1 | Out-String)
-            if ($text -match 'version "(\d+)') { if ([int]$Matches[1] -ge 17) { return $c } }
-        }
-    }
-    return $null
-}
-$jdk = Find-Jdk
+$jdk = Find-FsJava
 if (-not $jdk) {
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) { Say "STOP: no Java 17+ found and winget is missing. Install Temurin 21 from adoptium.net, then run this again." "Red"; Finish 1 }
     Say "  No Java 17+ found. Installing Temurin 21 with winget: accept its terms in this window and approve the Windows prompt." "Yellow"
     winget install --id EclipseAdoptium.Temurin.21.JDK -e --source winget
-    $jdk = Find-Jdk
+    $jdk = Find-FsJava
     if (-not $jdk) { Say "STOP: Java is still not found after the install. Open a new window and run this again." "Red"; Finish 1 }
 }
 $env:JAVA_HOME = $jdk
@@ -137,11 +125,10 @@ Say "  Java: $jdk"
 
 # ---------------------------------------------------------------- 4
 Say "Step 4/9: Hadoop native files"
-$hh = $env:HADOOP_HOME
-if (-not $hh) { $hh = [Environment]::GetEnvironmentVariable("HADOOP_HOME", "User") }
-if (-not $hh) { $hh = [Environment]::GetEnvironmentVariable("HADOOP_HOME", "Machine") }
-if (-not $hh) { $hh = "C:\hadoop" }
-function Hadoop-Ready($h) { (Test-Path "$h\bin\winutils.exe") -and (Test-Path "$h\bin\hadoop.dll") }
+# HADOOP_HOME from this window or the user/machine settings; if it is not set, suggest hadoop on the system drive.
+$hh = Get-FsEnv "HADOOP_HOME"
+if (-not $hh) { $hh = Join-Path ($env:SystemDrive + "\") "hadoop" }
+function Hadoop-Ready($h) { Test-FsHadoop $h }
 if (-not (Hadoop-Ready $hh)) {
     New-Item -ItemType Directory -Force -Path "$hh\bin" | Out-Null
     Start-Process explorer.exe "$hh\bin"
@@ -159,8 +146,12 @@ Say "  Hadoop: $hh"
 
 # ---------------------------------------------------------------- 5
 Say "Step 5/9: Python packages and tests (about 2 minutes)"
-if ((Run "05_pip" "py -3.12 -m pip install --quiet -r requirements.txt") -ne 0) { Say "STOP: pip install failed; see logs\laptop_steps\05_pip.log" "Red"; Finish 1 }
-if ((Run "05_tests" "py -3.12 -m unittest discover -s tests -v") -ne 0) { Say "  Some tests failed (see logs\laptop_steps\05_tests.log); continuing, the streaming runs check themselves" "Yellow" }
+$pyFound = Find-FsPython
+if (-not $pyFound) { Say "STOP: Python 3.11+ not found. Install Python 3.12 (with the py launcher), create the project .venv, or set FOODSHIELD_PYTHON." "Red"; Finish 1 }
+$py = Format-FsPythonCommand $pyFound
+Say "  Python: $($pyFound.Version) ($($pyFound.Source))"
+if ((Run "05_pip" "$py -m pip install --quiet -r requirements.txt") -ne 0) { Say "STOP: pip install failed; see logs\laptop_steps\05_pip.log" "Red"; Finish 1 }
+if ((Run "05_tests" "$py -m unittest discover -s tests -v") -ne 0) { Say "  Some tests failed (see logs\laptop_steps\05_tests.log); continuing, the streaming runs check themselves" "Yellow" }
 
 # ---------------------------------------------------------------- 6
 Say "Step 6/9: the four Week 6 streaming runs (about 45-60 minutes)"
@@ -172,7 +163,7 @@ else { [void](Run "06_week6_laptop" "powershell -NoProfile -ExecutionPolicy Bypa
 
 # ---------------------------------------------------------------- 7
 Say "Step 7/9: laptop results into the docs and the dashboard"
-$applied = Run "07_apply_laptop_results" "py -3.12 scripts\apply_laptop_results.py"
+$applied = Run "07_apply_laptop_results" "$py scripts\apply_laptop_results.py"
 if ($applied -eq 1) { Say "  a laptop run is missing; see logs\laptop_steps\06_week6_laptop.log" "Yellow"; [void]$problems.Add("a streaming run is missing") }
 elseif ($applied -eq 2) { Say "  a laptop run failed a check; see docs\WEEK6_LAPTOP_RESULTS.md" "Yellow"; [void]$problems.Add("a streaming run failed a check") }
 
@@ -181,24 +172,24 @@ Say "Step 8/9: demo rehearsal (the slide-11 command at 1,000 events/s)"
 if (Test-Path (Join-Path $root "data\processed\week6_streaming\laptop_demo_1000\week6_report.json")) { Say "  already rehearsed; skipped" }
 else {
     $t0 = Get-Date
-    if ((Run "08_demo" "py -3.12 scripts\run_week6_replay.py --name laptop_demo_1000 --work-root $work --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 1000") -ne 0) { [void]$problems.Add("the demo run failed (logs\laptop_steps\08_demo.log)") }
+    if ((Run "08_demo" "$py scripts\run_week6_replay.py --name laptop_demo_1000 --work-root $work --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 1000") -ne 0) { [void]$problems.Add("the demo run failed (logs\laptop_steps\08_demo.log)") }
     Say ("  demo took {0:N1} minutes on this laptop" -f ((Get-Date) - $t0).TotalMinutes) "Green"
-    [void](Run "08_dashboard" "py -3.12 scripts\build_week8_dashboard.py")
+    [void](Run "08_dashboard" "$py scripts\build_week8_dashboard.py")
 }
 
 # ---------------------------------------------------------------- 9
 Say "Step 9/9: batch scaling series on the laptop (optional, about 30 minutes)"
-$freeGb = [math]::Round((Get-PSDrive -Name C).Free / 1GB, 1)
+$freeGb = [math]::Round((Get-PSDrive -Name $work.Substring(0,1)).Free / 1GB, 1)
 if (Test-Path (Join-Path $root "data\processed\week7_batch_scaling_laptop\summary.json")) { Say "  already done; skipped" }
 elseif (-not (Test-Path (Join-Path $root "logs\laptop_steps\RUN_BATCH_SERIES"))) { Say "  skipped (optional; it ran out of memory at 186 M rows and needs a fix first)" }
-elseif ($freeGb -lt 12) { Say "  skipped: only $freeGb GB free on C: (needs about 12 GB)" "Yellow" }
+elseif ($freeGb -lt 12) { Say "  skipped: only $freeGb GB free on the work folder drive (needs about 12 GB)" "Yellow" }
 else {
-    [void](Run "09_matplotlib" "py -3.12 -m pip install --quiet matplotlib")
+    [void](Run "09_matplotlib" "$py -m pip install --quiet matplotlib")
     if (-not (Test-Path (Join-Path $root "data\interim\faostat_bulk\parquet"))) {
-        [void](Run "09_d9a" "py -3.12 scripts\run_d9a_faostat_bulk.py --output data\processed\d9a_faostat_bulk_laptop")
+        [void](Run "09_d9a" "$py scripts\run_d9a_faostat_bulk.py --output data\processed\d9a_faostat_bulk_laptop")
     }
-    if ((Run "09_batch" "py -3.12 scripts\run_week7_batch_scaling.py --phase all --output-suffix _laptop") -ne 0) { [void]$problems.Add("the batch series failed (logs\laptop_steps\09_batch.log)") }
-    [void](Run "09_apply_laptop_results" "py -3.12 scripts\apply_laptop_results.py")
+    if ((Run "09_batch" "$py scripts\run_week7_batch_scaling.py --phase all --output-suffix _laptop") -ne 0) { [void]$problems.Add("the batch series failed (logs\laptop_steps\09_batch.log)") }
+    [void](Run "09_apply_laptop_results" "$py scripts\apply_laptop_results.py")
 }
 
 Finish 0
