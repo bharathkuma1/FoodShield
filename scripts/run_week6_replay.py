@@ -50,7 +50,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from foodshield.streaming.kafka_local import LocalKafka, create_topics, java_executable  # noqa: E402
 from foodshield.streaming.monitor import OnlineMonitor, load_cell_weights, load_frozen_models, replay_offline  # noqa: E402
 from foodshield.streaming.producer import ReplayProducer  # noqa: E402
-from foodshield.streaming.winsafe import kill_tree  # noqa: E402
+from foodshield.streaming.winsafe import kill_tree, remove_tree  # noqa: E402
 from foodshield.streaming.records import GridWeather, replay_records  # noqa: E402
 
 
@@ -127,7 +127,7 @@ def main() -> int:
     parser.add_argument("--kill-consumer-after-batches", type=int, default=0)
     parser.add_argument("--work-root", type=Path, default=None,
                         help="Folder for Kafka data, checkpoints and Spark temp files. On Windows use a short path "
-                             "without spaces, e.g. C:\\fs6.")
+                             "without spaces (the Windows scripts use FOODSHIELD_WORK_ROOT, default fs6 on the system drive).")
     parser.add_argument("--partitions", type=int, default=None, help="Override observation-topic partitions.")
     parser.add_argument("--trigger-seconds", type=float, default=None, help="Override the Structured Streaming trigger.")
     parser.add_argument("--max-offsets", type=int, default=None, help="Override maxOffsetsPerTrigger.")
@@ -146,7 +146,10 @@ def main() -> int:
     cfg["kafka"]["data_dir"] = str(Path(cfg["kafka"]["data_dir"]) / args.name)
     run_dir = ROOT / cfg["work_root"] / args.name
     out_dir = ROOT / cfg["output_root"] / args.name
-    shutil.rmtree(run_dir, ignore_errors=True)
+    # Clear the previous run of this name. The dashboard server may be reading its alert files, so retry.
+    if not remove_tree(run_dir):
+        sys.exit(f"Could not clear the previous run folder {run_dir}: a program still has a file in it open. "
+                 "Close it (or delete the folder) and run again.")
     run_dir.mkdir(parents=True)
     out_dir.mkdir(parents=True, exist_ok=True)
     effective_config = run_dir / "effective_config.json"

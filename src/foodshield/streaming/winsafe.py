@@ -12,6 +12,7 @@ Killing a process on Windows does not kill its children (Spark's JVM, Kafka's JV
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -40,6 +41,20 @@ def write_text_atomic(path: Path, text: str, required: bool = True) -> bool:
         if required:
             raise
         return False
+
+
+def remove_tree(path: Path, attempts: int = 50, wait_s: float = 0.2) -> bool:
+    """Delete a folder, retrying while another process briefly holds one of its files open (Windows).
+
+    The dashboard server reads the newest run's alert files once a second, so deleting that run's
+    folder can hit a file that is open for a moment. Returns True when the folder is gone.
+    """
+    for _ in range(attempts):
+        shutil.rmtree(path, ignore_errors=True)
+        if not path.exists():
+            return True
+        time.sleep(wait_s)
+    return not path.exists()
 
 
 def kill_tree(process: subprocess.Popen | None, wait_s: float = 30.0) -> None:

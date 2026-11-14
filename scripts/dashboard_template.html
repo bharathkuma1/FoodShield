@@ -755,8 +755,8 @@ function buildLive() {
   if (!live.served) {
     const d = h("div", null, box, "howto");
     h("div", "The live view needs the small local server that comes with the project. In the project folder, either double-click RUN_DEMO_LIVE.bat (starts the server and the demo together) or run:", d);
-    h("code", "py -3.12 scripts\\serve_dashboard.py --work-root C:\\fs6", h("p", null, d));
-    h("div", "It opens this page at http://127.0.0.1:8765 and follows whichever replay is running in C:\\fs6. This copy is opened as a file, so it shows saved results only.", d);
+    h("code", "python scripts\\serve_dashboard.py --work-root <work folder>", h("p", null, d));
+    h("div", "It opens this page at http://127.0.0.1:8765 and follows whichever replay is running in that work folder (the --work-root given to the replay; RUN_DEMO_LIVE.bat uses FOODSHIELD_WORK_ROOT, by default fs6 on the system drive). This copy is opened as a file, so it shows saved results only.", d);
     return;
   }
   const top = h("div", null, box, "controls");

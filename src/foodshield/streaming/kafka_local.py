@@ -94,7 +94,13 @@ class LocalKafka:
         self.log = None
 
     def _java(self, main: str, *args: str, heap: str = "-Xmx256m") -> list[str]:
-        return [self.java, *heap.split(), f"-Dlog4j2.configurationFile={(self.home / 'config' / 'log4j2.yaml').as_posix()}",
+        # Give the JVM a temp folder inside the run's data folder, as the Spark side does with spark.local.dir.
+        # On Windows, Java's NIO selector opens a Unix-domain socket in the temp folder; in some user-profile
+        # TEMP folders that fails ("Unable to establish loopback connection") and Kafka exits at start-up.
+        tmp = self.data_dir / "tmp"
+        tmp.mkdir(parents=True, exist_ok=True)
+        return [self.java, *heap.split(), f"-Djava.io.tmpdir={tmp}", f"-Djdk.net.unixdomain.tmpdir={tmp}",
+                f"-Dlog4j2.configurationFile={(self.home / 'config' / 'log4j2.yaml').as_posix()}",
                 f"-Dkafka.logs.dir={(self.data_dir / 'server-logs').as_posix()}", "-cp", _classpath(self.home), main, *args]
 
     def format_storage(self) -> None:
