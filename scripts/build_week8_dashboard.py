@@ -174,7 +174,20 @@ def build_data() -> dict:
             for c in fao:
                 d9["domains"][c["domain"]]["query_" + c["format"] + "_s"] = c["median_s"]
             d9["basis"] = "Week 7: median of 3 timed runs after a warm-up, including opening the dataset"
-    return {"timeline": timeline,
+    processed = None
+    full = load_json(P / "week6_streaming" / "full_max" / "week6_report.json")
+    if bulk:
+        processed = {"faostat": {k: {"rows": v["csv_rows"], "csv_mb": round(v["csv_bytes"] / 1e6),
+                                     "parquet_mb": round(v["parquet_bytes"] / 1e6, 1), "years": v["years"],
+                                     "areas": v["areas"], "ukraine_wheat_rows": v["ukraine_wheat_reconciliation"]["extract_rows"],
+                                     "reconciliation": v["ukraine_wheat_reconciliation"]["status"]}
+                                 for k, v in bulk["domains"].items()},
+                     "weather": grid and {"daily_rows": grid["daily_rows"], "cells": grid["cells"],
+                                          "cell_months": grid["cell_months"], "months": grid["months"]},
+                     "stream": full and {"unique": full["producer"]["unique_total"],
+                                         "by_type": full["producer"]["unique_records"],
+                                         "duplicates": full["producer"]["duplicates_sent"]}}
+    return {"timeline": timeline, "processed": processed,
             "headline": evaluation["headline"] if evaluation else [], "episodes": episodes, "streaming": streaming,
             "scaling": scaling, "d9": d9, "quality": quality and quality["ablation_support"],
             "test_window": primary["test_window"], "explorer": explorer_data(prices, test),

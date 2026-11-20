@@ -79,6 +79,7 @@ th { color: var(--text-secondary); font-weight: 600; }
 .ok { color: var(--good); font-weight: 600; white-space: nowrap; } .bad { color: var(--critical); font-weight: 600; }
 .note { font-size: 12px; color: var(--text-muted); }
 .scroll { overflow-x: auto; }
+#processed table { min-width: 900px; }
 code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--surface-2); padding: 1px 4px; border-radius: 4px; }
 /* controls */
 .controls { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; background: var(--surface-2);
@@ -168,6 +169,11 @@ input[type=range] { width: 180px; accent-color: var(--accent); }
 
 <div role="tabpanel" id="tab-overview" aria-labelledby="t-overview">
 <div class="tiles" id="tiles"></div>
+<section>
+  <h2>What Spark processed</h2>
+  <p class="lede" id="processed-lede">Every input at its real size, on the batch path and the streaming path, and how few rows remain once the data is narrowed to Ukraine wheat.</p>
+  <div class="scroll" id="processed"></div>
+</section>
 <section>
   <h2>Price history, stress months and alerts</h2>
   <p class="lede">Real (CPI-deflated) farm-gate wheat price. Shaded months had a ≥10% rise within the next 3 months. Ticks show alerts from price-only M0 and the full M4 model: out-of-sample backtest 2014–2020, then the one-time test 2021–2022.</p>
@@ -438,6 +444,29 @@ function renderOverview() {
     if (D.scaling) { const size = D.scaling.configs.filter(c => c.series === "size"); const big = size.reduce((a, b) => a.factor > b.factor ? a : b);
       items.push([(big.rows / 1e6).toFixed(0) + "M rows", "Largest batch run", fmt(big.median_s, 1) + " s, " + fmt(big.rows_per_s_median / 1e6, 1) + "M rows/s"]); }
     items.forEach(([v, k, s]) => { const t = h("div", null, box, "tile"); h("div", v, t, "v"); h("div", k, t, "k"); h("div", s, t, "s"); });
+  })();
+
+  (function processed() {
+    const P = D.processed; if (!P) return;
+    const n = v => v.toLocaleString("en-US");
+    const names = {TCL: "FAOSTAT Trade", QCL: "FAOSTAT Crops and Livestock", PP: "FAOSTAT Producer Prices"};
+    const keep = {TCL: " rows (Ukraine wheat trade)", QCL: " rows (Ukraine wheat production)", PP: " months (Ukraine wheat price)"};
+    const rows = []; let batch = 0;
+    ["TCL", "QCL", "PP"].forEach(k => { const d = P.faostat[k]; if (!d) return; batch += d.rows;
+      rows.push(["Batch", names[k] + ", all countries, " + d.years[0] + "–" + d.years[1], n(d.rows),
+        n(d.csv_mb) + " MB CSV → " + d.parquet_mb + " MB Parquet", "CSV → year-partitioned Parquet; filter Ukraine wheat; checked against the model extract (" + d.reconciliation + ")",
+        n(d.ukraine_wheat_rows) + keep[k]]); });
+    if (P.weather) { batch += P.weather.daily_rows;
+      rows.push(["Batch", "NASA POWER daily weather, " + P.weather.cells + " grid cells, 2001–2022", n(P.weather.daily_rows), "—",
+        "daily → " + n(P.weather.cell_months) + " cell-months → wheat-weighted national months", n(P.weather.months) + " months"]); }
+    rows.push(["Batch total", "", n(batch), "", "", ""]);
+    if (P.stream) { const t = P.stream.by_type;
+      rows.push(["Streaming", "Kafka replay in availability order", n(P.stream.unique) + " unique",
+        n(t.weather_daily) + " weather · " + n(t.price_monthly) + " price · " + n(t.annual) + " annual",
+        "parse, validate, remove " + n(P.stream.duplicates) + " re-sent duplicates, sum weather into cell-months, score frozen M0 and M4", "one score per stage per month"]); }
+    table(document.getElementById("processed"), ["Path", "Input", "Rows read", "Size", "What Spark does", "Rows the models use"], rows);
+    document.getElementById("processed-lede").textContent = "Every input at its real size: " + (batch / 1e6).toFixed(1) +
+      " M rows on the batch path, and the full replay on the streaming path. The models need only Ukraine wheat, so a few hundred rows per signal remain; daily weather is the only signal that stays large, which is why it dominates the stream. The live demo replays the streaming path from 2016.";
   })();
 
   (function timeline() {
