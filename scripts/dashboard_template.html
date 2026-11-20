@@ -312,7 +312,7 @@ function control(parent, label) { const c = h("div", null, parent, "control"); c
 
 // ---------- stages, inputs and reasons in plain words
 const STAGES = ["M0", "M0+season", "M1", "M2", "M3", "M4"];
-const STAGE_NAME = {"M0": "M0 price only", "M0+season": "Price + season (control)", "M1": "M1 + weather", "M2": "M2 + production", "M3": "M3 + trade", "M4": "M4 + interaction"};
+const STAGE_NAME = {"M0": "M0 price only", "M0+season": "Price + season (control)", "M1": "M1 + weather", "M2": "M2 + production", "M3": "M3 + trade", "M4": "M4 all signals + interaction"};
 const STAGE_COLOR = {"M0": "--s-m0", "M0+season": "--s-season", "M1": "--s-m1", "M2": "--s-m2", "M3": "--s-m3", "M4": "--s-m4"};
 const INPUT_NAME = {
   price_real_mom_change: "price change last month", price_real_anomaly_z_12m: "price vs its 12-month normal",

@@ -174,7 +174,7 @@ Source integration preserves source meaning and metadata while producing typed a
 | M1 + weather | 0.43 (0.28–0.57) | −0.27 to −0.02 | 0.28 | 0.61 | 5/8 |
 | M2 + production | 0.42 (0.28–0.55) | −0.26 to −0.05 | 0.37 | 0.62 | 4/8 |
 | M3 + trade | 0.43 (0.28–0.56) | −0.26 to −0.04 | 0.35 | 0.62 | 4/8 |
-| M4 + interaction | 0.44 (0.29–0.57) | −0.25 to −0.02 | 0.32 | 0.61 | 4/8 |
+| M4 all signals + interaction | 0.44 (0.29–0.57) | −0.25 to −0.02 | 0.32 | 0.61 | 4/8 |
 | Price + season (control) | 0.50 (0.33–0.64) | −0.22 to +0.07 | 0.21 | 0.91 | 6/8 |
 
 On 2014–2020, every added signal group made F1 worse than M0 beyond noise. Calendar season was the strongest single addition: it gave the best ranking (AUC 0.91) and halved false alarms. With the Week 3 weather feature, M1's apparent AUC of 0.88 came from the season.
@@ -187,7 +187,7 @@ On 2014–2020, every added signal group made F1 worse than M0 beyond noise. Cal
 |---|---:|---:|---|---:|---:|---:|
 | M0 price | 18 | 0.43 | — | 0.76 | 0.75 | 3/3 |
 | M1–M3 | 12 | 0.47 | about −0.14 to +0.19 | 0.47 | 0.79–0.85 | 3/3 |
-| M4 + interaction | 11 | 0.62 | +0.08 to +0.31 | 0.35 | 0.88 | 3/3 |
+| M4 all signals + interaction | 11 | 0.62 | +0.08 to +0.31 | 0.35 | 0.88 | 3/3 |
 | Price + season (control) | 0 | 0.00 | −0.62 to −0.19 | 0.00 | 0.53 | 0/3 |
 
 All stages caught all three episodes, so the gain came from fewer false alarms. M4 was the only stage that beat M0 beyond noise. Its advantage depends on the annual lag: with three years, M3 was best and M4 fell to F1 0.46. The seasonal pattern learned before 2018 broke in the war period.

@@ -121,7 +121,7 @@ def ablation_figure(out: Path, report_path: Path = ROOT / "data/processed/week5_
     unc = report["uncertainty"]["by_variant"][variant]
     stages = ["M0", "M0+season", "M1", "M2", "M3", "M4"]
     names = {"M0": "M0 price", "M0+season": "M0 + season (control)", "M1": "M1 + weather",
-             "M2": "M2 + production", "M3": "M3 + trade", "M4": "M4 + interaction"}
+             "M2": "M2 + production", "M3": "M3 + trade", "M4": "M4 all signals + interaction"}
     always = v["baselines_on_backtest_origins"]["always_alert"]["f1"]
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.4), dpi=200, facecolor=SURFACE, sharey=True)
     ys = list(range(len(stages)))[::-1]

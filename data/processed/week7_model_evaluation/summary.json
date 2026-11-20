@@ -198,7 +198,7 @@
     },
     {
       "stage": "M4",
-      "label": "M4 + interaction",
+      "label": "M4 all signals + interaction",
       "features": 13,
       "backtest_precision": 0.4,
       "backtest_recall": 0.5,

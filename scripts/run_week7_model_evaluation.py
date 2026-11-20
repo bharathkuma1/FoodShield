@@ -36,7 +36,7 @@ OUT = PROCESSED / "week7_model_evaluation"
 FIGURES = ROOT / "docs" / "figures"
 STAGES = ["M0", "M0+season", "M1", "M2", "M3", "M4"]
 LABELS = {"M0": "M0 price", "M0+season": "Price + season (control)", "M1": "M1 + weather", "M2": "M2 + production",
-          "M3": "M3 + trade", "M4": "M4 + interaction"}
+          "M3": "M3 + trade", "M4": "M4 all signals + interaction"}
 SEED, RESAMPLES = 20261107, 2000
 SENSITIVITY_CASES = {"rise5_h3": (5, 3), "rise15_h3": (15, 3), "rise10_h1": (10, 1), "rise10_h6": (10, 6)}
 
