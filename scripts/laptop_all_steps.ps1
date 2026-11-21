@@ -5,7 +5,7 @@
 #
 # Steps (each is skipped when it is already done, so the script can simply be run again after a stop):
 #   1 tidy the downloads out of the project folder (the duplicate archive goes to the Recycle Bin)
-#   2 make the folder a Git repository from foodshield_v2.bundle
+#   2 make the folder a Git repository tracking main on GitHub
 #   3 Java 21 (installed with winget if no JDK 17+ is found; winget asks you to accept its terms)
 #   4 Hadoop 3.5.0 native files in HADOOP_HOME\bin (if HADOOP_HOME is not set yet: hadoop\bin on the
 #     system drive; from Bharath; the script waits for them), and HADOOP_HOME saved for future windows
@@ -96,7 +96,7 @@ if ((Test-Path -LiteralPath $mainFile) -and ((Get-Item -LiteralPath $mainFile).L
 }
 
 # ---------------------------------------------------------------- 2
-Say "Step 2/9: Git repository from the bundle"
+Say "Step 2/9: Git repository (main from GitHub)"
 $gitCmd = Join-Path $env:ProgramFiles "Git\cmd"
 if (-not (Get-Command git -ErrorAction SilentlyContinue) -and (Test-Path (Join-Path $gitCmd "git.exe"))) { $env:PATH = "$gitCmd;$env:PATH" }
 if (Test-Path (Join-Path $root ".git")) { Say "  already a Git repository" }
