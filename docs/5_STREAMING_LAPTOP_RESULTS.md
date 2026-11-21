@@ -15,7 +15,7 @@
 | 250 events/s | 250.0/s | 303.8/s | 19,445 records | 2.1 / 3.1 / 3.5 s (13 months) | 299 | all passed |
 | 100 events/s | 100.0/s | 126.8/s | 9,986 records | 2.4 / 2.9 / 3.0 s (13 months) | 626 | all passed |
 
-## Workspace development runs (for comparison)
+## Development-machine runs (2 cores, for comparison)
 
 | Run | Achieved rate | Consumer rate | Largest backlog | Alert latency p50 / p95 / max | Micro-batches | Checks |
 | --- | --- | --- | --- | --- | --- | --- |

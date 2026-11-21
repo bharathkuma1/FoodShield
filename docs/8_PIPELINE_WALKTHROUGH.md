@@ -107,8 +107,8 @@ So a later download can be compared with the one used: a different hash means a 
 
 ### Step 3.4 — Large archives through a browser
 
-- The full FAOSTAT archives (319 MB) and the grid weather were fetched through a browser on a project member's computer, because the build workspace could not reach FAO or NASA directly.
-- Each file was copied into the workspace and checked (`zipfile.testzip` for archives, SHA-256 for every file).
+- The full FAOSTAT archives (319 MB) and the grid weather were fetched through a browser on a project member's computer, because the development machine could not reach FAO or NASA directly.
+- Each file was copied to the development machine and checked (`zipfile.testzip` for archives, SHA-256 for every file).
 
 ### Step 3.5 — What is in Git and what is not
 

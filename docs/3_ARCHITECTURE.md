@@ -317,7 +317,7 @@ On Windows, Spark needs Hadoop native files matching PySpark's bundled Hadoop 3.
 
 The maintainer built both files from the official [Hadoop 3.5.0 source archive](https://downloads.apache.org/hadoop/common/hadoop-3.5.0/hadoop-3.5.0-src.tar.gz), SHA-512 `90c4f187af0606443523249a40c9af487bd0bbee7af3ff777492f5b5198e599583d07e4d55f569e39842e3304a605e929babf6bbea7d7683c7fac0523147ab0b`. The source archive predates a Windows SDK 10.0.26100 name collision; the build applies Apache's merged [HADOOP-19977 fix](https://github.com/apache/hadoop/pull/8713.patch) and used Visual Studio 2022 Build Tools/MSVC, the Windows SDK and CMake. Those compiler tools are needed only for that build step. Teammates can use an already compatible Windows native build.
 
-The Hadoop Windows files are not in Git and are not needed on Linux or macOS. The workspace development runs used Linux; Windows 11 is the documented laptop host, not a project-wide OS requirement.
+The Hadoop Windows files are not in Git and are not needed on Linux or macOS. The development runs used a 2-core Linux machine; Windows 11 is the documented laptop host, not a project-wide OS requirement.
 
 ### Additional tools for later milestones
 

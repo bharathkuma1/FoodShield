@@ -8,7 +8,7 @@ series ``run_week7_batch_scaling.py --phase all --output-suffix _laptop``):
 It reads ``data/processed/week6_streaming/laptop_*/week6_report.json`` and writes:
 
 - ``data/processed/week6_streaming/laptop_summary.csv`` and ``laptop_summary.json``;
-- ``docs/5_STREAMING_LAPTOP_RESULTS.md``: laptop and workspace runs side by side, the
+- ``docs/5_STREAMING_LAPTOP_RESULTS.md``: laptop and development-machine runs side by side, the
   laptop batch series if present, and the ready-to-paste text for the four
   "TBD (laptop)" cells in the report's Section 5.2 and the slide-10 note;
 - ``docs/dashboard/index.html``, rebuilt (the dashboard already shows laptop runs).
@@ -107,7 +107,7 @@ def num(v, digits=1, thousands=True) -> str:
 
 
 def report_cell(label: str, s: dict) -> str:
-    """Text for one 'Laptop' cell of the report's Section 5.2 table, in the workspace column's style."""
+    """Text for one 'Laptop' cell of the report's Section 5.2 table, in the development-machine column's style."""
     ok = "all checks passed" if s["all_checks_passed"] else f"FAILED: {s['failed_checks'] or 'see report'}"
     p95 = f"p95 {num(s['latency_p95_s'])} s"
     if label.startswith("Full speed"):
@@ -151,7 +151,7 @@ def batch_section() -> list[str]:
     out = ["## Batch series on the laptop", "",
            f"Machine: {get(laptop, 'machine', 'os') or 'see summary.json'}, "
            f"{get(laptop, 'machine', 'cpu_count') or '?'} cores. Median of the timed runs after a warm-up.", "",
-           "| Configuration | Laptop median | Workspace median (2 cores) |", "| --- | --- | --- |"]
+           "| Configuration | Laptop median | Development machine median (2 cores) |", "| --- | --- | --- |"]
     for tag in sorted(lap, key=lambda t: (lap[t].get("series") or "", lap[t].get("factor") or 0, t)):
         out.append(f"| `{tag}` | {num(lap[tag].get('median_s'), 2)} s | "
                    f"{num(ws.get(tag, {}).get('median_s'), 2) + ' s' if tag in ws else 'n/a'} |")
@@ -202,7 +202,7 @@ def main() -> int:
         "",
         *run_table(laptop),
         "",
-        "## Workspace development runs (for comparison)",
+        "## Development-machine runs (2 cores, for comparison)",
         "",
         *run_table(workspace),
         "",

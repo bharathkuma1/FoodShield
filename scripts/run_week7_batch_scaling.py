@@ -31,7 +31,7 @@ and docs/figures/week7_*.png. Workloads and run outputs stay in data/interim/wee
 
 On a second machine, add ``--output-suffix _laptop`` so the results go to
 data/processed/week7_batch_scaling_laptop/ and docs/figures/week7_*_laptop.png
-instead of replacing the committed workspace series:
+instead of replacing the committed development-machine series:
 
     python scripts/run_week7_batch_scaling.py --phase all --output-suffix _laptop
 """

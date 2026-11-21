@@ -1,7 +1,7 @@
 # 5. Streaming: Kafka replay with Spark Structured Streaming
 
 **Decision:** D12 (confirmed at the start of Week 6): native Kafka on the project laptop; replay of the daily grid weather plus monthly price and annual records; the proposed targets; at-least-once delivery with de-duplication.
-**Status:** Built and checked in the Claude workspace (development runs) and on the team laptop (reported runs). Every check passed in every run, and both targets were met.
+**Status:** Built and checked on a 2-core Linux development machine (development runs) and on the team laptop (reported runs). Every check passed in every run, and both targets were met.
 
 This is the TA's required demonstration. Historical records are replayed into a local Kafka topic, Spark Structured Streaming consumes them, and stress alerts come out. It is an engineering demonstration only: it uses the already-frozen M0 and M4 models and adds no test evidence. The record envelope, keys, alert fields and delivery rules are in [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md) §3.5; the streaming scaling series is in [`6_SCALABILITY.md`](6_SCALABILITY.md) §6.3.
 
@@ -58,7 +58,7 @@ The paced runs start in 2011, so the 2022 window has more than 10 years of weath
 
 ## 5.4 Laptop results (reported)
 
-The reported runs (D12) ran on the team laptop: Windows 11, 16 cores, Java 21, Python 3.12, PySpark 4.3.0. Every check passed in all runs. Full tables, with the workspace runs beside them, are generated in [`5_STREAMING_LAPTOP_RESULTS.md`](5_STREAMING_LAPTOP_RESULTS.md).
+The reported runs (D12) ran on the team laptop: Windows 11, 16 cores, Java 21, Python 3.12, PySpark 4.3.0. Every check passed in all runs. Full tables, with the development-machine runs beside them, are generated in [`5_STREAMING_LAPTOP_RESULTS.md`](5_STREAMING_LAPTOP_RESULTS.md).
 
 | Run | Laptop result |
 |---|---|
@@ -68,13 +68,13 @@ The reported runs (D12) ran on the team laptop: Windows 11, 16 cores, Java 21, P
 | Hard restart (consumer killed after batch 60) | 239,011-record backlog cleared from the checkpoint; nothing lost or double-counted; alert p95 21.4 s, from the alerts due while the consumer restarted |
 | Demo rehearsal (2022 at 1,000/s, replay from 2016) | All checks passed; 3.0 minutes end to end; M4 agrees with the frozen test on 20 of 22 months, as expected for a replay from 2016 |
 
-Alert latency at the target rates was about one second higher than on the 2-core workspace, because each micro-batch took longer (626 against 968 micro-batches in the 849 s window at 100/s). Streamed M0 equalled the one-time test on all 22 months in every run.
+Alert latency at the target rates was about one second higher than on the 2-core development machine, because each micro-batch took longer (626 against 968 micro-batches in the 849 s window at 100/s). Streamed M0 equalled the one-time test on all 22 months in every run.
 
 **Windows fixes found by the laptop run** (all in the code): the Python launcher arguments in `week6_laptop.ps1`; atomic writes that retry while another process briefly holds the file (`src/foodshield/streaming/winsafe.py`); one Kafka data folder per run; consumer and broker stopped as process trees; leftover Java processes of this project stopped before the runs. A later check on a second Windows machine added: Python, Java, Hadoop and the work folder found by `scripts\foodshield_env.ps1` instead of fixed paths; a private temp folder for the Kafka JVM (its socket could not open in the user temp folder); retried deletion of a previous run folder that the dashboard server still had open.
 
-## 5.5 Development runs (workspace)
+## 5.5 Development runs (2-core Linux machine)
 
-**Machine:** Claude cloud workspace, Linux, 2 CPU cores, 7 GB RAM. Java 21, Python 3.13, PySpark 4.3.0, Kafka 4.4.0 (one broker, 512 MB heap), Spark `local[2]` with a 1 GB driver, a 1-second trigger and at most 200,000 offsets per trigger. Under D12a the numbers to report are the laptop runs; these runs show that the pipeline works and give a first measurement.
+**Machine:** Linux development machine (Claude's cloud environment), 2 CPU cores, 7 GB RAM. Java 21, Python 3.13, PySpark 4.3.0, Kafka 4.4.0 (one broker, 512 MB heap), Spark `local[2]` with a 1 GB driver, a 1-second trigger and at most 200,000 offsets per trigger. Under D12a the numbers to report are the laptop runs; these runs show that the pipeline works and give a first measurement.
 
 **Correctness: every check passed in every run.**
 
@@ -131,7 +131,7 @@ powershell -ExecutionPolicy Bypass -File scripts\week6_laptop.ps1
 
 The script checks Java, `HADOOP_HOME` and the input files; installs `requirements.txt` (`pyspark==4.3.0`, `kafka-python==3.0.13`) with the Python that `scripts\foodshield_env.ps1` finds; and runs the four runs in §5.3, with Kafka data and Spark checkpoints in the work folder, a short path without spaces (`FOODSHIELD_WORK_ROOT`, by default `fs6` on the system drive). How Python, Java, Hadoop and the work folder are found, and how to set each one, is in the README under "Machine settings". It takes about 45–60 minutes in total. Each report lands in `data\processed\week6_streaming\laptop_<run>\week6_report.json`. `RUN_LAPTOP_STEPS.bat` runs this together with the setup checks and tests.
 
-**After the runs:** `python scripts\apply_laptop_results.py`. It writes `laptop_summary.csv`/`.json`, [`5_STREAMING_LAPTOP_RESULTS.md`](5_STREAMING_LAPTOP_RESULTS.md) (laptop next to workspace runs, plus the text for the report's and the slides' laptop cells) and rebuilds the dashboard. It exits with 1 if a run is missing and 2 if a run failed a check.
+**After the runs:** `python scripts\apply_laptop_results.py`. It writes `laptop_summary.csv`/`.json`, [`5_STREAMING_LAPTOP_RESULTS.md`](5_STREAMING_LAPTOP_RESULTS.md) (laptop next to development-machine runs, plus the text for the report's and the slides' laptop cells) and rebuilds the dashboard. It exits with 1 if a run is missing and 2 if a run failed a check.
 
 **Single run:**
 
@@ -170,7 +170,7 @@ The 250 events/s run takes about 8 minutes (the 2016–2021 fast-forward is abou
 | ~3:30 | Printed report | Achieved rate; alert latency p50 and p95; the checks block (every unique record processed once, alerts equal the offline replay, M0 equals the one-time test), all true. M4 agrees with the frozen test on 20 of 22 months because this replay starts in 2016; that is expected and not a check. |
 | If it fails | Dashboard, Streaming tab, "Replay a saved run" (the recorded laptop demo, with the same pop-ups) | Say so plainly; play the recorded run and walk through the same fields. |
 
-The timings are from the 2-core workspace (the producer took 185 s for this run there). **Rehearsal check:** the demo needs the laptop prerequisites (Java 17+, Hadoop native files) and one rehearsal run beforehand.
+The timings are from the 2-core development machine (the producer took 185 s for this run there). **Rehearsal check:** the demo needs the laptop prerequisites (Java 17+, Hadoop native files) and one rehearsal run beforehand.
 
 ## 5.8 Files
 

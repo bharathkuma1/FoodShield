@@ -206,7 +206,7 @@ Three further checks use only the backtest ([`4_MODELS_AND_RESULTS.md`](4_MODELS
 
 ### 7.4 Data-engineering measurements
 
-D9 runs were single runs; the Week 7 batch series repeated each configuration three times after a warm-up ([`6_SCALABILITY.md`](6_SCALABILITY.md) §6.2). Both used a 2-core, 8 GB Linux workspace with Spark 4.3.0 in local mode.
+D9 runs were single runs; the Week 7 batch series repeated each configuration three times after a warm-up ([`6_SCALABILITY.md`](6_SCALABILITY.md) §6.2). Both used a 2-core, 8 GB Linux development machine with Spark 4.3.0 in local mode.
 
 - **Workload size (Week 7).** The fixed weather-aggregation pipeline, on labelled synthetic expansions of the real 1.86 million daily rows:
   - 1.9 million rows in 2.3 s, 18.6 million in 5.7 s, 55.9 million in 14.0 s, 186 million in 43.2 s;
@@ -227,7 +227,7 @@ D9 runs were single runs; the Week 7 batch series repeated each configuration th
 
 The full history was replayed into Kafka 4.4.0 (one KRaft broker) and consumed by Spark Structured Streaming: 1,864,486 records (daily grid weather, monthly price, annual values) in availability order. Spark de-duplicated the records, built the monthly features and scored the frozen M0 and M4 models.
 
-In development runs on the same 2-core workspace:
+In development runs on the same 2-core development machine:
 
 - every unique record was processed exactly once, including after 1% re-sent records and a hard consumer restart;
 - the streamed alerts equalled an offline replay of the same records, and the streamed M0 scores equalled the frozen test scores;

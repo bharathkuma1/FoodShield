@@ -139,7 +139,7 @@ Percentages indicate workstream evidence present in the repository. They are not
 | 3 | 100% | 100% | 100% | 100% | Spark feature build, real-input as-of integration, coverage profile and hand-reviewed examples |
 | 4 | 80% | 95% | 55% | 65% | Week 4 snapshot (mean 74%). Since then the target, horizon, split, M0 baseline, weighted weather, annual lag and test rule were confirmed as D1–D9 and the rolling backtest added; owners to confirm the percentages |
 | 5 | — | — | — | — | Implemented; owners review their stage (M1 Jyoti, M2 Abhijith, M3/M4 Naman, M0 reference Bharath) |
-| 6 | — | — | — | — | Built by Claude for all four workstreams (D14): replay records (Bharath), Structured Streaming input and state (Abhijith), alert fields and reason codes (Jyoti), Kafka topics and replay run (Naman); checked in the workspace and on the team laptop |
+| 6 | — | — | — | — | Built by Claude for all four workstreams (D14): replay records (Bharath), Structured Streaming input and state (Abhijith), alert fields and reason codes (Jyoti), Kafka topics and replay run (Naman); checked on the 2-core development machine and on the team laptop |
 | 7 | — | — | — | — | Built by Claude for all four workstreams (D14): M0–M4 metrics and lead time (Bharath), data quality and as-of checks (Abhijith), batch scaling (Jyoti), streaming throughput and latency (Naman) |
 | 8 | — | — | — | — | Dashboard, report draft, slides and live demo drafted (D14, D15); set at the joint review |
 

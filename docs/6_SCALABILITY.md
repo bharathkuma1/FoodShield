@@ -34,7 +34,7 @@ Report elapsed time, throughput, speed-up relative to a declared reference, scal
 
 | Item | Value |
 |---|---|
-| Hardware | Claude cloud workspace, Linux, 2 CPU cores, 8.4 GB RAM |
+| Hardware | Linux development machine (Claude's cloud environment), 2 CPU cores, 8.4 GB RAM |
 | Software | Python 3.13, Java 21, PySpark 4.3.0 in local mode |
 | Spark settings | Adaptive query execution off, so the configured shuffle partition count is what runs |
 | Mode | Single-machine scaling only; no cluster was used |
@@ -113,7 +113,7 @@ The single D9-A run (§6.4) reported 7–44× because it timed only the query on
 
 **Script:** `scripts/run_week6_replay.py` → `data/processed/week6_streaming/s7_*/`; summary table `data/processed/week6_streaming/week7_series_summary.csv`.
 
-**Setup.** The Week 6 replay (Kafka 4.4.0, one KRaft broker; Spark Structured Streaming `local[2]`) on the same workspace machine:
+**Setup.** The Week 6 replay (Kafka 4.4.0, one KRaft broker; Spark Structured Streaming `local[2]`) on the same 2-core development machine:
 
 - records from 2016-01 are sent fast to build the 5+ years of history the features need;
 - all of 2022 (84,939 records, 13 alert months) is then sent at a fixed rate and measured;
@@ -157,7 +157,7 @@ The reported laptop runs (D12; Windows 11, 16 cores) met both targets with alert
 | D | Multi-country wheat panel | — | **Extension work** (D13). **31 countries** have enough monthly wheat producer prices (below), so D is feasible on price data. |
 | TM | Detailed trade matrix (411 MB archive, optional) | Supported by the same code | Not downloaded; only needed for partner-level trade flows. |
 
-Machine for the A and B timings: Claude cloud workspace, Linux, **2 CPU cores, 7 GB RAM**, Spark 4.3.0 `local[2]`, driver memory 3 GB (A) or 2 GB (B). They are single runs without a warm-up; the repeated measurements are in §6.2.
+Machine for the A and B timings: Linux development machine (Claude's cloud environment), **2 CPU cores, 7 GB RAM**, Spark 4.3.0 `local[2]`, driver memory 3 GB (A) or 2 GB (B). They are single runs without a warm-up; the repeated measurements are in §6.2.
 
 ### A. Full FAOSTAT archives
 
@@ -219,9 +219,9 @@ The middle column matters most. The corrected M1 features compare each month wit
 
 ### How the downloads were done
 
-The Claude workspace cannot reach FAO or NASA directly, so both downloads went through the Claude desktop app's built-in browser on a project member's computer.
+The development machine cannot reach FAO or NASA directly, so both downloads went through the Claude desktop app's built-in browser on a project member's computer.
 
-- **FAOSTAT archives:** downloaded from the official URLs in [`2_DATA.md`](2_DATA.md) §2.5 into the repository folder, copied into the workspace and checked with `zipfile.testzip`; the SHA-256 of each archive is in the profile.
+- **FAOSTAT archives:** downloaded from the official URLs in [`2_DATA.md`](2_DATA.md) §2.5 into the repository folder, copied to the development machine and checked with `zipfile.testzip`; the SHA-256 of each archive is in the profile.
 - **NASA grid:** the same request URLs as `scripts/fetch_d9b_gridded_weather.py`, saved in four parts with a SHA-256 per part, all verified, then merged in cell order into `data/raw/nasa_power_grid/nasa_power_grid_daily_2001_2022.csv`. The manifest (request URL and raw SHA-256 per cell) is committed next to it; the CSV is not.
 
 The large files stay out of Git (`data/raw/*`, `data/interim/` and root-level `*.zip` are ignored). Only profiles, the grid manifest and derived outputs are committed.
@@ -262,4 +262,4 @@ Archives can change after each FAO update. Compare the archive SHA-256 in `bulk_
 - **One machine, 2 cores.** These results show single-machine scaling, not cluster scale-out.
 - **Disk caching.** Repeated runs may read input from the operating system's file cache. This is likely for the smaller workloads; the 4.3 GB workload is half the RAM.
 - **Synthetic copies.** The larger workloads are noisy copies of real data. They have the real schema and key structure, but they are not new information.
-- **The laptop repeat.** Tried: 1×, 10× and 30× ran (median 3.5 s, 6.9 s and 14.6 s), then the 100× run stopped with a Java direct-memory error at the 2 GB setting. It needs a memory fix before it can be reported. `run_week7_batch_scaling.py --phase all --output-suffix _laptop` writes to `data/processed/week7_batch_scaling_laptop/` and `docs/figures/*_laptop.png`, so the workspace series is kept; `apply_laptop_results.py` then puts the two side by side.
+- **The laptop repeat.** Tried: 1×, 10× and 30× ran (median 3.5 s, 6.9 s and 14.6 s), then the 100× run stopped with a Java direct-memory error at the 2 GB setting. It needs a memory fix before it can be reported. `run_week7_batch_scaling.py --phase all --output-suffix _laptop` writes to `data/processed/week7_batch_scaling_laptop/` and `docs/figures/*_laptop.png`, so the development-machine series is kept; `apply_laptop_results.py` then puts the two side by side.
