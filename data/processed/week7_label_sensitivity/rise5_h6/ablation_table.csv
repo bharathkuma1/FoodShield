@@ -1,0 +1,7 @@
+variant,stage,features,backtest_origins,backtest_stress_months,backtest_precision,backtest_recall,backtest_f1,backtest_false_alarm_rate,backtest_mean_fold_auc,episodes_detected,validation_f1,validation_auc
+corrected,M0,2,78,51,0.8298,0.7647,0.7959,0.2963,0.8052,9/9,0.8235,0.5556
+corrected,M0+season,4,78,51,0.7925,0.8235,0.8077,0.4074,0.9113,8/9,0.8235,0.6720
+corrected,M1,5,78,51,0.7708,0.7255,0.7475,0.4074,0.7149,7/9,0.8235,0.4974
+corrected,M2,8,78,51,0.7258,0.8824,0.7965,0.6296,0.7195,9/9,0.8235,0.5397
+corrected,M3,12,78,51,0.7679,0.8431,0.8037,0.4815,0.7624,9/9,0.8235,0.5450
+corrected,M4,13,78,51,0.7321,0.8039,0.7664,0.5556,0.7206,9/9,0.8235,0.5344

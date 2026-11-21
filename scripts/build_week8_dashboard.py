@@ -33,7 +33,8 @@ P = ROOT / "data" / "processed"
 OUT = ROOT / "docs" / "dashboard" / "index.html"
 STAGES = ["M0", "M0+season", "M1", "M2", "M3", "M4"]
 # Label sensitivity runs (backtest only, 2-year annual delay).
-LABEL_RUNS = {"r5h3": ("rise5_h3", 5, 3), "r15h3": ("rise15_h3", 15, 3), "r10h1": ("rise10_h1", 10, 1), "r10h6": ("rise10_h6", 10, 6)}
+# Every rise x horizon combination except the main one (r10h3), which comes from the primary runs.
+LABEL_RUNS = {f"r{r}h{m}": (f"rise{r}_h{m}", r, m) for r in (5, 10, 15) for m in (1, 3, 6) if (r, m) != (10, 3)}
 REPLAY_RUNS = [("laptop_demo_1000", "Laptop demo, 1,000 events/s"), ("laptop_paced_100", "Laptop, 100 events/s"),
                ("laptop_paced_250", "Laptop, 250 events/s"), ("laptop_full_max", "Laptop, full speed"),
                ("laptop_restart", "Laptop, consumer killed and restarted")]

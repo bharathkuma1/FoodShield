@@ -534,8 +534,11 @@ function renderOverview() {
 }
 
 // =================================================================== Explorer
-const LABELS = {r10h3: "10% rise within 3 months", r5h3: "5% rise within 3 months", r15h3: "15% rise within 3 months",
-                r10h1: "10% rise within 1 month", r10h6: "10% rise within 6 months"};
+const RISES = [5, 10, 15], HORIZONS = [1, 3, 6];
+const LABELS = {};  // "r10h3" -> "10% rise within 3 months"
+RISES.forEach(r => HORIZONS.forEach(m => { LABELS["r" + r + "h" + m] = r + "% rise within " + m + (m === 1 ? " month" : " months"); }));
+const REPORTED_LABELS = ["r5h3", "r15h3", "r10h1", "r10h6"];  // the D1/D2 checks in the report; the other four are extra
+const labelParts = k => { const m = /^r(\d+)h(\d+)$/.exec(k); return m ? [m[1], m[2]] : ["10", "3"]; };
 const EX_DEFAULT = {a: "M0", b: "M4", period: "test", label: "r10h3", lag: "2", cut: null};
 const PRICES = D.explorer.prices;
 function confusionOf(labels, alerts) {
@@ -575,8 +578,17 @@ function renderExplorer() {
     STAGES.forEach(x => { const o = h("option", STAGE_NAME[x], s); o.value = x; }); s.value = st[key]; s.addEventListener("change", () => { st[key] = s.value; update(); }); return s; };
   const c1 = control(box, "Compare"); const selA = stageSelect(c1.row, "a"); h("span", "vs", c1.row); const selB = stageSelect(c1.row, "b");
   const c2 = control(box, "Period"); segPeriod = seg(c2.row, [["backtest", "Backtest 2014–2020"], ["test", "Test 2021–2022"]], st.period, v => { st.period = v; update(); }, "Period");
-  const c3 = control(box, "Stress means"); const selL = h("select", null, c3.row); selL.setAttribute("aria-label", "Stress definition");
-  Object.entries(LABELS).forEach(([k, t]) => { const o = h("option", t, selL); o.value = k; }); selL.value = st.label; selL.addEventListener("change", () => { st.label = selL.value; update(); });
+  if (!LABELS[st.label]) st.label = EX_DEFAULT.label;
+  const c3 = control(box, "Stress means: real price rises at least");
+  const selR = h("select", null, c3.row); selR.setAttribute("aria-label", "Minimum price rise");
+  RISES.forEach(r => { const o = h("option", r + "%" + (r === 10 ? " (project)" : ""), selR); o.value = String(r); });
+  h("span", "within", c3.row);
+  const selH = h("select", null, c3.row); selH.setAttribute("aria-label", "Time window");
+  HORIZONS.forEach(m => { const o = h("option", m + (m === 1 ? " month" : " months") + (m === 3 ? " (project)" : ""), selH); o.value = String(m); });
+  const showLabel = () => { const [r, m] = labelParts(st.label); selR.value = r; selH.value = m; };
+  showLabel();
+  const onLabel = () => { st.label = "r" + selR.value + "h" + selH.value; update(); };
+  selR.addEventListener("change", onLabel); selH.addEventListener("change", onLabel);
   const c4 = control(box, "Annual data delay"); segLag = seg(c4.row, [["2", "2 years"], ["3", "3 years"]], st.lag, v => { st.lag = v; update(); }, "Annual data delay");
   const c5 = control(box, "Alert line"); segCut = seg(c5.row, [["reported", "Reported"], ["custom", "My cutoff"]], st.cut === null ? "reported" : "custom", v => {
     st.cut = v === "reported" ? null : parseFloat(slider.value); update(); }, "Alert line");
@@ -586,7 +598,7 @@ function renderExplorer() {
   const hint = h("span", "← more alerts · fewer alerts →", c5.c, "note");
   slider.addEventListener("input", () => { st.cut = parseFloat(slider.value); segCut.set("custom"); update(); });
   const reset = h("button", "Reset to reported settings", box, "btn"); reset.type = "button";
-  reset.addEventListener("click", () => { Object.assign(st, EX_DEFAULT); selA.value = st.a; selB.value = st.b; selL.value = st.label; segPeriod.set(st.period); segLag.set(st.lag); segCut.set("reported"); update(); });
+  reset.addEventListener("click", () => { Object.assign(st, EX_DEFAULT); selA.value = st.a; selB.value = st.b; showLabel(); segPeriod.set(st.period); segLag.set(st.lag); segCut.set("reported"); update(); });
   let noticeTimer = null;
   const say = (t) => { notice.textContent = t; clearTimeout(noticeTimer); noticeTimer = setTimeout(() => { notice.textContent = ""; }, 7000); };
 
@@ -607,9 +619,12 @@ function renderExplorer() {
     const bn = h("div", null, banner, "banner " + (exploring ? "exploring" : "reported"));
     let text;
     if (st.cut !== null) text = "Exploring: your own alert line, not a reported result." + (st.period === "test" ? " The reported test used alert lines chosen on 2018–2020 before the test was opened; a line picked while looking at the test is not a fair test." : "");
+    else if (!primary && st.label !== "r10h3" && !REPORTED_LABELS.includes(st.label)) text = "Exploring: stress defined as a " + LABELS[st.label] + ". An extra check on the backtest only, not part of the reported results.";
     else if (!primary) text = "Reported robustness check, not the headline result: " + (st.label !== "r10h3" ? "stress defined as a " + LABELS[st.label] + "." : "annual statistics usable only three years after their data year.");
     else if (st.period === "test") text = "Reported result: the one-time test, 2021–2022, with every setting fixed before it was opened.";
     else text = "Reported result: the 2014–2020 backtest. Each year is scored by models trained on earlier years only.";
+    const nStress = set.stages[st.a].filter(r => r[1] === 1).length;
+    if (nStress < 5) text += " Only " + nStress + " stress month" + (nStress === 1 ? "" : "s") + " in this period: too few to compare models.";
     h("span", text + " ", bn);
     if (exploring) { const r = h("button", "Reset to reported settings", bn, "link"); r.type = "button"; r.addEventListener("click", () => reset.click()); }
     const A = evaluateStage(key, st.a, st.cut), B = evaluateStage(key, st.b, st.cut);
