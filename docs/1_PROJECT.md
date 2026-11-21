@@ -81,7 +81,7 @@ The roadmap follows the project's eight-week schedule and incorporates the TA's 
 | Evaluation | Experiment design, scalability and performance targets, metrics, plots and analysis | Model evaluation, data-quality checks, batch and streaming scaling series done with plots; laptop streaming runs passed every check. Only measured results are presented as achieved |
 | Summary | Progress toward the proposal's goals and future extensions | The report draft's conclusion states the model result, the streaming and scaling assessment and future extensions; confirm at the joint review |
 | Presentation slides | One deck per team | Drafted as a shared Claude slide deck (12 slides, speaker notes, demo script; exports to PowerPoint or PDF); joint review pending |
-| Public GitHub repository link | One link per team; verify public access | Push `feature/workinprogress_v2` and confirm public access before submission |
+| Public GitHub repository link | One link per team; verify public access | Push `main` and confirm public access before submission |
 | Contribution summary | Each member submits the MS Form with tasks performed and estimated effort | The repository records workstream ownership (§1.5); each member provides their own form response |
 | Demo/presentation session | Session-selection MS Form; all members attend the full session | Session details not yet available |
 | Peer evaluation | Each student completes the evaluation form for presentations in the session | Pending session and form |

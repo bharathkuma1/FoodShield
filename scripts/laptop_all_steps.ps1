@@ -103,9 +103,9 @@ if (Test-Path (Join-Path $root ".git")) { Say "  already a Git repository" }
 elseif (-not (Get-Command git -ErrorAction SilentlyContinue)) { Say "  Git not found; skipped (install Git for Windows and run this again)" "Yellow" }
 else {
     [void](Run "02_git_init" "git init")
-    [void](Run "02_git_fetch" "git fetch .\foodshield_v2.bundle feature/workinprogress_v2:feature/workinprogress_v2")
-    [void](Run "02_git_checkout" "git checkout -f feature/workinprogress_v2")
     [void](Run "02_git_remote" "git remote add origin https://github.com/bharathkuma1/FoodShield.git")
+    [void](Run "02_git_fetch" "git fetch origin main")
+    [void](Run "02_git_checkout" "git checkout -f -B main origin/main")
     [void](Run "02_git_status" "git status --short --branch")
 }
 

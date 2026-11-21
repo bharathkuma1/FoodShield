@@ -3,7 +3,7 @@
 **Authors:** Bharath Kumar; Abhijith C R; Jyoti Prakash Das; Naman Singh Shekhawat
 **Course:** DA231o Data Engineering at Scale, Data-Flux
 **Document type:** Continuing project manuscript and reproducibility guide
-**Version:** 0.2 (evidence through Week 8; branch `feature/workinprogress_v2`)
+**Version:** 0.2 (evidence through Week 8; branch `main`)
 **Note (Week 8):** the submission text is now the final report draft, a shared Claude doc that condenses this manuscript to the 6–8 page format ([`1_PROJECT.md`](1_PROJECT.md) §1.4). This file stays as the detailed running manuscript.
 
 ## Abstract

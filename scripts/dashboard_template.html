@@ -271,7 +271,7 @@ input[type=range] { width: 180px; accent-color: var(--accent); }
 </section>
 </div>
 
-<p class="note">Sources: FAOSTAT (CC BY 4.0), State Statistics Service of Ukraine, NASA POWER, geoBoundaries. Synthetic data appears only in the labelled scaling benchmark. Repository: <code>feature/workinprogress_v2</code>; details in <code>docs/</code>.</p>
+<p class="note">Sources: FAOSTAT (CC BY 4.0), State Statistics Service of Ukraine, NASA POWER, geoBoundaries. Synthetic data appears only in the labelled scaling benchmark. Repository: <code>main</code>; details in <code>docs/</code>.</p>
 </main>
 <script id="data" type="application/json">__DATA__</script>
 <script>
@@ -425,7 +425,7 @@ document.querySelectorAll(".tabs button").forEach((b, i, all) => {
   b.addEventListener("click", () => showTab(b.dataset.tab));
   b.addEventListener("keydown", ev => { if (ev.key === "ArrowRight" || ev.key === "ArrowLeft") { const n = all[(i + (ev.key === "ArrowRight" ? 1 : all.length - 1)) % all.length]; n.focus(); showTab(n.dataset.tab); } });
 });
-document.getElementById("meta").textContent = "Built from committed results · branch feature/workinprogress_v2 · defaults on every tab show the reported results";
+document.getElementById("meta").textContent = "Built from committed results · branch main · defaults on every tab show the reported results";
 
 // =================================================================== Overview
 function renderOverview() {

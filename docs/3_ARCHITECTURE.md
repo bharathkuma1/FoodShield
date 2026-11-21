@@ -303,7 +303,7 @@ This is the team setup reference. It does not authorise or perform installations
 
 | Software | Required baseline | Notes and trusted source |
 |---|---|---|
-| Git | A maintained Git version | Needed to clone, branch, commit and pull. [Official Git install page](https://git-scm.com/install/). The team's working branch is `feature/workinprogress_v2`. |
+| Git | A maintained Git version | Needed to clone, branch, commit and pull. [Official Git install page](https://git-scm.com/install/). The project is on the `main` branch. |
 | Python | Python 3.11 or later | Required by the pinned Spark 4.3.0. Keep driver and worker Python versions aligned. [Python for Windows](https://www.python.org/downloads/windows/). |
 | Java JDK | Java 17 or later | Required by PySpark 4.x and Kafka 4.x. Set `JAVA_HOME` if Java is not on `PATH`. [Eclipse Temurin JDK 17 downloads](https://adoptium.net/temurin/releases/?version=17). |
 | PySpark | 4.3.0 | Pinned in `requirements.txt`; install inside a project virtual environment. No separate Spark download is needed. [Spark 4.3.0 installation guide](https://spark.apache.org/docs/latest/api/python/getting_started/install.html). |
@@ -335,7 +335,7 @@ There is no agreed project-wide minimum RAM, processor, operating system or driv
 ### Get the code and prepare the Python environment
 
 ```powershell
-git clone --branch feature/workinprogress_v2 https://github.com/bharathkuma1/FoodShield.git
+git clone https://github.com/bharathkuma1/FoodShield.git
 cd FoodShield
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
