@@ -56,8 +56,8 @@ def backtest_setting(path: Path, rise: float, horizon: int, lag: int) -> dict:
     return {"period": "backtest", "rise": rise, "horizon": horizon, "lag": lag, "stages": stages}
 
 
-def test_setting(run: dict) -> dict:
-    return {"period": "test", "rise": 10, "horizon": 3, "lag": run["annual_lag"],
+def test_setting(run: dict, rise: float = 10, horizon: int = 3, posthoc: bool = False) -> dict:
+    return {"period": "test", "rise": rise, "horizon": horizon, "lag": run["annual_lag"], "posthoc": posthoc,
             "stages": {s: [[m["origin"], m["label"], round(m["score"], 6), round(st["cutoff_from_validation"], 6), int(m["alert"])]
                            for m in st["monthly"]] for s, st in run["stages"].items()}}
 
@@ -74,6 +74,11 @@ def explorer_data(prices: dict[str, float], test: dict) -> dict:
         path = P / "week7_label_sensitivity" / folder / "backtest_predictions.csv"
         if path.exists():
             settings[f"backtest|{key}|2"] = backtest_setting(path, rise, horizon, 2)
+        # Post-hoc test scores for the other definitions (scripts/run_posthoc_test_definitions.py); exploratory only.
+        posthoc = load_json(P / "posthoc_test_definitions" / folder / "final_test_report.json")
+        for run in (posthoc or {}).get("runs", []):
+            if run["variant"] == "corrected":
+                settings[f"test|{key}|{run['annual_lag']}"] = test_setting(run, rise, horizon, posthoc=True)
     return {"prices": prices, "settings": settings}
 
 

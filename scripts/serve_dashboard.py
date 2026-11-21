@@ -67,7 +67,9 @@ def live_payload(work_root: Path, name: str | None) -> dict:
             except ValueError:
                 continue
             alerts.append({k: a.get(k) for k in ALERT_FIELDS})
+    stress = (read_json(run / "effective_config.json") or {}).get("models", {}).get("stress_definition")
     return {"run": run.name, "run_started": (run / "effective_config.json").stat().st_mtime, "work_root": str(work_root),
+            "stress": stress,
             "status": read_json(run / "consumer_status.json"), "finished": (run / "STOP").exists(),
             "alerts": alerts, "server_time": time.time()}
 

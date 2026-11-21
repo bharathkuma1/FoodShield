@@ -131,6 +131,11 @@ def main() -> int:
     parser.add_argument("--partitions", type=int, default=None, help="Override observation-topic partitions.")
     parser.add_argument("--trigger-seconds", type=float, default=None, help="Override the Structured Streaming trigger.")
     parser.add_argument("--max-offsets", type=int, default=None, help="Override maxOffsetsPerTrigger.")
+    parser.add_argument("--stress-rise", type=int, default=10, choices=(5, 10, 15),
+                        help="Stress definition of the scoring models: minimum real-price rise in percent (default 10).")
+    parser.add_argument("--stress-horizon", type=int, default=3, choices=(1, 3, 6),
+                        help="Stress definition of the scoring models: months ahead (default 3). Anything other than "
+                             "10%% within 3 months uses the post-hoc models from scripts/run_posthoc_test_definitions.py.")
     args = parser.parse_args()
     cfg = json.loads(args.config.read_text(encoding="utf-8"))
     if args.partitions is not None:
@@ -139,6 +144,13 @@ def main() -> int:
         cfg["streaming"]["trigger_seconds"] = args.trigger_seconds
     if args.max_offsets is not None:
         cfg["streaming"]["max_offsets_per_trigger"] = args.max_offsets
+    posthoc = (args.stress_rise, args.stress_horizon) != (10, 3)
+    if posthoc:  # exploratory models for another stress definition; the project definition stays the default
+        report_path = f"data/processed/posthoc_test_definitions/rise{args.stress_rise}_h{args.stress_horizon}/final_test_report.json"
+        if not (ROOT / report_path).exists():
+            sys.exit(f"{report_path} not found: run scripts/run_posthoc_test_definitions.py first")
+        cfg["models"]["frozen_report"] = report_path
+    cfg["models"]["stress_definition"] = {"rise_pct": args.stress_rise, "horizon_months": args.stress_horizon, "posthoc": posthoc}
     if args.work_root is not None:
         cfg["work_root"] = str(args.work_root.resolve())
         cfg["kafka"]["data_dir"] = str(args.work_root.resolve() / "kafka-data")
@@ -310,7 +322,8 @@ def main() -> int:
         "pipeline": "week6_kafka_spark_streaming_replay", "run": args.name,
         "generated_utc": datetime.now(timezone.utc).isoformat(),
         "settings": {"rate_events_per_s": args.rate or "max", "measure_from": args.measure_from, "until": args.until,
-                     "replay_from": args.replay_from,
+                     "replay_from": args.replay_from, "stress_definition": cfg["models"]["stress_definition"],
+                     "models_report": cfg["models"]["frozen_report"],
                      "duplicate_fraction": args.duplicate_fraction, "kill_consumer_after_batches": args.kill_consumer_after_batches,
                      "trigger_seconds": cfg["streaming"]["trigger_seconds"],
                      "max_offsets_per_trigger": cfg["streaming"]["max_offsets_per_trigger"],

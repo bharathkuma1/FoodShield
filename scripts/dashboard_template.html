@@ -604,8 +604,8 @@ function renderExplorer() {
 
   function update() {
     // Combinations that were never run fall back to the nearest one that was, with a note.
-    if (st.label !== "r10h3" && st.period === "test") { st.period = "backtest"; segPeriod.set("backtest"); say("Other stress definitions were tested on the backtest only (the test was opened once, for the main definition), so the period switched to the backtest."); }
-    if (st.label !== "r10h3" && st.lag === "3") { st.lag = "2"; segLag.set("2"); say("The 3-year delay was run with the main stress definition only, so the delay switched back to 2 years."); }
+    if (!D.explorer.settings[st.period + "|" + st.label + "|" + st.lag] && st.lag === "3") { st.lag = "2"; segLag.set("2"); say("The 3-year delay was not run for this combination, so the delay switched back to 2 years."); }
+    if (!D.explorer.settings[st.period + "|" + st.label + "|" + st.lag] && st.period === "test") { st.period = "backtest"; segPeriod.set("backtest"); say("The test was not scored for this combination, so the period switched to the backtest."); }
     const key = st.period + "|" + st.label + "|" + st.lag;
     if (!D.explorer.settings[key]) { say("That combination was not run."); return; }
     const set = D.explorer.settings[key];
@@ -619,6 +619,7 @@ function renderExplorer() {
     const bn = h("div", null, banner, "banner " + (exploring ? "exploring" : "reported"));
     let text;
     if (st.cut !== null) text = "Exploring: your own alert line, not a reported result." + (st.period === "test" ? " The reported test used alert lines chosen on 2018–2020 before the test was opened; a line picked while looking at the test is not a fair test." : "");
+    else if (set.posthoc) text = "Exploring, post-hoc: stress defined as a " + LABELS[st.label] + ". The 2021–2022 test was scored for this definition after the one-time test had been opened, so it is not a reported result. The reported test is 10% within 3 months.";
     else if (!primary && st.label !== "r10h3" && !REPORTED_LABELS.includes(st.label)) text = "Exploring: stress defined as a " + LABELS[st.label] + ". An extra check on the backtest only, not part of the reported results.";
     else if (!primary) text = "Reported robustness check, not the headline result: " + (st.label !== "r10h3" ? "stress defined as a " + LABELS[st.label] + "." : "annual statistics usable only three years after their data year.");
     else if (st.period === "test") text = "Reported result: the one-time test, 2021–2022, with every setting fixed before it was opened.";
@@ -664,7 +665,15 @@ function drawExplorer(st, A, B) {
   const priceH = f.ih, y = v => f.m.t + priceH - (v - lo) / (hi - lo) * priceH;
   rows.forEach((r, i) => { if (r[1] === 1) el("rect", {x: x(i) - f.iw / n / 2, y: f.m.t, width: f.iw / n, height: priceH, fill: css("--band")}, f.svg); });
   for (let v = lo; v <= hi; v += 50) { el("line", {x1: f.m.l, x2: f.W - f.m.r, y1: y(v), y2: y(v), class: "gridline"}, f.svg); el("text", {x: f.m.l - 6, y: y(v) + 4, "text-anchor": "end"}, f.svg).textContent = v; }
-  const yearTick = (svgF, yy) => rows.forEach((r, i) => { if (r[0].endsWith("-01") || i === 0) el("text", {x: x(i), y: yy, "text-anchor": i === 0 ? "start" : "middle"}, svgF.svg).textContent = r[0].slice(0, 4); });
+  // Month ticks: every month when there is room, else every 2, 3 or 6 months; January shows the year (bold).
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const yearTick = (svgF, yy) => {
+    const px = svgF.iw / n, step = [1, 2, 3, 6, 12].find(k => k * px >= 30) || 12;
+    rows.forEach((r, i) => { const m = +r[0].slice(5, 7);
+      if ((m - 1) % step !== 0) return;
+      const t = el("text", {x: x(i), y: yy, "text-anchor": "middle"}, svgF.svg);
+      t.textContent = m === 1 ? r[0].slice(0, 4) : MON[m - 1];
+      if (m === 1) t.setAttribute("font-weight", "600"); else t.setAttribute("fill", css("--text-muted")); }); };
   yearTick(f, f.m.t + priceH + 14);
   el("path", {d: rows.map((r, i) => (i ? "L" : "M") + x(i) + " " + y(PRICES[r[0]])).join(""), fill: "none", stroke: css("--text-secondary"), "stroke-width": 2}, f.svg);
   pair.forEach(([s, R], j) => { const yy = f.m.t + priceH + 30 + j * 14;
@@ -772,7 +781,7 @@ function liveMonths() { return Object.values(live.months).sort((a, b) => a.month
 function ingestLive(payload) {
   if (!payload.run) { live.state = "wait"; live.run = null; live.message = payload.message; return []; }
   if (payload.run !== live.run || payload.run_started !== live.started) { live.run = payload.run; live.started = payload.run_started; live.seen = new Set(); live.months = {}; }
-  live.state = payload.finished ? "done" : "on"; live.status = payload.status; live.workRoot = payload.work_root;
+  live.state = payload.finished ? "done" : "on"; live.status = payload.status; live.workRoot = payload.work_root; live.stress = payload.stress || null;
   const fresh = {};
   payload.alerts.forEach(a => { const id = a.model_stage + "|" + a.observation_month; if (live.seen.has(id)) return; live.seen.add(id);
     const it = live.months[a.observation_month] = live.months[a.observation_month] || {month: a.observation_month, stages: {}};
@@ -820,6 +829,8 @@ function drawLive() {
   liveUI.dot.className = "dot " + (live.state === "on" ? "on" : live.state === "wait" ? "wait" : "");
   liveUI.text.textContent = live.state === "on" ? "Connected: run “" + live.run + "” is running" : live.state === "done" ? "Run “" + live.run + "” finished" :
     live.state === "wait" ? (live.message || "Waiting for a run to start") : live.state === "error" ? "Server not reachable (" + live.error + "). Is serve_dashboard.py still running?" : "Connecting…";
+  if (live.run && live.stress) liveUI.text.textContent += " · models for stress = " + live.stress.rise_pct + "% rise within " + live.stress.horizon_months +
+    (live.stress.horizon_months === 1 ? " month" : " months") + (live.stress.posthoc ? " (post-hoc, exploratory)" : " (project)");
   liveUI.soundNote.textContent = prefs.sound && (!audio || audio.state !== "running") ? "Click anywhere on the page once to allow sound." : "";
   const items = liveMonths(), st = live.status || {};
   const alertsN = items.reduce((a, it) => a + Object.values(it.stages).filter(x => x.alert).length, 0);

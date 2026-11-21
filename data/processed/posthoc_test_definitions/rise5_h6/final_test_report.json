@@ -1,0 +1,2019 @@
+{
+  "mode": "posthoc_test",
+  "rise_pct": 5,
+  "horizon_months": 6,
+  "note": "Exploratory, scored after the one-time test was opened; not a reported result.",
+  "generated_utc": "2026-11-21T10:40:03.369532+00:00",
+  "runs": [
+    {
+      "annual_lag": 2,
+      "variant": "corrected",
+      "train_origins": 78,
+      "validation_origins": 30,
+      "validation_stress_months": 21,
+      "test_origins": 19,
+      "test_window": [
+        "2021-01",
+        "2022-07"
+      ],
+      "test_stress_months": 9,
+      "stages": {
+        "M0": {
+          "cutoff_from_validation": 0.38884528377655314,
+          "threshold": 0.38884528377655314,
+          "n": 19,
+          "positives": 9,
+          "alerts": 18,
+          "true_positive": 9,
+          "false_positive": 9,
+          "false_negative": 0,
+          "true_negative": 1,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666,
+          "false_positive_rate": 0.9,
+          "auc": 0.8111111111111111,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.5225328877487805,
+              "alert": 1
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.35698322892703604,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.4002734787549206,
+              "alert": 1
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.47081575058027036,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.6875924015925565,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.6080400235949626,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.6472267051083945,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.8590116294651403,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.7684211139632786,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.7309680349818,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.69655624123747,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.6288663906439782,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.6698948017651922,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.5212266692495584,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.5960838790276377,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.7457626159715935,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.8302916148938297,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.8617376531092121,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.8441087700228846,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 7.05324548023274,
+            "price_real_anomaly_z_12m": -0.6037572550439348
+          },
+          "intercept": 0.8106335733132628
+        },
+        "M0+season": {
+          "cutoff_from_validation": 0.24226949770169948,
+          "threshold": 0.24226949770169948,
+          "n": 19,
+          "positives": 9,
+          "alerts": 19,
+          "true_positive": 9,
+          "false_positive": 10,
+          "false_negative": 0,
+          "true_negative": 0,
+          "precision": 0.47368421052631576,
+          "recall": 1.0,
+          "f1": 0.6428571428571429,
+          "false_positive_rate": 1.0,
+          "auc": 0.9555555555555556,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.6236552644253817,
+              "alert": 1
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.3298046634992341,
+              "alert": 1
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.24897092795063014,
+              "alert": 1
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.2494558183319625,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.43791906290965166,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.49772077468849063,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.6888129885252718,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.9159664495741557,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.9212049422512416,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.9246798733065315,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.9011831965778546,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.8140164288695861,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.7166486706891226,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.440984441322128,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.3673517034990784,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.43860453843084013,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.5712762540298624,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.7262164102561118,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.8282531930212422,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 5.202746618027058,
+            "price_real_anomaly_z_12m": -0.43114724865770465,
+            "month_sin": -1.3947013930436167,
+            "month_cos": 0.013076675007083477
+          },
+          "intercept": 0.9734253919827419
+        },
+        "M1": {
+          "cutoff_from_validation": 0.29768983848088715,
+          "threshold": 0.29768983848088715,
+          "n": 19,
+          "positives": 9,
+          "alerts": 18,
+          "true_positive": 9,
+          "false_positive": 9,
+          "false_negative": 0,
+          "true_negative": 1,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666,
+          "false_positive_rate": 0.9,
+          "auc": 0.7222222222222222,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.4180218353552403,
+              "alert": 1
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.2921025774185829,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.39286445916387924,
+              "alert": 1
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.4428807104925845,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.630732173606052,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.4263373901501011,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.5574113885670088,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.79400876307367,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.7658208898305322,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.802152307670652,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.689082521281481,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.5482884154907656,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.7107529517171658,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.5755694322307665,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.6664462698347156,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.6584603336945829,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.8755929757141063,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.89924726759759,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.8716541643691583,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 6.644879311379689,
+            "price_real_anomaly_z_12m": -0.5818920812368243,
+            "precipitation_sum_mm_clim_z": -0.26584512182298337,
+            "t2m_max_mean_c_clim_z": 0.07528571905705847,
+            "t2m_min_mean_c_clim_z": -0.08762398962770486
+          },
+          "intercept": 0.7767594367391928
+        },
+        "M2": {
+          "cutoff_from_validation": 0.27348162121787634,
+          "threshold": 0.27348162121787634,
+          "n": 19,
+          "positives": 9,
+          "alerts": 18,
+          "true_positive": 9,
+          "false_positive": 9,
+          "false_negative": 0,
+          "true_negative": 1,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666,
+          "false_positive_rate": 0.9,
+          "auc": 0.6555555555555556,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.31967445479699497,
+              "alert": 1
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.21735317205964388,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.31769867064519586,
+              "alert": 1
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.37784040825913523,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.5631776584052279,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.37625327731893543,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.5189975184194269,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.7643505904266524,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.7172915314387271,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.7564378386270428,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.6231210519188024,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.48142685687079567,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.7525497585113367,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.6294451841743772,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.7241579659811441,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.7362172825026024,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.9137999203531836,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.930852480066295,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.9092177882578469,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 6.757069851791602,
+            "price_real_anomaly_z_12m": -0.6383467571473396,
+            "precipitation_sum_mm_clim_z": -0.2653899817511457,
+            "t2m_max_mean_c_clim_z": 0.04451725338896541,
+            "t2m_min_mean_c_clim_z": -0.05200182504537861,
+            "production_t_yoy_sym_change": -0.7935164873929949,
+            "yield_kg_ha_yoy_sym_change": -0.6371522901971394,
+            "area_harvested_ha_yoy_sym_change": -2.637847796427403
+          },
+          "intercept": 0.7866383439041009
+        },
+        "M3": {
+          "cutoff_from_validation": 0.3221165593759874,
+          "threshold": 0.3221165593759874,
+          "n": 19,
+          "positives": 9,
+          "alerts": 16,
+          "true_positive": 9,
+          "false_positive": 7,
+          "false_negative": 0,
+          "true_negative": 3,
+          "precision": 0.5625,
+          "recall": 1.0,
+          "f1": 0.72,
+          "false_positive_rate": 0.7,
+          "auc": 0.5888888888888889,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.23884619360244763,
+              "alert": 0
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.18608426648189502,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.28933794083080944,
+              "alert": 0
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.3816283563335776,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.5384235494332097,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.34510621420459264,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.43202450717612684,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.7213608836465117,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.7213005361663094,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.7463741676229689,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.5562083834988643,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.43183090093218457,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.7646802033832333,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.638350670112104,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.772327871725012,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.7657079052187282,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.9390774703226996,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.9425083845457163,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.9291665623532132,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 6.617700611811754,
+            "price_real_anomaly_z_12m": -0.6543225705596976,
+            "precipitation_sum_mm_clim_z": -0.2992859323363376,
+            "t2m_max_mean_c_clim_z": -0.0198602284955473,
+            "t2m_min_mean_c_clim_z": -0.10230503949183818,
+            "production_t_yoy_sym_change": -1.00831975155592,
+            "yield_kg_ha_yoy_sym_change": -0.6742542448957397,
+            "area_harvested_ha_yoy_sym_change": -3.7463881024590666,
+            "import_quantity_t_yoy_sym_change": -0.36816799363019714,
+            "export_quantity_t_yoy_sym_change": -0.7281872238308241,
+            "import_value_1000_usd_yoy_sym_change": 0.4575135334822645,
+            "export_value_1000_usd_yoy_sym_change": -0.6655331493595058
+          },
+          "intercept": 0.9464033618791996
+        },
+        "M4": {
+          "cutoff_from_validation": 0.2969135258906307,
+          "threshold": 0.2969135258906307,
+          "n": 19,
+          "positives": 9,
+          "alerts": 16,
+          "true_positive": 9,
+          "false_positive": 7,
+          "false_negative": 0,
+          "true_negative": 3,
+          "precision": 0.5625,
+          "recall": 1.0,
+          "f1": 0.72,
+          "false_positive_rate": 0.7,
+          "auc": 0.5888888888888889,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.20991894554396384,
+              "alert": 0
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.1714280028905324,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.28713996919627094,
+              "alert": 0
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.38103896361100076,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.5342577694850248,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.34816133008499917,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.44491583298817816,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.7243182564083124,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.7197659960861329,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.7436311029081444,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.554785188757268,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.4313758775655121,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.7717325712643446,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.6467638692919273,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.7737519318014658,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.7831822870238436,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.9337486640304549,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.9372626130101541,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.926629697047479,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 6.566266259264035,
+            "price_real_anomaly_z_12m": -0.6591048595464115,
+            "precipitation_sum_mm_clim_z": -0.2926104898376786,
+            "t2m_max_mean_c_clim_z": -0.018762834644279105,
+            "t2m_min_mean_c_clim_z": -0.10039938388491297,
+            "production_t_yoy_sym_change": -1.012306820280211,
+            "yield_kg_ha_yoy_sym_change": -0.6795690893773156,
+            "area_harvested_ha_yoy_sym_change": -3.7547668476768763,
+            "import_quantity_t_yoy_sym_change": -0.3605676326122804,
+            "export_quantity_t_yoy_sym_change": -0.7306249930375658,
+            "import_value_1000_usd_yoy_sym_change": 0.46551204465472085,
+            "export_value_1000_usd_yoy_sym_change": -0.66059015552817,
+            "m4_price_precip_clim_interaction": -0.030263368144579767
+          },
+          "intercept": 0.9524710704435551
+        }
+      },
+      "baselines": {
+        "always_alert": {
+          "threshold": 0.5,
+          "n": 19,
+          "positives": 9,
+          "alerts": 19,
+          "true_positive": 9,
+          "false_positive": 10,
+          "false_negative": 0,
+          "true_negative": 0,
+          "precision": 0.47368421052631576,
+          "recall": 1.0,
+          "f1": 0.6428571428571429,
+          "false_positive_rate": 1.0
+        }
+      }
+    },
+    {
+      "annual_lag": 3,
+      "variant": "corrected",
+      "train_origins": 78,
+      "validation_origins": 30,
+      "validation_stress_months": 21,
+      "test_origins": 19,
+      "test_window": [
+        "2021-01",
+        "2022-07"
+      ],
+      "test_stress_months": 9,
+      "stages": {
+        "M0": {
+          "cutoff_from_validation": 0.38884528377655314,
+          "threshold": 0.38884528377655314,
+          "n": 19,
+          "positives": 9,
+          "alerts": 18,
+          "true_positive": 9,
+          "false_positive": 9,
+          "false_negative": 0,
+          "true_negative": 1,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666,
+          "false_positive_rate": 0.9,
+          "auc": 0.8111111111111111,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.5225328877487805,
+              "alert": 1
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.35698322892703604,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.4002734787549206,
+              "alert": 1
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.47081575058027036,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.6875924015925565,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.6080400235949626,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.6472267051083945,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.8590116294651403,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.7684211139632786,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.7309680349818,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.69655624123747,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.6288663906439782,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.6698948017651922,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.5212266692495584,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.5960838790276377,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.7457626159715935,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.8302916148938297,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.8617376531092121,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.8441087700228846,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 7.05324548023274,
+            "price_real_anomaly_z_12m": -0.6037572550439348
+          },
+          "intercept": 0.8106335733132628
+        },
+        "M0+season": {
+          "cutoff_from_validation": 0.24226949770169948,
+          "threshold": 0.24226949770169948,
+          "n": 19,
+          "positives": 9,
+          "alerts": 19,
+          "true_positive": 9,
+          "false_positive": 10,
+          "false_negative": 0,
+          "true_negative": 0,
+          "precision": 0.47368421052631576,
+          "recall": 1.0,
+          "f1": 0.6428571428571429,
+          "false_positive_rate": 1.0,
+          "auc": 0.9555555555555556,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.6236552644253817,
+              "alert": 1
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.3298046634992341,
+              "alert": 1
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.24897092795063014,
+              "alert": 1
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.2494558183319625,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.43791906290965166,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.49772077468849063,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.6888129885252718,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.9159664495741557,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.9212049422512416,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.9246798733065315,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.9011831965778546,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.8140164288695861,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.7166486706891226,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.440984441322128,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.3673517034990784,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.43860453843084013,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.5712762540298624,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.7262164102561118,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.8282531930212422,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 5.202746618027058,
+            "price_real_anomaly_z_12m": -0.43114724865770465,
+            "month_sin": -1.3947013930436167,
+            "month_cos": 0.013076675007083477
+          },
+          "intercept": 0.9734253919827419
+        },
+        "M1": {
+          "cutoff_from_validation": 0.29768983848088715,
+          "threshold": 0.29768983848088715,
+          "n": 19,
+          "positives": 9,
+          "alerts": 18,
+          "true_positive": 9,
+          "false_positive": 9,
+          "false_negative": 0,
+          "true_negative": 1,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666,
+          "false_positive_rate": 0.9,
+          "auc": 0.7222222222222222,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.4180218353552403,
+              "alert": 1
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.2921025774185829,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.39286445916387924,
+              "alert": 1
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.4428807104925845,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.630732173606052,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.4263373901501011,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.5574113885670088,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.79400876307367,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.7658208898305322,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.802152307670652,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.689082521281481,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.5482884154907656,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.7107529517171658,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.5755694322307665,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.6664462698347156,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.6584603336945829,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.8755929757141063,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.89924726759759,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.8716541643691583,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 6.644879311379689,
+            "price_real_anomaly_z_12m": -0.5818920812368243,
+            "precipitation_sum_mm_clim_z": -0.26584512182298337,
+            "t2m_max_mean_c_clim_z": 0.07528571905705847,
+            "t2m_min_mean_c_clim_z": -0.08762398962770486
+          },
+          "intercept": 0.7767594367391928
+        },
+        "M2": {
+          "cutoff_from_validation": 0.3609567071331662,
+          "threshold": 0.3609567071331662,
+          "n": 19,
+          "positives": 9,
+          "alerts": 19,
+          "true_positive": 9,
+          "false_positive": 10,
+          "false_negative": 0,
+          "true_negative": 0,
+          "precision": 0.47368421052631576,
+          "recall": 1.0,
+          "f1": 0.6428571428571429,
+          "false_positive_rate": 1.0,
+          "auc": 0.7555555555555555,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.49051568158096626,
+              "alert": 1
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.3721079973208935,
+              "alert": 1
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.4860115232572716,
+              "alert": 1
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.5450309420402382,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.7112637559475935,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.4992479876162197,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.6082691485961379,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.8354913869387792,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.8327471046119788,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.8609814035372994,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.7519633121668842,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.623714799779489,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.71091621282339,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.5702235774979256,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.6776744646615933,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.6428061195227976,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.8808475006214419,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.8976715130146701,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.872919218470321,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 6.594802142110955,
+            "price_real_anomaly_z_12m": -0.5676628234231498,
+            "precipitation_sum_mm_clim_z": -0.2985155912968871,
+            "t2m_max_mean_c_clim_z": 0.06087999150216199,
+            "t2m_min_mean_c_clim_z": -0.12132205632807586,
+            "production_t_yoy_sym_change": -0.3110977866991449,
+            "yield_kg_ha_yoy_sym_change": -1.34238815063497,
+            "area_harvested_ha_yoy_sym_change": 2.5523722407573812
+          },
+          "intercept": 0.8732299087736817
+        },
+        "M3": {
+          "cutoff_from_validation": 0.5019730664567856,
+          "threshold": 0.5019730664567856,
+          "n": 19,
+          "positives": 9,
+          "alerts": 15,
+          "true_positive": 8,
+          "false_positive": 7,
+          "false_negative": 1,
+          "true_negative": 3,
+          "precision": 0.5333333333333333,
+          "recall": 0.8888888888888888,
+          "f1": 0.6666666666666667,
+          "false_positive_rate": 0.7,
+          "auc": 0.7,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-07",
+              "lead_time_months": 1
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.4365584145747119,
+              "alert": 0
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.3388878600184897,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.46249371187838306,
+              "alert": 0
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.5411897387478662,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.7028507894356224,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.5009768155715206,
+              "alert": 0
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.6109596908609995,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.8354793642959246,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.8324752112344532,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.8561050162545731,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.7369859211743754,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.6148774891475792,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.791429745990505,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.6754898348066098,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.7810782979675536,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.7670874727795698,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.9354935990234349,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.9430719584985179,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.9282115772308378,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 6.589301864494812,
+            "price_real_anomaly_z_12m": -0.6175530996664153,
+            "precipitation_sum_mm_clim_z": -0.292063595604866,
+            "t2m_max_mean_c_clim_z": 0.043468380238458885,
+            "t2m_min_mean_c_clim_z": -0.11960282252309348,
+            "production_t_yoy_sym_change": -0.1411017050258667,
+            "yield_kg_ha_yoy_sym_change": -1.1116016199372567,
+            "area_harvested_ha_yoy_sym_change": 2.962160802290527,
+            "import_quantity_t_yoy_sym_change": -0.5462525137398737,
+            "export_quantity_t_yoy_sym_change": 0.10136765927837683,
+            "import_value_1000_usd_yoy_sym_change": -0.41403350406184974,
+            "export_value_1000_usd_yoy_sym_change": 0.07760215271985146
+          },
+          "intercept": 0.863289963313747
+        },
+        "M4": {
+          "cutoff_from_validation": 0.500794861770314,
+          "threshold": 0.500794861770314,
+          "n": 19,
+          "positives": 9,
+          "alerts": 16,
+          "true_positive": 9,
+          "false_positive": 7,
+          "false_negative": 0,
+          "true_negative": 3,
+          "precision": 0.5625,
+          "recall": 1.0,
+          "f1": 0.72,
+          "false_positive_rate": 0.7,
+          "auc": 0.7,
+          "episodes": [
+            {
+              "episode_start": "2021-06",
+              "episode_end": "2021-12",
+              "positive_origins": 7,
+              "first_stress_month": "2021-08",
+              "detected": true,
+              "first_alert": "2021-06",
+              "lead_time_months": 2
+            },
+            {
+              "episode_start": "2022-06",
+              "episode_end": "2022-07",
+              "positive_origins": 2,
+              "first_stress_month": "2022-08",
+              "detected": true,
+              "first_alert": "2022-06",
+              "lead_time_months": 2
+            }
+          ],
+          "monthly": [
+            {
+              "origin": "2021-01",
+              "label": 0,
+              "score": 0.42641175156747346,
+              "alert": 0
+            },
+            {
+              "origin": "2021-02",
+              "label": 0,
+              "score": 0.333728025009284,
+              "alert": 0
+            },
+            {
+              "origin": "2021-03",
+              "label": 0,
+              "score": 0.4625446215456612,
+              "alert": 0
+            },
+            {
+              "origin": "2021-04",
+              "label": 0,
+              "score": 0.5418845503323009,
+              "alert": 1
+            },
+            {
+              "origin": "2021-05",
+              "label": 0,
+              "score": 0.7025994905094911,
+              "alert": 1
+            },
+            {
+              "origin": "2021-06",
+              "label": 1,
+              "score": 0.5029184225327339,
+              "alert": 1
+            },
+            {
+              "origin": "2021-07",
+              "label": 1,
+              "score": 0.6149382513794996,
+              "alert": 1
+            },
+            {
+              "origin": "2021-08",
+              "label": 1,
+              "score": 0.8364218368527632,
+              "alert": 1
+            },
+            {
+              "origin": "2021-09",
+              "label": 1,
+              "score": 0.8326004609385735,
+              "alert": 1
+            },
+            {
+              "origin": "2021-10",
+              "label": 1,
+              "score": 0.8558651909547139,
+              "alert": 1
+            },
+            {
+              "origin": "2021-11",
+              "label": 1,
+              "score": 0.7371527017887313,
+              "alert": 1
+            },
+            {
+              "origin": "2021-12",
+              "label": 1,
+              "score": 0.615533229020232,
+              "alert": 1
+            },
+            {
+              "origin": "2022-01",
+              "label": 0,
+              "score": 0.79220956995028,
+              "alert": 1
+            },
+            {
+              "origin": "2022-02",
+              "label": 0,
+              "score": 0.6763569776779201,
+              "alert": 1
+            },
+            {
+              "origin": "2022-03",
+              "label": 0,
+              "score": 0.7804862478181324,
+              "alert": 1
+            },
+            {
+              "origin": "2022-04",
+              "label": 0,
+              "score": 0.7710240663076878,
+              "alert": 1
+            },
+            {
+              "origin": "2022-05",
+              "label": 0,
+              "score": 0.9336625039365977,
+              "alert": 1
+            },
+            {
+              "origin": "2022-06",
+              "label": 1,
+              "score": 0.9413643998473031,
+              "alert": 1
+            },
+            {
+              "origin": "2022-07",
+              "label": 1,
+              "score": 0.9271320544524476,
+              "alert": 1
+            }
+          ],
+          "coefficients": {
+            "price_real_mom_change": 6.573990109159885,
+            "price_real_anomaly_z_12m": -0.61868903190162,
+            "precipitation_sum_mm_clim_z": -0.2897781923948104,
+            "t2m_max_mean_c_clim_z": 0.04354257506901483,
+            "t2m_min_mean_c_clim_z": -0.1191417908688688,
+            "production_t_yoy_sym_change": -0.14264820219569255,
+            "yield_kg_ha_yoy_sym_change": -1.1137664644078937,
+            "area_harvested_ha_yoy_sym_change": 2.957917935283716,
+            "import_quantity_t_yoy_sym_change": -0.5453469920326893,
+            "export_quantity_t_yoy_sym_change": 0.10059541526219258,
+            "import_value_1000_usd_yoy_sym_change": -0.4136817786413902,
+            "export_value_1000_usd_yoy_sym_change": 0.07711787386167834,
+            "m4_price_precip_clim_interaction": -0.008115314157372355
+          },
+          "intercept": 0.8652833806797996
+        }
+      },
+      "baselines": {
+        "always_alert": {
+          "threshold": 0.5,
+          "n": 19,
+          "positives": 9,
+          "alerts": 19,
+          "true_positive": 9,
+          "false_positive": 10,
+          "false_negative": 0,
+          "true_negative": 0,
+          "precision": 0.47368421052631576,
+          "recall": 1.0,
+          "f1": 0.6428571428571429,
+          "false_positive_rate": 1.0
+        }
+      }
+    }
+  ]
+}

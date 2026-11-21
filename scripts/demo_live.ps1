@@ -8,6 +8,10 @@
 
 # "Continue", as in the other laptop scripts: under "Stop", Windows PowerShell 5.1 treats java's
 # version text on stderr as a fatal error.
+#
+# Optional: another stress definition for the scoring models, e.g. "RUN_DEMO_LIVE.bat 5 6" (5% within
+# 6 months). The default is the project definition, 10% within 3 months; others use the post-hoc models.
+param([ValidateSet(5, 10, 15)][int]$StressRise = 10, [ValidateSet(1, 3, 6)][int]$StressHorizon = 3)
 $ErrorActionPreference = "Continue"
 . (Join-Path $PSScriptRoot "foodshield_env.ps1")
 $root = Split-Path -Parent $PSScriptRoot
@@ -28,8 +32,9 @@ Start-Sleep -Seconds 5
 
 Write-Host "2/2 Demo replay: 2016-2021 sent fast to build feature history, then all of 2022 at 1,000 events/s (about 3 minutes)."
 Write-Host "    Do not click inside this window while it runs (that pauses it)."
+if ($StressRise -ne 10 -or $StressHorizon -ne 3) { Write-Host "    Models: stress = $StressRise% rise within $StressHorizon months (post-hoc, exploratory; the project definition is 10% within 3 months)." -ForegroundColor Yellow }
 $pyArgs = $py.Args
-& $py.Exe @pyArgs scripts\run_week6_replay.py --name demo --work-root $work --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 1000
+& $py.Exe @pyArgs scripts\run_week6_replay.py --name demo --work-root $work --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 1000 --stress-rise $StressRise --stress-horizon $StressHorizon
 $code = $LASTEXITCODE
 Write-Host ""
 if ($code -eq 0) { Write-Host "Demo finished; the report is in data\processed\week6_streaming\demo\week6_report.json." -ForegroundColor Green }

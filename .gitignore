@@ -86,6 +86,7 @@ data/processed/
 !/data/processed/week7_model_evaluation/
 !/data/processed/week7_data_quality/
 !/data/processed/week7_label_sensitivity/
+!/data/processed/posthoc_test_definitions/
 !/data/processed/week8_dashboard/
 data/external/
 outputs/
