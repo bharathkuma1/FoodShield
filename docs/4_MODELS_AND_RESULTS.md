@@ -1,6 +1,6 @@
 # 4. Models, evaluation and results
 
-How the stress target and evaluation protocol were set (Week 4), how M0–M4 were built and compared (Week 5), what the one-time 2021–2022 test showed, and the Week 7 evaluation. Data are described in [`2_DATA.md`](2_DATA.md), the pipeline in [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md), and decisions D1–D15 in [`7_DECISIONS.md`](7_DECISIONS.md).
+How the stress target and evaluation protocol were set (Week 4), how M0–M4 were built and compared (Week 5), what the one-time 2021–2022 test showed, and the Week 7 evaluation. Data are described in [`2_DATA.md`](2_DATA.md), the pipeline in [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md), and decisions D1–D16 in [`7_DECISIONS.md`](7_DECISIONS.md).
 
 **Results at a glance**
 
@@ -458,6 +458,39 @@ D1 and D2 kept 5% and 15% rises and 1- and 6-month horizons as sensitivity check
 - **Season helps most at the rarer, larger 15% threshold.** Its interval, −0.002 to +0.305, just touches 0.
 
 These checks support keeping D1 and D2 unchanged.
+
+**Extra combinations for the dashboard.** To let the dashboard's Explorer offer every rise (5/10/15%) with every horizon (1/3/6 months), the four remaining combinations were run the same way, on the 2014–2020 backtest only. They are exploratory and not part of the reported results; no intervals were computed for them.
+
+| Label | Stress months / episodes | M0 F1 | M1 | M2 | M3 | M4 | Price + season | Always alert |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| ≥5% in 1 month | 16 / 12 | 0.37 | 0.30 | 0.29 | 0.26 | 0.22 | 0.47 | 0.32 |
+| ≥5% in 6 months | 51 / 9 | 0.80 | 0.75 | 0.80 | 0.80 | 0.77 | 0.81 | 0.79 |
+| ≥15% in 1 month | 2 / 1 | 0.50 | 0.67 | 0.67 | 0.00 | 0.00 | 0.50 | 0.05 |
+| ≥15% in 6 months | 25 / 8 | 0.62 | 0.48 | 0.52 | 0.52 | 0.54 | 0.59 | 0.49 |
+
+- ≥5% in 6 months marks two thirds of months as stress, so alerting every month already scores 0.79.
+- ≥15% in 1 month has 2 stress months and no positive validation month, so its scores mean little; the dashboard says so.
+- None of them changes the reading above: no stage clearly beats price-only M0.
+
+Rises below 5% were not run: a 2–3% move is ordinary month-to-month variation (28–59% of months at 1–3 months), so "stress" would lose its meaning.
+
+**Post-hoc test for the other definitions (D16).** The one-time test was opened for the project definition only (≥10% within 3 months). For the dashboard and the replay, the same 2021–2022 window was later scored for the other eight combinations with `scripts/run_posthoc_test_definitions.py`. It follows the frozen protocol in everything except the stress definition: training 2011–2017, alert cutoff chosen on 2018–2020, the same estimator and features, annual delays of 2 and 3 years. It writes to `data/processed/posthoc_test_definitions/` and leaves `final_test/` untouched. Because the test outcomes were already known, these numbers are exploratory, not test evidence. The project row comes from the one-time test and is the reported result. Test F1, 2-year delay:
+
+| Label | Test stress months / episodes | M0 | M1 | M2 | M3 | M4 | Price + season | Always alert |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| ≥5% in 1 month | 5 of 24 / 4 | 0.22 | 0.15 | 0.21 | 0.13 | 0.13 | 0.33 | 0.34 |
+| ≥5% in 3 months | 9 of 22 / 2 | 0.62 | 0.62 | 0.67 | 0.62 | 0.62 | 0.64 | 0.58 |
+| ≥5% in 6 months | 9 of 19 / 2 | 0.67 | 0.67 | 0.67 | 0.72 | 0.72 | 0.64 | 0.64 |
+| ≥10% in 1 month | 1 of 24 / 1 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.08 |
+| **≥10% in 3 months (one-time test, reported)** | 5 of 22 / 3 | 0.43 | 0.47 | 0.47 | 0.47 | **0.62** | 0.00 | 0.37 |
+| ≥10% in 6 months | 5 of 19 / 2 | 0.77 | 0.53 | 0.59 | 0.46 | 0.46 | 0.73 | 0.42 |
+| ≥15% in 1 month | 0 of 24 / 0 | — | — | — | — | — | — | — |
+| ≥15% in 3 months | 2 of 22 / 2 | 0.00 | 0.22 | 0.18 | 0.29 | 0.22 | 0.00 | 0.17 |
+| ≥15% in 6 months | 4 of 19 / 2 | 0.67 | 0.29 | 0.29 | 0.29 | 0.29 | 0.55 | 0.35 |
+
+- M4's test gain over M0 appears only for the project definition and, narrowly, for ≥5% in 6 months (0.72 vs 0.67). At 6 months with a 10% or 15% rise, price-only M0 is clearly best.
+- The 1-month definitions have at most one stress month in the test, and ≥15% in 3 months has two, so those rows cannot rank the models.
+- This supports the main reading: multi-signal models do not consistently beat price-only monitoring. Choosing a definition because it favours one model after seeing these numbers would be selection on the test.
 
 ### Limits
 

@@ -1,6 +1,6 @@
 # 8. End-to-end pipeline, step by step
 
-How FoodShield turns public source files into monthly stress alerts: acquisition, Spark processing through Bronze, Silver and Gold, features, models, evaluation, streaming, scale runs and the dashboard. Each step gives the code, the reason, and the same real month before and after. The column-level data model is in [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md) §3.9; sources in [`2_DATA.md`](2_DATA.md); decisions D1–D15 in [`7_DECISIONS.md`](7_DECISIONS.md); results in [`4_MODELS_AND_RESULTS.md`](4_MODELS_AND_RESULTS.md), [`5_STREAMING.md`](5_STREAMING.md) and [`6_SCALABILITY.md`](6_SCALABILITY.md).
+How FoodShield turns public source files into monthly stress alerts: acquisition, Spark processing through Bronze, Silver and Gold, features, models, evaluation, streaming, scale runs and the dashboard. Each step gives the code, the reason, and the same real month before and after. The column-level data model is in [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md) §3.9; sources in [`2_DATA.md`](2_DATA.md); decisions D1–D16 in [`7_DECISIONS.md`](7_DECISIONS.md); results in [`4_MODELS_AND_RESULTS.md`](4_MODELS_AND_RESULTS.md), [`5_STREAMING.md`](5_STREAMING.md) and [`6_SCALABILITY.md`](6_SCALABILITY.md).
 
 ## 1. How to read this
 
@@ -882,7 +882,7 @@ for each test year Y in 2014 ... 2020:
 | 3-year annual lag | annual data usable one year later (D6) |
 | Season in every stage | `month_sin`, `month_cos` added to every stage (D11) |
 | Week 3 features as built | the original anomaly features, kept for traceability (D10) |
-| Other stress definitions | 5% / 15% rise, 1- / 6-month horizon; backtest only |
+| Other stress definitions | 5% / 15% rise, 1- / 6-month horizon; backtest only. The dashboard also has the remaining 5% and 15% combinations at 1 and 6 months, and a post-hoc 2021–2022 test score for every definition other than the project one (D16, exploratory) |
 
 ## 14. Streaming: the same steps inside Kafka and Spark
 
@@ -1084,6 +1084,8 @@ Section 11.3: daily → cell-month → national month in Spark, then compared wi
 3. The page polls `/live` once a second, draws each month as it is scored, and pops up each new stress alert, with optional sound.
 
 `RUN_DEMO_LIVE.bat` starts the server and a replay together. The demo steps are in [`5_STREAMING.md`](5_STREAMING.md) §5.7.
+
+By default the replay scores the frozen models of the one-time test (≥10% within 3 months). `--stress-rise` and `--stress-horizon` (or `RUN_DEMO_LIVE.bat 5 6`) make it score the post-hoc models of another definition instead (D16); the live view names the definition in use, and the self-checks compare against the matching models.
 
 ## 17. Scope beyond batch analytics, and design choices
 

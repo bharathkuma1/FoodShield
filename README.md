@@ -48,7 +48,7 @@ Details: `docs/4_MODELS_AND_RESULTS.md` (models and results), `docs/5_STREAMING.
 
 1. **See the results:** open `docs/dashboard/index.html` in any browser. It works offline.
 2. **Run the checks:** `python -m unittest discover -s tests -v` (about 1–2 minutes).
-3. **Run the live demo (Windows):** double-click `RUN_DEMO_LIVE.bat`. It opens the dashboard on its Streaming tab and runs a 3-minute Kafka replay of 2022; each stress alert pops up as Spark raises it.
+3. **Run the live demo (Windows):** double-click `RUN_DEMO_LIVE.bat`. It opens the dashboard on its Streaming tab and runs a 3-minute Kafka replay of 2022; each stress alert pops up as Spark raises it. Optional, from a command prompt: `RUN_DEMO_LIVE.bat 5 6` scores the post-hoc models for a 5% rise within 6 months instead of the project definition (D16).
 
 ## Requirements
 
@@ -112,6 +112,7 @@ python scripts\run_week7_model_evaluation.py                   # lead times, thr
 python scripts\run_week7_data_quality.py                       # data-quality and timing tests
 python scripts\run_week7_batch_scaling.py --phase all          # batch scaling series (about 1 hour); plots in docs\figures
 python scripts\run_week5_ablation.py --rise-pct 5 --horizon 3 --variants corrected --output data\processed\week7_label_sensitivity\rise5_h3   # other stress definitions
+python scripts\run_posthoc_test_definitions.py                 # post-hoc 2021-2022 test for the other definitions (D16)
 python scripts\run_week6_replay.py --name s7_rate_2000 --replay-from 2016-01-01 --measure-from 2022-01-01 --rate 2000   # one streaming series run
 python scripts\plot_week7_streaming.py
 ```
@@ -129,7 +130,7 @@ python scripts\serve_dashboard.py --work-root <work folder>     # the same page 
 | Tab | What you can do |
 |---|---|
 | Overview | Headline numbers, price history with stress months and alerts, M0–M4 results, each episode and its warning time |
-| Explorer | Compare any two models; change the period, stress definition, publication lag and alert cutoff. Results are recalculated from the saved scores; the defaults show the reported results |
+| Explorer | Compare any two models; change the period, the stress definition (rise 5/10/15% within 1/3/6 months), publication lag and alert cutoff. Results are recalculated from the saved scores; the defaults show the reported results, and other definitions on the test period are marked post-hoc (D16) |
 | What if? | Pick a month, move its inputs (price change, rainfall, production, imports) and see how the frozen models react |
 | Streaming | Play back a recorded replay month by month, or follow a running one live with an on-screen pop-up for each alert |
 | Scale | Batch runtime and throughput by workload size; CSV vs Parquet query times |
@@ -157,7 +158,7 @@ Live mode needs the page to be opened through `serve_dashboard.py` (or `RUN_DEMO
 | `docs/4_MODELS_AND_RESULTS.md` | Stress label and split, M0–M4, the one-time test, model evaluation |
 | `docs/5_STREAMING.md` | Kafka replay: what runs, checks, laptop results, the live demo |
 | `docs/6_SCALABILITY.md` | Batch and streaming scaling series, data at full size |
-| `docs/7_DECISIONS.md` | Requirements and decisions D1–D15 |
+| `docs/7_DECISIONS.md` | Requirements and decisions D1–D16 |
 | `docs/8_PIPELINE_WALKTHROUGH.md` | Every processing step, from source files to alerts, with code and a worked example |
 | `docs/PROJECT_SUBMISSION.md` | Source text for the final report |
 

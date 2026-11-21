@@ -1,6 +1,6 @@
 # 2. Data: sources, feasibility, events and quality
 
-What data FoodShield uses, why these sources were chosen, how each file was obtained, and how its quality was checked. Project scope is in [`1_PROJECT.md`](1_PROJECT.md); how the data is processed is in [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md); the decisions referred to as D1–D15 are in [`7_DECISIONS.md`](7_DECISIONS.md).
+What data FoodShield uses, why these sources were chosen, how each file was obtained, and how its quality was checked. Project scope is in [`1_PROJECT.md`](1_PROJECT.md); how the data is processed is in [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md); the decisions referred to as D1–D16 are in [`7_DECISIONS.md`](7_DECISIONS.md).
 
 Sections 2.2–2.4 record the Week 1 feasibility work as it stood at the end of Week 1. Items it left open were settled later: the stress label and horizon (D1, D2), the split (D3), wheat-area-weighted weather (D5) and the annual availability lag (D6).
 

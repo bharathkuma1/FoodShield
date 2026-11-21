@@ -1,6 +1,6 @@
 # 7. Decisions, assumptions and open questions
 
-This log separates requirements established by the submitted proposal and TA feedback from implementation choices, and records each team decision (D1–D15) with its rationale and the week it was made. Evidence for each decision is in the numbered documents: [`1_PROJECT.md`](1_PROJECT.md), [`2_DATA.md`](2_DATA.md), [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md), [`4_MODELS_AND_RESULTS.md`](4_MODELS_AND_RESULTS.md), [`5_STREAMING.md`](5_STREAMING.md), [`6_SCALABILITY.md`](6_SCALABILITY.md).
+This log separates requirements established by the submitted proposal and TA feedback from implementation choices, and records each team decision (D1–D16) with its rationale and the week it was made. Evidence for each decision is in the numbered documents: [`1_PROJECT.md`](1_PROJECT.md), [`2_DATA.md`](2_DATA.md), [`3_ARCHITECTURE.md`](3_ARCHITECTURE.md), [`4_MODELS_AND_RESULTS.md`](4_MODELS_AND_RESULTS.md), [`5_STREAMING.md`](5_STREAMING.md), [`6_SCALABILITY.md`](6_SCALABILITY.md).
 
 ## 7.1 Confirmed requirements
 
@@ -98,13 +98,14 @@ Abhijith C R confirmed these at the start of Week 6. The team is doing a joint r
 | D13 | Multi-country wheat panel (D9-D) | **Revised at the start of Week 6: extension work, not project scope.** Following the team's approval, the project stays single-country (Ukraine). The panel is planned as extended work after the core project is complete. Feasibility evidence is kept: 31 countries have enough monthly wheat producer prices. *(Earlier the same day, D13 read "Go"; it was revised before any panel work started.)* |
 | D14 | Working mode | Claude does the work of all four workstreams in one shared place; the whole team reviews it together. The repository stays in the local folder (`feature/workinprogress_v2`) for now; pushing to GitHub waits for the joint review. Workstream ownership in [`1_PROJECT.md`](1_PROJECT.md) §1.5 is kept for review and accountability. After the joint review the work was pushed, and `main` became the single project branch. |
 
-## 7.7 Week 8 decision (D15)
+## 7.7 Week 8 decisions (D15, D16)
 
-Abhijith C R confirmed this in Week 8, on the same basis as D12–D14.
+Abhijith C R confirmed these in Week 8, on the same basis as D12–D14.
 
 | # | Decision | Confirmed choice |
 |---|---|---|
 | D15 | Dashboard technology and format (closes question 8) | **One static, offline HTML page** (`docs/dashboard/index.html`, built by `scripts/build_week8_dashboard.py`; no framework, nothing to install). Five tabs: Overview; **Explorer** (compare any two stages, period, stress definition, annual delay and alert cutoff, recomputed in the browser from the saved month-by-month scores, nothing retrained); **What if?** (nudge one month's inputs for the frozen test models); **Streaming** (replay a saved laptop run, plus a live view); Scale. Defaults reproduce the reported numbers exactly; any other setting is labelled "exploring", and a cutoff moved on the test period carries a warning that it is not a fair test. **Live mode:** `scripts/serve_dashboard.py` (Python standard library, 127.0.0.1 only, read-only) serves the page and the running replay's alerts; the page pops up each new stress alert (from January 2022 by default, the paced demo window) with optional sound, and both can be switched off. `RUN_DEMO_LIVE.bat` starts the server and the demo together. Streamlit was not chosen: it needs an install and a running process and adds demo risk. |
+| D16 | Other stress definitions in the dashboard and the replay | The Explorer offers every rise (5/10/15%) with every horizon (1/3/6 months); the project definition, ≥10% within 3 months, is the default and the only reported result. The four combinations not covered by D1/D2 were added to the 2014–2020 backtest. The 2021–2022 test is scored for the eight other definitions **post-hoc** by `scripts/run_posthoc_test_definitions.py` (frozen protocol otherwise; `final_test/` untouched), and the dashboard and the replay (`--stress-rise`, `--stress-horizon`) label these results "post-hoc, exploratory". Rises below 5% were not run because a 2–3% move is ordinary monthly variation. Results: [`4_MODELS_AND_RESULTS.md`](4_MODELS_AND_RESULTS.md), label sensitivity. |
 
 ## 7.8 Assumptions to validate
 
